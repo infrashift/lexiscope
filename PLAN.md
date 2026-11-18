@@ -102,7 +102,7 @@ First ADRs:
 
 Tracking: [ISSUE-002](.okfw/issues/issue-002-cli-version-and-ruleset-overrides-and-the-go-port-of-nasa-lint--01a1ed42b88b.md)
 
-- [ ] Port `scripts/nasa-lint.py` to Go (`cmd/nasa-lint`) in a separate commit, and use the port in `zmake lint`
+- [x] Port `scripts/nasa-lint.py` to Go (`cmd/nasa-lint`) in a separate commit, and use the port in `zmake lint`
 - [ ] Install golangci-lint v2 at a pinned version, with errcheck, funlen and govet, and add it to `zmake lint`
 - [ ] Add `internal/version` with the `-ldflags` variables `Version`, `Commit` and `BuildDate`, and the SARIF versions `2.1.0` and `2.2`
 - [ ] Add the cobra CLI in `cmd/lexis`

@@ -1,6 +1,7 @@
 package assert
 
 import (
+	"bytes"
 	"errors"
 	"testing"
 )
@@ -23,4 +24,38 @@ func TestFalsePanicsWithFailure(t *testing.T) {
 	}()
 	True(false, "count > 0")
 	t.Fatal("True(false) did not panic")
+}
+
+func runWithRecover(w *bytes.Buffer, fail bool) (code int) {
+	defer Recover(w, "cmd", &code)
+	True(!fail, "x is set")
+	return 0
+}
+
+func TestRecoverSetsTheExitCode(t *testing.T) {
+	var buf bytes.Buffer
+	if code := runWithRecover(&buf, true); code != ExitAssertion {
+		t.Fatalf("code = %d, want %d", code, ExitAssertion)
+	}
+	if got, want := buf.String(), "cmd: internal error: assertion failed: x is set\n"; got != want {
+		t.Fatalf("output = %q, want %q", got, want)
+	}
+	buf.Reset()
+	if code := runWithRecover(&buf, false); code != 0 || buf.Len() != 0 {
+		t.Fatalf("code = %d, output = %q; want 0 and no output", code, buf.String())
+	}
+}
+
+func TestRecoverPanicsAgainOnOtherValues(t *testing.T) {
+	defer func() {
+		if r := recover(); r != "boom" {
+			t.Fatalf("recover() = %#v, want boom", r)
+		}
+	}()
+	var code int
+	func() {
+		defer Recover(&bytes.Buffer{}, "cmd", &code)
+		panic("boom")
+	}()
+	t.Fatal("Recover swallowed a panic that is not a Failure")
 }

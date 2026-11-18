@@ -33,7 +33,7 @@ A numbered list item is a step. Each other sentence is descriptive. The `procedu
 
 ## Power of 10 rules for the lexis source
 
-ADR-0003 in the wiki adapts the NASA Power of 10 rules to Go. Phase 2 ports `scripts/nasa-lint.py` to Go. The port checks these rules:
+ADR-0003 in the wiki adapts the NASA Power of 10 rules to Go. `cmd/nasa-lint` is the Go port of `scripts/nasa-lint.py`. `zmake lint` runs it. The port checks these rules:
 
 | Rule | Check |
 |---|---|
@@ -41,7 +41,9 @@ ADR-0003 in the wiki adapts the NASA Power of 10 rules to Go. Phase 2 ports `scr
 | R2 | No `for {}` loop without a bound |
 | R4 | Each function has 60 lines or fewer |
 | R5 | An average of two or more `assert.` calls per function |
-| R7 | No `_ =` discard, and no `, _ :=` on a call |
-| R9 | No function types and no function variables |
+| R7 | No `_ =` discard, and no blank result of a call, for example `x, _ := f()` |
+| R9 | No function types, no function literals and no function values |
 
 Test files (`_test.go`) are exempt. Rule R3 is a deviation: lexis sets hard caps on each buffer, but Go allocates on the heap.
+
+To allow one finding, add a comment on the same line or the line above, for example `// nasa-lint: allow(R9) <reason>`. Give a reason in each comment.

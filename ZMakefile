@@ -20,11 +20,11 @@ GO_DIRS := cmd internal rules
 @test:
     $(GO) test -race -count=1 ./...
 
-## lint: check the formatting, run go vet and check the Power of 10 rules
+## lint: check the formatting, run go vet and check the Power of 10 rules (Go port of nasa-lint)
 @lint:
     $(GOFMT) -l $(GO_DIRS) | (! grep .)
     $(GO) vet ./...
-    $(PYTHON) -I scripts/nasa-lint.py
+    $(GO) run ./cmd/nasa-lint
 
 ## fmt: format the Go sources in place
 @fmt:

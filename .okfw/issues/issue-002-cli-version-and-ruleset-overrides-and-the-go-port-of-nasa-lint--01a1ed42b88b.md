@@ -5,17 +5,17 @@ type: "Issue"
 kind: "issue"
 tags:
   - "issue"
-  - "open"
   - "phase-2"
   - "cli"
+  - "in-progress"
 created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+timestamp: "2026-11-18T03:42:05-06:00"
 description: "Add the cobra CLI, the version package, golangci-lint and a Go port of nasa-lint.py."
 ---
 
 # ISSUE-002: CLI, version and ruleset overrides, and the Go port of nasa-lint
 
-**Status:** open · **Phase:** 2
+**Status:** in-progress · **Phase:** 2
 
 ## Description
 Add the commands of `PLAN.md` Phase 2 and make the Power of 10 check read Go code.

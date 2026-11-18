@@ -21,7 +21,7 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 `ZMakefile` (zmake, modern mode) and `Makefile` (GNU Make) have the same targets. Change both files together.
 
 Run these targets with `zmake`:
-- `zmake lint` runs gofmt, `go vet` and `scripts/nasa-lint.py`. Until the Go port in Phase 2, nasa-lint finds no functions.
+- `zmake lint` runs gofmt, `go vet` and `cmd/nasa-lint`, the Go port of `scripts/nasa-lint.py`. Run `go run ./cmd/nasa-lint --verbose` to list the functions with fewer than 2 assertions.
 - `zmake test` runs `go test -race -count=1 ./...`.
 - `zmake build` writes `bin/lexis`.
 - `zmake fmt` formats the Go source.

@@ -39,10 +39,23 @@ The user requires the Power of 10 rules for all Go code in lexis. The rules targ
 
 **Suppression:** `// nasa-lint: allow(Rn) <reason>` on the line or the line above. Each suppression needs a reason.
 
-**Port:** Phase 2 ports `scripts/nasa-lint.py` to Go in a separate commit. Until then `zmake lint` runs the Python script, and it checks nothing in lexis. `gofmt` and `go vet` run from Phase 1.
+**Port:** `cmd/nasa-lint` and `internal/nasalint` are the Go port of `scripts/nasa-lint.py`. `zmake lint` runs the port. The Python script stays in `scripts/` without changes. The port reads the syntax tree with `go/ast` and resolves names with `go/types`. It uses the standard library only.
+
+- **Scope:** each package of the module, without `_test.go` files. It skips hidden directories, `testdata`, `vendor`, `node_modules` and each directory with its own `go.mod`.
+- **R1:** the call graph covers one package. An import cycle is a compile error in Go, so a recursion across packages needs a function value, and R9 reports each function value. A call through an interface of the package reaches each method of that name. The search for cycles uses an explicit stack.
+- **R4:** the count starts at the `func` keyword and ends at the last brace, as in the Python script.
+- **R5:** a call into a package whose path ends in `/internal/assert` is an assertion. Calls in function literals count for the enclosing function. The functions of the assert package do not count.
+- **R7:** the port reports `_ = x`, `var _ = x` and each blank on the left side of a call, for example `x, _ := f()` and `_, err := f()`. A conversion is not a call. `v, _ := m[k]`, `v, _ := x.(T)` and `var _ I = T{}` stay legal.
+- **R9:** the port reports each function type outside a declaration, a function literal or an interface method. It also reports each function literal. A function of the package outside call position is a function value, for example `f := helper`.
+- **Limits:** 4096 directories, 8192 files, 2^20 syntax nodes per file and 2^16 functions per package.
+- **Limit of the port:** imports resolve to empty packages. The port therefore misses a function of another package as a value, for example `strings.ToUpper`.
+- **Exit status:** 0 without findings, 1 with findings, 2 on a failure.
+
+`assert.Recover` is the boundary of each command. Defer it directly, so it can call `recover`. It recovers an `assert.Failure` only. Each other panic keeps its stack trace.
 
 ## Consequences
 - The code is more verbose than common Go: explicit stacks, limits and assertions.
+- A sort with `slices.SortFunc`, a `go/types` error callback and a cobra command need a function value. Each use has an allow comment with a reason.
 - An input that exceeds a limit fails with an error.
 
 ## Alternatives considered
