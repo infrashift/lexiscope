@@ -13,4 +13,4 @@ sidebar:
 | 2 | CLI, version and ruleset overrides, and the Go port of `nasa-lint.py` | done |
 | 3 | CUE ruleset engine and the `ste-100` ruleset | done |
 | 4 | Prose and comment engine, and parity with `scripts/ste-check.py` | done |
-| 5 | SARIF reports and the self-check | planned |
+| 5 | SARIF reports and the self-check | done |

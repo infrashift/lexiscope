@@ -60,7 +60,7 @@ func Markdown(name string, src []byte) ([]Block, error) {
 
 // frontMatterEnd returns the first line after the front matter. The oracle
 // knows YAML front matter (---). lexis also knows TOML front matter (+++).
-// Without a closing line, the front matter runs to the end of the file.
+// Without a line that closes it, the front matter runs to the end of the file.
 func frontMatterEnd(lines *Lines) int {
 	assert.True(lines != nil, "the table exists")
 	assert.True(lines.Count() > 0, "a file has one line or more")

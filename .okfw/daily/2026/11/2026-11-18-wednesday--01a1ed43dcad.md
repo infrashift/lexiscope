@@ -21,6 +21,7 @@ timestamp: "2026-11-18T00:06:50-06:00"
 - [x] Phase 2: Go port of nasa-lint, golangci-lint, version and CLI
 - [x] Phase 3: CUE ruleset engine and the ste-100 ruleset
 - [x] Phase 4: prose and comment engine, and parity with ste-check
+- [x] Phase 5: SARIF reports and the self-check
 
 ## Notes
 
@@ -38,7 +39,10 @@ timestamp: "2026-11-18T00:06:50-06:00"
 - **Changed:** Phase 4. `lexis scan` checks Markdown files and source comments. The parity test matches the oracle on fixtures and on each repository document. `zmake self-check` runs lexis on lexis.
 - **Learned:** Python's `\s`, `\w` and `\b` are Unicode, but Go's are ASCII. `read_text` turns a lone `\r` into a line break. GNU cp does not overwrite a file that the same command made, so a backup of two files with one name kept the wrong one.
 - **Learned:** four mutants survived the first fixtures. Each one showed a gap: a link to a page, a star inside a word, a quoted step and a lone `\r`.
-- **Next:** Phase 5. Add the SARIF reports, prove the 2.2 validation and decide the policy for the warnings of the self-check.
+- **Changed:** the self-check fails on each finding and loads `vocabulary.cue` (ADR-0009). 24 terms went into the vocabulary, and 16 sentences changed.
+- **Changed:** Phase 5. `lexis scan --format sarif` writes SARIF 2.1.0 and 2.2. `--fail-on` sets the severity that fails a scan.
+- **Learned:** gojsonschema checks the SARIF 2.2 schema correctly, because the schema uses no keyword of draft 2019-09 or 2020-12. The `convert` package of go-sarif drops custom entries of a property bag, but its comment calls the conversion lossless.
+- **Next:** none in `PLAN.md`. The user creates the GitHub repository, sets Pages to GitHub Actions and pushes.
 
 ## End of Day
 

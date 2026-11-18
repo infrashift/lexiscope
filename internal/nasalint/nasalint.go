@@ -16,8 +16,8 @@
 // the line above: // nasa-lint: allow(R7) <reason>.
 //
 // An import cycle is a compile error in Go, so a recursion across packages
-// needs a function value, and R9 reports each function value. The call graph
-// of R1 therefore covers one package at a time.
+// needs a function value, and R9 reports each function value. So the call graph
+// of R1 covers one package at a time.
 package nasalint
 
 import (

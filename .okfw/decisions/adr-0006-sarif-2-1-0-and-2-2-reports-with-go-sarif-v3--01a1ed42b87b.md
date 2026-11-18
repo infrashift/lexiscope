@@ -26,8 +26,17 @@ Code scanning tools read SARIF 2.1.0. SARIF 2.2 is newer. `github.com/owenrumney
 - lexis calls `Validate()` before it writes a report.
 - A test gives `Validate()` a broken 2.2 report. If `Validate()` accepts it, lexis uses a draft 2020-12 validator for 2.2. If no validator fits, lexis marks 2.2 as experimental.
 
+**Phase 5 result:**
+- lexis builds one 2.1.0 report. `convert.ToV22` of go-sarif makes the 2.2 report, with `WithStrictConversion`. So lexis has one report builder, not two.
+- `Validate()` of go-sarif rejects broken 2.2 reports. The test `TestValidateRejectsBroken22` breaks eight constraints. Four are fields of the report and of a result: `version`, `guid`, `level` and `kind`. The others are a `startLine` of 0, the level of a rule, an absent driver name and a bad `columnKind`. Each case fails validation, and a mutant of the test that breaks nothing fails the test.
+- `TestSchema22NeedsNoDraft202012` reads the 2.2 schema of go-sarif. The schema uses no keyword that only draft 2019-09 or 2020-12 has, and no `$ref` with a sibling constraint. So draft 07 semantics give the same result as draft 2020-12 for this schema. lexis needs no second validator, and SARIF 2.2 is not experimental in lexis. A go-sarif version with a changed schema fails the test.
+- **A fault of go-sarif:** its package comment calls the 2.1.0 to 2.2 conversion lossless, but the conversion drops custom entries of a property bag. The strict conversion found this, so the rules of lexis have no `properties`.
+- Fixes: a STE-100-05 result has a fix that replaces the term with the approved term. A STE-100-06 swap gives a verb for a noun, so it is not a text fix.
+- Each 2.2 report has a new random `guid`, as SARIF 2.2 requires. Two 2.2 reports of one scan are not equal byte for byte.
+
 ## Consequences
-- Phase 5 adds one Go dependency, and maybe a second one for the 2.2 validator. Each needs this ADR or a new ADR.
+- Phase 5 adds one Go dependency: go-sarif v3.3.2, with gojsonschema. go-sarif needs `go 1.26.10` in `go.mod`.
+- The go-sarif structs write each empty array and the value -1 for each unset index, so a report has many fields with no data. The schema accepts them.
 
 ## Alternatives considered
 - **SARIF 2.1.0 only.** Rejected: the user asked for 2.2 support.

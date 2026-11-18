@@ -28,6 +28,6 @@ Every change follows this loop. Do not report or commit work while a gate fails.
 11. **Journal.** Add an entry to today's `okfw daily` note: what changed, what you learned, what is next.
 12. **Commit.** Commit the code, the wiki, the docs and `PLAN.md` together. Make one commit per phase. Do not push.
 
-`ZMakefile` (zmake, modern mode) and `Makefile` (GNU Make) have the same targets. Change both files together. Verify that `zmake -n check` and `make -n check` print the same commands.
+`ZMakefile` (zmake, with `@name:` tasks) and `Makefile` (GNU Make) have the same targets. Change both files together. Verify that `zmake -n check` and `make -n check` print the same commands.
 
 See [Wiki conventions](/wiki-conventions--01a1ed42b854.md).

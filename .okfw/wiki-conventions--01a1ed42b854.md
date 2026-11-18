@@ -29,7 +29,7 @@ This guide defines how the lexis OKF wiki (`.okfw/`) stores project knowledge.
 | `daily/` | daily note | `okfw daily`: what changed, what you learned, what is next. |
 
 ## PLAN.md and issues
-`PLAN.md` is the phase checklist. Each phase from 1 to 5 has a mirror issue (ISSUE-001 to ISSUE-005). Each phase heading in `PLAN.md` has a `Tracking:` line that links to its issue. When a phase is done, tick the `PLAN.md` checkboxes and the acceptance criteria of the issue.
+`PLAN.md` is the phase checklist. Each phase from 1 to 5 has a mirror issue (ISSUE-001 to ISSUE-005). Each phase heading in `PLAN.md` has an `Issue:` line that links to its issue. At the end of a phase, tick the `PLAN.md` checkboxes and the acceptance criteria of the issue.
 
 ## ADRs (`decisions/`)
 - Title: `ADR-NNNN: <decision>`. Number ADRs in sequence. Do not reuse a number.
@@ -51,7 +51,7 @@ All documentation follows ASD-STE100 Simplified Technical English. This includes
 - Use active voice and simple present tense: "The parser reads the document."
 - Start each procedural step with an imperative verb: Run, Read, Inspect, Verify, Add, Set.
 - Keep procedural steps to 20 words or fewer. Keep descriptive sentences to 25 words or fewer.
-- Use a verb, not a noun form: "lexis checks the file", not "The checking of the file occurs".
+- Use a verb, not a noun form: "lexis checks the file", not "The file check occurs".
 - Do not use `your`. Write "the ruleset file".
 - Use one term for one concept. This wiki uses these terms:
   - *rule*: one check with a stable ID, for example `STE-100-01`.

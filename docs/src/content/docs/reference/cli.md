@@ -7,15 +7,15 @@ sidebar:
 
 <!-- internal/cli/cli_test.go checks that this page lists each command and each flag. -->
 
-Each command below works. `lexis scan --format sarif` arrives in Phase 5. Until then it exits with status 2 and names the phase.
+This page lists each command and each flag of lexis.
 
 ## Exit status
 
 | Status | Meaning |
 |---|---|
-| 0 | The command succeeded. A scan found no error findings. |
-| 1 | A scan found one or more error findings. Warnings and notes do not change the status. |
-| 2 | A usage error, a failure, or a command that a later phase delivers. |
+| 0 | The command succeeded. A scan found no finding at the `--fail-on` severity or higher. |
+| 1 | A scan found one or more findings at the `--fail-on` severity or higher. The default is `error`, so warnings and notes do not change the status. |
+| 2 | A usage error or a failure, for example a SARIF report that fails validation. |
 
 lexis writes each failure to stderr as `lexis: <message>`.
 
@@ -57,6 +57,7 @@ A path can be a file or a directory. In a directory, lexis checks each file of a
 | `--sarif-version` | `2.1.0` | The SARIF version: `2.1.0` or `2.2`. It needs `--format sarif`. |
 | `--output`, `-o` | `-` | The report file. `-` is stdout. |
 | `--exclude` | none | Skip each path that matches the pattern. Repeat the flag for each pattern. |
+| `--fail-on` | `error` | The lowest severity that gives exit status 1: `error`, `warning` or `note`. |
 
 An exclude pattern uses the syntax of Go's `path.Match`. It matches a path, each parent directory of the path, or the base name. For example, `--exclude .okfw/daily` skips the directory and its files, and `--exclude index.md` skips each file with that name.
 
@@ -67,7 +68,7 @@ docs/guide.md:12:9: error: STE-100-04: Do not use "will".
 lexis: 1 error(s), 0 warning(s), 0 note(s) in 14 file(s), ruleset ste-100
 ```
 
-The line and the column start at 1. The column counts UTF-16 code units, as SARIF does. The JSON report has a `summary` object and a `findings` list with the same fields.
+The line and the column start at 1. The column counts UTF-16 code units, as SARIF does. The JSON report has a `summary` object and a `findings` list with the same fields. [Write a SARIF report](../../guides/sarif/) tells what a SARIF report holds.
 
 A rule ID has capital letters, digits and hyphens, for example `STE-100-01` or `DOC-CUSTOM-01`. A parameter name has lowercase letters, digits and underscores. lexis rejects a rule that `--enable-rule` and `--omit-rule` both name.
 

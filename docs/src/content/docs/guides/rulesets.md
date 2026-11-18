@@ -35,7 +35,7 @@ Change a severity:
 rules: "STE-100-05": severity: "error"
 ```
 
-Add approved technical terms. The extended rules do not report them:
+Add approved technical terms. STE-100-06 and STE-100-07 do not report them:
 
 ```cue
 vocabulary: {okfw: true, zmake: true}
@@ -48,6 +48,23 @@ lexicon: tell2: {approved: "tell", unapproved: ["apprise"], nominalizations: ["a
 ```
 
 A user file can add a concept, but it can not change the lists of a built-in concept. CUE lists do not merge.
+
+## Keep a vocabulary file
+
+A project can keep its technical terms in one file, for example `vocabulary.cue`, and load it with each scan. The lexis repository does this for its self-check:
+
+```cue
+vocabulary: {
+	unification: true // CUE unification
+	trailing:    true // a trailing comment
+}
+```
+
+```sh
+bin/lexis scan --ruleset ste-100 --ruleset vocabulary.cue .
+```
+
+Add a term only when it names a concept of the project, a tool or a standard. Rewrite other text. The vocabulary applies to STE-100-06 and STE-100-07 only. The load fails when a vocabulary term is also an unapproved term of the lexicon or a banned term, for example of STE-100-04 or STE-100-09.
 
 ## Add a rule
 

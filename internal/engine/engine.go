@@ -3,7 +3,7 @@
 //
 // The checks of the core rules copy scripts/ste-check.py (ADR-0005). They
 // copy its sentence split, its word count, its \b boundaries and its re.I
-// matching. They use the Unicode classes of Python's str patterns.
+// flag. They use the Unicode classes of Python's str patterns.
 package engine
 
 import (

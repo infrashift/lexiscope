@@ -23,12 +23,18 @@ lexis version v0.0.0-dev (commit: 04c24b78cf5f, built: 2026-11-18T09:46:48Z)
 1. Run `zmake build`.
 2. Run `bin/lexis scan docs/`.
 
-lexis writes one line for each finding and a summary. The exit status is 1 when lexis finds an error, and 0 when it finds only warnings or nothing.
+lexis writes one line for each finding and a summary. The exit status is 1 when lexis finds an error, and 0 when it finds only warnings or nothing. `--fail-on warning` also gives status 1 for a warning.
 
 Write a JSON report to a file:
 
 ```sh
 bin/lexis scan --format json -o lexis.json docs/
+```
+
+Write a SARIF report for a code scanning tool. [Write a SARIF report](../sarif/) tells more:
+
+```sh
+bin/lexis scan --format sarif -o lexis.sarif docs/
 ```
 
 Skip generated files with `--exclude`:

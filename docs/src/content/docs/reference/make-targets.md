@@ -17,7 +17,7 @@ The `ZMakefile` and the `Makefile` have the same targets. zmake reads the `ZMake
 | `fmt` | `gofmt -w` on the Go directories | no |
 | `wiki` | `okfw validate --all` and `okfw validate --okf` | yes |
 | `docs-style` | `scripts/ste-check.py` | yes |
-| `self-check` | `bin/lexis scan` on the documents and the Go comments of lexis. An error fails it. | yes |
+| `self-check` | `bin/lexis scan` on the documents and the Go comments of lexis, with `vocabulary.cue`. It also writes `lexis-self.sarif` and `lexis-self-v22.sarif`. Each finding fails it. | yes |
 | `docs-dev` | Runs this site locally, by default at `http://localhost:4321/lexis/` | no |
 | `docs-build` | Builds this site into `docs/dist/` | no |
 

@@ -14,10 +14,10 @@ description: "How lexis applies each Power of 10 rule to Go code, which rules th
 
 **Status:** Accepted
 **Date:** 2026-11-18
-**Source:** User request, `PLAN.md`. Gerard J. Holzmann, "The Power of 10: Rules for Developing Safety-Critical Code" (2006). zmake ADR-0003 and ztree ADR-0003.
+**Source:** User request, `PLAN.md`. Gerard J. Holzmann, "The Power of 10" (2006). zmake ADR-0003 and ztree ADR-0003.
 
 ## Context
-The user requires the Power of 10 rules for all Go code in lexis. The rules target C. Go has a garbage collector, closures and panics. `scripts/nasa-lint.py` checks Zig files only, so it finds no functions in lexis. Some rules need an adaptation for Go.
+The user requires the Power of 10 rules for all Go code in lexis. The rules target C. Go has a garbage collector, closures and panics. `scripts/nasa-lint.py` checks Zig files only, so it finds no functions in lexis. Some rules need changes for Go.
 
 ## Decision
 | Rule | lexis adaptation | Check |
@@ -48,11 +48,11 @@ The user requires the Power of 10 rules for all Go code in lexis. The rules targ
 - **Scope:** each package of the module, without `_test.go` files. It skips hidden directories, `testdata`, `vendor`, `node_modules` and each directory with its own `go.mod`.
 - **R1:** the call graph covers one package. An import cycle is a compile error in Go, so a recursion across packages needs a function value, and R9 reports each function value. A call through an interface of the package reaches each method of that name. The search for cycles uses an explicit stack.
 - **R4:** the count starts at the `func` keyword and ends at the last brace, as in the Python script.
-- **R5:** a call into a package whose path ends in `/internal/assert` is an assertion. Calls in function literals count for the enclosing function. The functions of the assert package do not count.
+- **R5:** a call into a package whose path ends in `/internal/assert` is an assertion. Calls in function literals count for the function that contains them. The functions of the assert package do not count.
 - **R7:** the port reports `_ = x`, `var _ = x` and each blank on the left side of a call, for example `x, _ := f()` and `_, err := f()`. A conversion is not a call. `v, _ := m[k]`, `v, _ := x.(T)` and `var _ I = T{}` stay legal.
 - **R9:** the port reports each function type outside a declaration, a function literal or an interface method. It also reports each function literal. A function of the package outside call position is a function value, for example `f := helper`.
 - **Limits:** 4096 directories, 8192 files, 2^20 syntax nodes per file and 2^16 functions per package.
-- **Limit of the port:** imports resolve to empty packages. The port therefore misses a function of another package as a value, for example `strings.ToUpper`.
+- **Limit of the port:** imports resolve to empty packages. So the port misses a function of another package as a value, for example `strings.ToUpper`.
 - **Exit status:** 0 without findings, 1 with findings, 2 on a failure.
 
 `assert.Recover` is the boundary of each command. Defer it directly, so it can call `recover`. It recovers an `assert.Failure` only. Each other panic keeps its stack trace.

@@ -31,7 +31,7 @@ Read Markdown files and source comments, run the rules, and match the oracle on 
 ## Resolution
 - `internal/parser` copies the line rules, the paragraphs and the cleanup of the oracle. Each block keeps the source offset of each byte, so a finding has its exact line and UTF-16 column.
 - The comment extractor reads the spans of ztree through `github.com/infrashift/ztree/bindings/go`. It skips directives such as `//go:build` and indented code. A trailing comment stands alone.
-- `internal/engine` runs the nine checks. The core checks copy the Python semantics of the oracle: Unicode `\s` and `\b`, the sentence split, the ASCII word count and re.I matching.
+- `internal/engine` runs the nine checks. The core checks copy the Python semantics of the oracle: Unicode `\s` and `\b`, the sentence split, the ASCII word count and the re.I flag.
 - The parity test matches the oracle on 20 fixtures (54 oracle findings), on each repository document, and with a changed word limit. Mutation checks: 19 mutants of the parser and the engine. Each mutant that can change a finding fails the test. A mutant that only adds an empty sentence can not change a finding.
 - `lexis scan` writes text and JSON. It exits with 1 on an error finding. `--exclude` skips paths. SARIF stays for Phase 5.
 - `zmake self-check` runs lexis on its own documents and Go comments: 0 errors, 79 warnings of the extended rules. The fix of nine long comment sentences came first.

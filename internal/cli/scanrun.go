@@ -1,10 +1,12 @@
 package cli
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+	"slices"
 
 	"github.com/spf13/cobra"
 
@@ -16,9 +18,9 @@ import (
 	"github.com/infrashift/lexis/internal/ruleset"
 )
 
-// errFindings marks a scan with error findings: exit status 1, and the
-// report holds the details.
-var errFindings = errors.New("the scan found errors")
+// errFindings marks a scan with a finding at the --fail-on severity or
+// higher: exit status 1, and the report holds the details.
+var errFindings = errors.New("the scan found a finding at the --fail-on severity")
 
 func (f *scanFlags) run(cmd *cobra.Command, args []string) error {
 	assert.True(cmd != nil, "cobra gives the command")
@@ -26,9 +28,6 @@ func (f *scanFlags) run(cmd *cobra.Command, args []string) error {
 	opts, err := f.options(cmd.Flags().Changed("sarif-version"), args)
 	if err != nil {
 		return err
-	}
-	if opts.Format == "sarif" {
-		return fmt.Errorf("--format sarif: %w: SARIF arrives in Phase 5 of PLAN.md", errNotAvailable)
 	}
 	rs, err := ruleset.Load(opts.Ruleset)
 	if err != nil {
@@ -47,13 +46,27 @@ func (f *scanFlags) run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	s := report.Summarize(rs.Name, len(files), findings)
-	if err := writeReport(cmd.OutOrStdout(), opts, findings, s); err != nil {
+	if err := writeReport(cmd.OutOrStdout(), opts, rs, findings, s); err != nil {
 		return err
 	}
-	if s.Errors > 0 {
+	if failed(s, opts.FailOn) {
 		return errFindings
 	}
 	return nil
+}
+
+// failed reports whether the summary counts a finding at the failOn
+// severity or higher.
+func failed(s report.Summary, failOn string) bool {
+	assert.True(slices.Contains(severities, failOn), "the options checked --fail-on")
+	assert.True(s.Errors >= 0 && s.Warnings >= 0 && s.Notes >= 0, "a count is not negative")
+	switch failOn {
+	case "error":
+		return s.Errors > 0
+	case "warning":
+		return s.Errors+s.Warnings > 0
+	}
+	return s.Errors+s.Warnings+s.Notes > 0
 }
 
 // checkFiles reads and checks each file.
@@ -82,31 +95,42 @@ func checkFiles(e *engine.Engine, files []string) ([]engine.Finding, error) {
 	return all, nil
 }
 
-// writeReport writes the report to stdout, or to the --output file.
-func writeReport(stdout io.Writer, opts ScanOptions, findings []engine.Finding, s report.Summary) error {
+// writeReport writes the report to stdout, or to the --output file. A
+// SARIF report that fails validation writes no file.
+func writeReport(stdout io.Writer, opts ScanOptions, rs *ruleset.Ruleset, findings []engine.Finding, s report.Summary) error {
 	assert.True(stdout != nil, "stdout exists")
 	assert.True(opts.Output != "", "the output has a default")
-	if opts.Output == "-" {
-		return render(output.New(stdout), opts.Format, findings, s)
-	}
-	file, err := os.Create(opts.Output)
-	if err != nil {
+	var buf bytes.Buffer
+	if err := render(output.New(&buf), opts, rs, findings, s); err != nil {
 		return err
 	}
-	werr := render(output.New(file), opts.Format, findings, s)
-	return errors.Join(werr, file.Close())
+	if opts.Output == "-" {
+		out := output.New(stdout)
+		out.Printf("%s", buf.Bytes())
+		return out.Err()
+	}
+	return os.WriteFile(opts.Output, buf.Bytes(), 0o644)
 }
 
-// render writes the report in one format.
-func render(out *output.Writer, format string, findings []engine.Finding, s report.Summary) error {
+// render writes the report in the format of the options.
+func render(out *output.Writer, opts ScanOptions, rs *ruleset.Ruleset, findings []engine.Finding, s report.Summary) error {
 	assert.True(out != nil, "the writer exists")
-	assert.True(format == "text" || format == "json", "the options checked the format")
-	if format == "json" {
+	assert.True(slices.Contains(formats, opts.Format), "the options checked the format")
+	switch opts.Format {
+	case "json":
 		if err := report.JSON(out, findings, s); err != nil {
 			return err
 		}
-		return out.Err()
+	case "sarif":
+		root, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		if err := report.SARIF(out, opts.SARIFVersion, root, rs, findings); err != nil {
+			return err
+		}
+	default:
+		report.Text(out, findings, s)
 	}
-	report.Text(out, findings, s)
 	return out.Err()
 }

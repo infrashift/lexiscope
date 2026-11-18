@@ -11,7 +11,7 @@ lexis has no binary release. This page tells how to build the repository and run
 
 | Tool | Version | Use |
 |---|---|---|
-| Go | 1.26 or later | Build and test lexis |
+| Go | 1.26.10 or later | Build and test lexis |
 | Python | 3.10 or later | Run `scripts/ste-check.py` and `scripts/nasa-lint.py` |
 | zmake or GNU Make | any | Run the targets of the `ZMakefile` or the `Makefile` |
 | golangci-lint | 2.15.0 exactly | Run the static checks of `zmake lint` |

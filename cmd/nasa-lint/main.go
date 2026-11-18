@@ -1,4 +1,4 @@
-// Command nasa-lint checks the Go source of the module in the working
+// Command nasa-lint checks the Go source of the module in the current
 // directory against the NASA Power of 10 rules (ADR-0003). It is the Go port
 // of scripts/nasa-lint.py. Package internal/nasalint lists the checks.
 //

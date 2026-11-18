@@ -19,9 +19,11 @@ VERSION_PKG := github.com/infrashift/lexis/internal/version
 LDFLAGS := -X $(VERSION_PKG).Version=$(VERSION) -X $(VERSION_PKG).Commit=$(COMMIT) -X $(VERSION_PKG).BuildDate=$(BUILD_DATE)
 # gofmt walks directories, so it gets the Go directories only, not docs/.
 GO_DIRS := cmd internal rules
-# The self-check reads the files of scripts/ste-check.py and the Go comments.
+# The self-check reads the files of scripts/ste-check.py and the Go comments,
+# with the vocabulary of this repository. Each finding fails it.
 SELF_CHECK_PATHS := PLAN.md CLAUDE.md docs/src/content/docs .okfw cmd internal rules
-SELF_CHECK_EXCLUDES := --exclude .okfw/daily --exclude .okfw/ephemeral --exclude index.md --exclude log.md
+SELF_CHECK_SCAN := bin/lexis scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note \
+	--exclude .okfw/daily --exclude .okfw/ephemeral --exclude index.md --exclude log.md
 
 .PHONY: check ztree build test lint self-check fmt wiki docs-style docs-dev docs-build
 
@@ -48,9 +50,12 @@ lint: ztree
 	$(GOLANGCI_LINT) run ./...
 	$(GO) run ./cmd/nasa-lint
 
-## self-check: scan the documentation and the comments of lexis with lexis (an error fails)
+## self-check: scan the documentation and the comments of lexis with lexis, and write both SARIF reports (each finding fails)
 self-check: build
-	bin/lexis scan $(SELF_CHECK_EXCLUDES) $(SELF_CHECK_PATHS)
+	bin/lexis --version
+	$(SELF_CHECK_SCAN) $(SELF_CHECK_PATHS)
+	$(SELF_CHECK_SCAN) --format sarif -o lexis-self.sarif $(SELF_CHECK_PATHS)
+	$(SELF_CHECK_SCAN) --format sarif --sarif-version 2.2 -o lexis-self-v22.sarif $(SELF_CHECK_PATHS)
 
 ## fmt: format the Go sources in place
 fmt:

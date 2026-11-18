@@ -14,7 +14,7 @@ sidebar:
 | `name` | string | The name of the ruleset. Required. |
 | `description` | string | Optional. |
 | `lexicon` | map of `#Concept` | One approved term for each concept. |
-| `vocabulary` | set of terms | Approved technical terms. The extended rules do not report them. |
+| `vocabulary` | set of terms | Approved technical terms. STE-100-06 and STE-100-07 do not report them. |
 | `rules` | map of `#Rule` | The rules, with the rule ID as the key. |
 
 A set of terms is a CUE struct with `true` values: `{okfw: true}`. A file adds a term to a set. It can not remove a term.

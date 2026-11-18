@@ -51,7 +51,7 @@ The oracle has no check for synonyms, nominalizations, `-ing` forms, `your`, mar
 
 **Phase 4 result:** the parity test runs the unchanged oracle on 20 fixtures and on each repository document. It also runs a copy of the oracle with a step limit of 15, against lexis with `--set STE-100-01.max_words=15`. The extractor copies the Python semantics of the oracle: Unicode `\s` and `\b`, universal newlines, and the order of the cleanup steps. [Known differences from ste-check](/specs/known-differences-from-ste-check--01a1ee352a3c.md) lists the three deliberate differences.
 
-**Self-check:** `zmake self-check` runs `lexis scan` on the documents of the oracle and on the Go comments. An error fails the gate. A warning of an extended rule does not fail it, because the heuristics give false findings.
+**Self-check:** `zmake self-check` runs `lexis scan` on the documents of the oracle and on the Go comments. In Phase 4, an error failed the gate and a warning did not. [ADR-0009](/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) replaces this policy: each finding fails the gate, and `vocabulary.cue` holds the technical terms of lexis.
 
 ## Consequences
 - Rules 01 to 04 keep the limits of the oracle, for example its word count.

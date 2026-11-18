@@ -63,6 +63,7 @@ func TestUsageErrors(t *testing.T) {
 		{[]string{"scan", "--allow-term", " "}, "--allow-term: a term is empty"},
 		{[]string{"scan", "--ruleset", ""}, "--ruleset: give a ruleset name"},
 		{[]string{"scan", "--output", ""}, "--output: the value is empty"},
+		{[]string{"scan", "--fail-on", "info"}, `--fail-on: "info" is not one of error, warning, note`},
 		{[]string{"rules", "inspect"}, "accepts 1 arg(s)"},
 	}
 	for _, c := range cases {
@@ -117,9 +118,34 @@ func TestScan(t *testing.T) {
 	if doc.Summary.Errors != 1 || doc.Summary.Files != 1 || len(doc.Findings) != 2 || doc.Findings[0].RuleID != "STE-100-04" || doc.Findings[0].Column != 4 {
 		t.Fatalf("json report = %+v", doc)
 	}
-	code, _, errOut = runLexis(t, "scan", "--format", "sarif")
-	if code != ExitFailure || !strings.Contains(errOut, "SARIF arrives in Phase 5") {
-		t.Fatalf("sarif scan = %d, %q", code, errOut)
+	for _, v := range []string{"2.1.0", "2.2"} {
+		code, _, errOut = runLexis(t, "scan", "--format", "sarif", "--sarif-version", v, "-o", "report.sarif", "bad.md")
+		data, err := os.ReadFile("report.sarif")
+		var log struct {
+			Version string
+			Runs    []struct{ Results []struct{ RuleID string } }
+		}
+		if code != ExitFindings || errOut != "" || err != nil || json.Unmarshal(data, &log) != nil {
+			t.Fatalf("sarif %s scan = %d, %q, %v", v, code, errOut, err)
+		}
+		if log.Version != v || len(log.Runs) != 1 || len(log.Runs[0].Results) != 2 || log.Runs[0].Results[0].RuleID != "STE-100-04" {
+			t.Fatalf("sarif %s report = %+v", v, log)
+		}
+	}
+	// --fail-on: bad.md has one error and one warning.
+	for _, c := range []struct {
+		args []string
+		code int
+	}{
+		{[]string{"--omit-rule", "STE-100-04"}, ExitOK},
+		{[]string{"--omit-rule", "STE-100-04", "--fail-on", "warning"}, ExitFindings},
+		{[]string{"--omit-rule", "STE-100-04", "--fail-on", "note"}, ExitFindings},
+		{[]string{"--omit-rule", "STE-100-04,STE-100-07", "--fail-on", "note"}, ExitOK},
+		{[]string{"--fail-on", "error"}, ExitFindings},
+	} {
+		if code, _, errOut := runLexis(t, append(append([]string{"scan"}, c.args...), "bad.md")...); code != c.code || errOut != "" {
+			t.Errorf("scan %v = %d, %q; want %d", c.args, code, errOut, c.code)
+		}
 	}
 	if code, _, errOut := runLexis(t, "scan", "missing.md"); code != ExitFailure || !strings.Contains(errOut, "missing.md") {
 		t.Fatalf("missing file = %d, %q", code, errOut)
@@ -143,7 +169,7 @@ func TestScanOptions(t *testing.T) {
 		"-r", "ste-100,my.cue", "--enable-rule", "STE-100-05", "--disable-rule", "STE-100-07,STE-100-08",
 		"--omit-rule", "DOC-CUSTOM-01", "--set", "STE-100-01.max_words=18", "--set", "STE-100-05.swap=a,b",
 		"--allow-term", "okfw,zmake", "--format", "sarif", "--sarif-version", "2.2", "-o", "out.sarif",
-		"--exclude", "a/*", "--exclude", "b.md", "docs", "README.md")
+		"--exclude", "a/*", "--exclude", "b.md", "--fail-on", "warning", "docs", "README.md")
 	got, err := f.options(fl.Changed("sarif-version"), fl.Args())
 	if err != nil {
 		t.Fatal(err)
@@ -164,6 +190,7 @@ func TestScanOptions(t *testing.T) {
 		SARIFVersion: "2.2",
 		Output:       "out.sarif",
 		Excludes:     []string{"a/*", "b.md"},
+		FailOn:       "warning",
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("options =\n%+v\nwant\n%+v", got, want)
@@ -177,7 +204,7 @@ func TestScanDefaults(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := ScanOptions{Paths: []string{"."}, Ruleset: ruleset.Options{Rulesets: []string{"ste-100"}},
-		Format: "text", SARIFVersion: "2.1.0", Output: "-"}
+		Format: "text", SARIFVersion: "2.1.0", Output: "-", FailOn: "error"}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("defaults =\n%+v\nwant\n%+v", got, want)
 	}

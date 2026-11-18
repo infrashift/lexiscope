@@ -2,12 +2,12 @@
 
 lexis is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. The first ruleset is `ste-100`, a subset of ASD-STE100 (Simplified Technical English). lexis writes text, JSON and SARIF reports.
 
-Work on one phase at a time. Inside a phase, work on one task at a time. Each phase has a mirror issue in the OKF wiki (`.okfw/issues/`). When a phase is done, tick this checklist and the acceptance criteria of the issue.
+Work on one phase at a time. Inside a phase, work on one task at a time. Each phase has a mirror issue in the OKF wiki (`.okfw/issues/`). At the end of a phase, tick this checklist and the acceptance criteria of the issue.
 
 Loop: do one task, run `zmake check`, and repeat until it reports zero errors and zero warnings. Then go to the next task. At the end of a phase, update the wiki and the docs site, then make one git commit. Do not push.
 
 - Architecture: [lexis architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md)
-- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)
+- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)
 - Guides: [Development workflow](.okfw/development-workflow--01a1ed42b859.md) · [Wiki conventions](.okfw/wiki-conventions--01a1ed42b854.md)
 
 ## Rules
@@ -24,7 +24,7 @@ Loop: do one task, run `zmake check`, and repeat until it reports zero errors an
 | Static analysis | `golangci-lint run` (v2, pinned version) | 2 |
 | Wiki | `okfw validate --all --okf` | 1 |
 | Writing style | `scripts/ste-check.py` | 1 |
-| Self-check | `lexis scan --ruleset ste-100 .` | 4 |
+| Self-check | `lexis scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note` | 4, zero results from 5 |
 
 The gate does not build the docs site, so the Go checks do not need bun. `zmake docs-build` builds the site, and the Pages workflow builds it for each pull request.
 
@@ -55,14 +55,14 @@ All Markdown files, wiki pages, docs pages, CLI help text and code comments foll
 lexis adds more checks. They apply to lexis output, and the authors of this repository follow them too:
 
 - Do not use marketing words, for example `seamless`, `robust`, `powerful` or `effortless`.
-- Do not use `your`. Write "the ruleset file", not "your ruleset file".
+- Do not use the second-person possessive pronoun. Write "the ruleset file".
 - Use the active voice. Name the actor: "The parser reads the document."
 - Use one term for one concept. Avoid nominalizations (`-tion`, `-ment`, `-ance`) and unclear `-ing` forms.
 - Write one instruction in each sentence.
 
 ## Phase 1 — Bootstrap, gates, wiki and docs site
 
-Tracking: [ISSUE-001](.okfw/issues/issue-001-bootstrap-the-repository-the-gates-the-wiki-and-the-docs-site--01a1ed42b886.md)
+Issue: [ISSUE-001](.okfw/issues/issue-001-bootstrap-the-repository-the-gates-the-wiki-and-the-docs-site--01a1ed42b886.md)
 
 - [x] Task 0: Rewrite this plan in STE, then get approval from the user
 - [x] Task 1.0: Create the git repo on `main` and write `.gitignore`
@@ -101,7 +101,7 @@ First ADRs:
 
 ## Phase 2 — CLI, version and ruleset overrides
 
-Tracking: [ISSUE-002](.okfw/issues/issue-002-cli-version-and-ruleset-overrides-and-the-go-port-of-nasa-lint--01a1ed42b88b.md)
+Issue: [ISSUE-002](.okfw/issues/issue-002-cli-version-and-ruleset-overrides-and-the-go-port-of-nasa-lint--01a1ed42b88b.md)
 
 - [x] Port `scripts/nasa-lint.py` to Go (`cmd/nasa-lint`) in a separate commit, and use the port in `zmake lint`
 - [x] Install golangci-lint v2 at a pinned version, with errcheck, funlen and govet, and add it to `zmake lint`
@@ -127,7 +127,7 @@ In Phase 2, `lexis scan` and the `lexis rules` commands check their flags. Then 
 
 ## Phase 3 — CUE ruleset engine and the ste-100 ruleset
 
-Tracking: [ISSUE-003](.okfw/issues/issue-003-cue-ruleset-engine-and-the-ste-100-ruleset--01a1ed42b891.md)
+Issue: [ISSUE-003](.okfw/issues/issue-003-cue-ruleset-engine-and-the-ste-100-ruleset--01a1ed42b891.md)
 
 - [x] Write the CUE schema in `internal/ruleset/schema.cue` and load it with `cuelang.org/go`
 - [x] Write the `ste-100` ruleset in `rules/ste100/ste100.cue`
@@ -167,12 +167,12 @@ Procedural sentences: the oracle treats only numbered list items as steps. lexis
 
 ## Phase 4 — Prose and comment engine, and parity with ste-check
 
-Tracking: [ISSUE-004](.okfw/issues/issue-004-prose-and-comment-engine-and-parity-with-ste-check--01a1ed42b897.md)
+Issue: [ISSUE-004](.okfw/issues/issue-004-prose-and-comment-engine-and-parity-with-ste-check--01a1ed42b897.md)
 
 - [x] Add the Markdown extractor in `internal/parser`
 - [x] Add the comment extractor in `internal/parser` with the ztree Go binding
 - [x] Add the parity test in `internal/engine/ste_parity_test.go`
-- [x] Add `lexis scan --ruleset ste-100 .` to `zmake check` (the `self-check` target; an error fails, a warning does not)
+- [x] Add `lexis scan --ruleset ste-100 .` to `zmake check` (the `self-check` target; in Phase 4 an error fails it, and from Phase 5 each finding fails it)
 - [x] Add the comment guide to the docs site
 
 The Markdown extractor:
@@ -202,12 +202,12 @@ Done when the core rules match the oracle on every input, in both directions.
 
 ## Phase 5 — SARIF reports and the self-check
 
-Tracking: [ISSUE-005](.okfw/issues/issue-005-sarif-reports-and-the-self-check--01a1ed42b89d.md)
+Issue: [ISSUE-005](.okfw/issues/issue-005-sarif-reports-and-the-self-check--01a1ed42b89d.md)
 
-- [ ] Add the SARIF report with `github.com/owenrumney/go-sarif/v3`
-- [ ] Prove that `Validate()` rejects a broken SARIF 2.2 report
-- [ ] Run the self-check on this repository
-- [ ] Add the SARIF guide to the docs site, and update the wiki
+- [x] Add the SARIF report with `github.com/owenrumney/go-sarif/v3`
+- [x] Prove that `Validate()` rejects a broken SARIF 2.2 report
+- [x] Run the self-check on this repository
+- [x] Add the SARIF guide to the docs site, and update the wiki
 
 The SARIF report:
 
@@ -226,3 +226,7 @@ The self-check:
 3. Write a SARIF 2.1.0 report of this repository to `lexis-self.sarif`.
 4. Write a SARIF 2.2 report of this repository to `lexis-self-v22.sarif`.
 5. Make sure that both reports have zero results.
+
+`zmake self-check` does steps 2 to 5. It loads `vocabulary.cue`, the technical terms of this repository, and uses `--fail-on note`, so each finding fails it ([ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)).
+
+Result: go-sarif validates SARIF 2.2 reports. The 2.2 schema uses no keyword of the newer drafts, and the tests prove that `Validate()` rejects broken reports. So lexis needs no second validator, and 2.2 is not experimental.

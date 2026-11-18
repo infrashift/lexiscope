@@ -17,8 +17,8 @@ import (
 // Output formats of lexis scan.
 var formats = []string{"text", "json", "sarif"}
 
-// errNotAvailable marks a command that a later phase of PLAN.md delivers.
-var errNotAvailable = errors.New("not available yet")
+// Severities of --fail-on, from the most severe.
+var severities = []string{"error", "warning", "note"}
 
 // ScanOptions is the checked command line of lexis scan.
 type ScanOptions struct {
@@ -28,13 +28,14 @@ type ScanOptions struct {
 	SARIFVersion string
 	Output       string   // "-" is stdout
 	Excludes     []string // path.Match patterns of paths to skip
+	FailOn       string   // the least severe finding that gives exit status 1
 }
 
 // scanFlags holds the raw flag values of lexis scan.
 type scanFlags struct {
-	rules                        rulesetFlags
-	format, sarifVersion, output string
-	excludes                     []string
+	rules                                rulesetFlags
+	format, sarifVersion, output, failOn string
+	excludes                             []string
 }
 
 func newScanCmd() *cobra.Command {
@@ -59,13 +60,14 @@ func (f *scanFlags) register(fl *pflag.FlagSet) {
 	fl.StringVar(&f.sarifVersion, "sarif-version", version.DefaultSARIFVersion, "SARIF version: 2.1.0 or 2.2")
 	fl.StringVarP(&f.output, "output", "o", "-", "report file; - is stdout")
 	fl.StringArrayVar(&f.excludes, "exclude", nil, "skip the paths that match this pattern")
+	fl.StringVar(&f.failOn, "fail-on", "error", "exit with status 1 on a finding of this severity or higher: error, warning or note")
 }
 
 // options checks the flag values and returns the scan options.
 func (f *scanFlags) options(sarifVersionSet bool, args []string) (ScanOptions, error) {
 	assert.True(f != nil, "the flags exist")
 	assert.True(len(args) <= maxArgs, "the command line is bounded")
-	o := ScanOptions{Paths: args, Format: f.format, SARIFVersion: f.sarifVersion, Output: f.output, Excludes: f.excludes}
+	o := ScanOptions{Paths: args, Format: f.format, SARIFVersion: f.sarifVersion, Output: f.output, Excludes: f.excludes, FailOn: f.failOn}
 	if len(o.Paths) == 0 {
 		o.Paths = []string{"."}
 	}
@@ -77,6 +79,9 @@ func (f *scanFlags) options(sarifVersionSet bool, args []string) (ScanOptions, e
 		return ScanOptions{}, err
 	}
 	o.Ruleset = rs
+	if !slices.Contains(severities, o.FailOn) {
+		return ScanOptions{}, fmt.Errorf("--fail-on: %q is not one of %s", o.FailOn, strings.Join(severities, ", "))
+	}
 	if o.Output == "" {
 		return ScanOptions{}, errors.New("--output: the value is empty; use - for stdout")
 	}

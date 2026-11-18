@@ -20,7 +20,7 @@ description: "lexis exits with 0, 1 or 2, keeps the first output error in one wr
 lexis runs in CI jobs, so its exit status has to be stable. Rule R7 forbids discarded results, and errcheck rejects an unchecked write. A check after each write makes the command code long. `PLAN.md` puts the `lexis scan` and `lexis rules` commands in Phase 2, but the ruleset engine arrives in Phase 3 and the rule engine in Phase 4.
 
 ## Decision
-- **Exit status:** 0 when the command succeeds without error findings, 1 when a scan finds errors, and 2 on a usage error or a failure. A failed assertion also gives 2.
+- **Exit status:** 0 when the command succeeds without error findings, 1 when a scan finds errors, and 2 on a usage error or a failure. A failed assertion also gives 2. Phase 5 adds `--fail-on <error|warning|note>`: status 1 means a finding at that severity or higher. The default is `error` ([ADR-0009](/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)).
 - **Messages:** lexis writes each failure to stderr as `lexis: <message>`. Cobra does not print its own errors or the usage text after an error.
 - **Boundary:** `cli.execute` defers `assert.Recover(&code, &failure)`. `assert.Recover` does no output. The caller writes the message.
 - **Output errors:** `internal/output.Writer` writes formatted text and keeps the first error. A command checks `Err()` once at its end and exits with status 2 when the output failed.
@@ -31,7 +31,7 @@ lexis runs in CI jobs, so its exit status has to be stable. Rule R7 forbids disc
 
 ## Consequences
 - A CI job can tell findings (1) from a broken setup (2).
-- Phase 3 and Phase 4 replace the `errNotAvailable` returns. The flags stay the same.
+- Phase 3 and Phase 4 replace the `errNotAvailable` returns. The flags stay the same. Phase 5 removes `errNotAvailable`, because each command works.
 
 ## Alternatives considered
 - **A check after each write.** Rejected: it doubles the length of the output code.
