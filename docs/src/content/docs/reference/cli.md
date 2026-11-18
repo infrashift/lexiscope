@@ -7,7 +7,7 @@ sidebar:
 
 <!-- internal/cli/cli_test.go checks that this page lists each command and each flag. -->
 
-The commands below exist from Phase 2. `lexis scan` and the `lexis rules` commands check their flags now. They do their work from Phase 4 and Phase 3. Until then they exit with status 2 and name the phase.
+The `lexis rules` commands work from Phase 3. `lexis scan` checks its flags and loads the ruleset now. It checks files from Phase 4. Until then it exits with status 2 and names the phase.
 
 ## Exit status
 
@@ -59,11 +59,24 @@ A rule ID has capital letters, digits and hyphens, for example `STE-100-01` or `
 
 ## `lexis rules list`
 
-Lists the active rules, the omitted rules and the word limits of the resolved ruleset.
+Lists each rule of the resolved ruleset after each change: its status, its severity, its check, its word limit and its title.
 
 | Flag | Default | Meaning |
 |---|---|---|
 | `--ruleset`, `-r` | `ste-100` | A built-in ruleset name, or one or more CUE files or directories. |
+| `--enable-rule` | none | Turn on these rule IDs. |
+| `--omit-rule`, `--disable-rule` | none | Turn off these rule IDs. |
+| `--set` | none | Change a rule parameter: `rule_id.param=value`. |
+| `--allow-term` | none | Add approved technical terms. |
+
+```text
+$ lexis rules list --omit-rule STE-100-07 --set STE-100-01.max_words=18
+ruleset ste-100: 11 rules, 10 active, 1 omitted
+ID          STATUS   SEVERITY  CHECK                         LIMIT  TITLE
+STE-100-01  active   error     max_words                     18     Limit the length of a procedural step
+...
+STE-100-07  omitted  warning   ambiguous_gerunds             -      Avoid unclear -ing forms
+```
 
 ## `lexis rules inspect`
 
@@ -71,4 +84,17 @@ Lists the active rules, the omitted rules and the word limits of the resolved ru
 lexis rules inspect <ruleset>
 ```
 
-Shows each rule, the lexicon and the word limits of one ruleset.
+Shows each rule with its parameters, then the lexicon and the vocabulary of one ruleset. The argument is a built-in name, a CUE file or a directory.
+
+## Values of `--set`
+
+lexis reads the value of `--set` as CUE. The value of a parameter in a CUE file has the same syntax. Text that is not valid CUE is a string.
+
+| Flag | Effect |
+|---|---|
+| `--set STE-100-01.max_words=18` | Sets the word limit to the number 18. |
+| `--set 'STE-100-01.procedural_markers=["numbered","bullet"]'` | Makes bullet items steps too. |
+| `--set 'STE-100-04.tokens={"utilise": true}'` | Adds a banned term. A set only grows. |
+| `--set STE-100-09.pattern=x+` | Sets a string. |
+
+A value that does not fit the parameter fails with the path of the field, for example `rules."STE-100-01".params.max_words: conflicting values "many" and int`.

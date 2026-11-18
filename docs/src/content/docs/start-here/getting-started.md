@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-lexis has no binary release. The CLI exists, but the scan arrives in Phase 4. This page tells how to build the repository and run its checks.
+lexis has no binary release. `lexis rules` works, but the scan arrives in Phase 4. This page tells how to build the repository and run its checks.
 
 ## Requirements
 

@@ -29,7 +29,7 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 | `cmd/nasa-lint` and `internal/nasalint` | The Go port of `scripts/nasa-lint.py`. | 2 |
 | `internal/assert` | `assert.True` for rule R5, and `assert.Recover` for the command boundary. | 1 |
 | `internal/version` | The version, commit and build date, and the SARIF versions. | 2 |
-| `internal/ruleset` | The CUE schema, the loader, the lexicon projection and the overrides. | 3 |
+| `internal/ruleset` | The CUE schema (`schema.cue`), the loader, the sources and the CLI changes. `lexis rules list` and `lexis rules inspect` print its result. | 3 |
 | `rules/ste100` | The CUE source of the `ste-100` ruleset, embedded in the binary. | 3 |
 | `internal/parser` | The Markdown extractor and the comment extractor. | 4 |
 | `internal/engine` | The tokenizer, the sentence splitter and the rule checks. | 4 |

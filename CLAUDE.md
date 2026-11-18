@@ -14,7 +14,8 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 - `cmd/nasa-lint/` and `internal/nasalint/` hold the Go port of `scripts/nasa-lint.py`.
 - Write command output through `internal/output.Writer`. Do not discard a write result.
 - `internal/` holds the packages. The [architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md) lists them.
-- `rules/ste100/` holds the CUE source of the `ste-100` ruleset.
+- `rules/ste100/` holds the CUE source of the `ste-100` ruleset. `internal/ruleset/schema.cue` is the schema. Run `bin/lexis rules inspect ste-100` to see the resolved ruleset.
+- In CUE, write each value that a user can change as a default (`*value | type`). Write each list of terms as a struct of `true` values.
 - `docs/` holds the docs site. `docs/go.mod` keeps it out of the Go module. Do not delete that file.
 - `.github/workflows/docs-release.yml` builds the docs site and deploys it to GitHub Pages.
 - `scripts/` holds the lint scripts from zmake: `nasa-lint.py` (Power of 10) and `ste-check.py` (ASD-STE100, the oracle). Do not change them.

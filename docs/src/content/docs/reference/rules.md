@@ -5,12 +5,12 @@ sidebar:
   order: 1
 ---
 
-Phase 3 of the plan adds these rules to lexis. This page lists the plan.
+`rules/ste100/ste100.cue` defines these rules. Run `lexis rules inspect ste-100` to see each parameter, the lexicon and the vocabulary. To change a rule, see [Write a ruleset](../../guides/rulesets/).
 
 ## The ste-100 ruleset
 
 The ruleset follows `scripts/ste-check.py`, which zmake and ztree use as their writing gate.
-Rules 01 to 04 form the core group. They match the script exactly, and a parity test checks both directions.
+Rules 01 to 04 form the core group. They match the script exactly. A test compares their limits, their banned words and their passive pattern with the script. From Phase 4, a parity test also compares the findings in both directions.
 Rules 05 to 11 form the extended group. Each extended rule gives a warning by default and has an exception list.
 
 | ID | Check | Severity | Group |

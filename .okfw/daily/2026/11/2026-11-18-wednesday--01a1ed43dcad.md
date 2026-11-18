@@ -19,6 +19,7 @@ timestamp: "2026-11-18T00:06:50-06:00"
 
 - [x] Phase 1: bootstrap, gates, wiki and docs site
 - [x] Phase 2: Go port of nasa-lint, golangci-lint, version and CLI
+- [x] Phase 3: CUE ruleset engine and the ste-100 ruleset
 
 ## Notes
 
@@ -30,7 +31,10 @@ timestamp: "2026-11-18T00:06:50-06:00"
 - **Learned:** errcheck and R7 conflict on writes. A writer that keeps the first error satisfies both.
 - **Learned:** funlen counts the lines between the braces. Its limit of 58 equals R4.
 - **Learned:** `recover` works in a named function that the code defers directly, so the command boundary needs no function literal.
-- **Next:** Phase 3. Add the CUE schema, the loader and the ste-100 ruleset.
+- **Changed:** Phase 3. `internal/ruleset` loads CUE rulesets. `ste100.cue` defines 11 rules and a lexicon of 20 concepts. `lexis rules list` and `lexis rules inspect` work.
+- **Learned:** two CUE defaults for one field do not unify, so the schema has no default for `severity`. A comprehension in a built-in file sees the lexicon of each user file. `try` is a CUE keyword.
+- **Learned:** a test that reads the constants of `scripts/ste-check.py` keeps rules 01 to 04 equal to the oracle before the engine exists.
+- **Next:** Phase 4. Add the Markdown extractor, the comment extractor with ztree, the rule checks and the parity test.
 
 ## End of Day
 

@@ -25,8 +25,20 @@ Users need to add rules, turn off rules, change limits and add approved terms. A
 - A rule has `enabled`, `severity`, `scope`, `title`, `message`, `params` and `check` fields. `check` selects one of a fixed set of check functions.
 - The lexicon maps each concept to one approved term, its unapproved synonyms and its nominalizations. lexis makes the substitution rule (STE-100-05) and the nominalization rule (STE-100-06) from the lexicon.
 - CUE unification fails when an approved term is also unapproved or banned.
-- The order of changes: the built-in ruleset, then each user overlay file, then the CLI flags (`--omit-rule`, `--enable-rule`, `--set`, `--allow-term`).
+- lexis unifies the schema, the built-in ruleset, each user file and then the CLI flags (`--enable-rule`, `--omit-rule`, `--set`, `--allow-term`). CUE unification is commutative, so the order of the files does not change the result. A test proves this.
+- Each ruleset file compiles in the scope of the schema, so it can refer to `#Severity` and the other definitions.
 - `rules/ste100/` embeds the `ste-100` ruleset in the binary.
+
+**Details that Phase 3 settled:**
+- **Defaults:** a built-in value that a user can change is a CUE default, for example `max_words: *20 | int` or `severity: *"warning" | #Severity`. A user file or a flag replaces the default. Two concrete values for one field fail with the path of the field and the position in each file. The schema itself has no defaults for `severity` and `description`, because two defaults for one field do not unify. A user rule must state its severity.
+- **Closed parameters:** `PLAN.md` asked for an open `params` struct. The schema closes `#Params` instead, so `--set STE-100-01.max_wrods=18` fails. Each check states its required parameters with an `if check == ...` clause.
+- **Sets:** each list of terms that a user can extend is a struct with `true` values, for example `tokens: {should: true}`. CUE lists do not merge, but structs do. A file can add a term to a set, but it can not remove a term. The lexicon keeps lists, as `PLAN.md` asked. A user file can add a concept but can not change the lists of a built-in concept.
+- **Projection:** `ste100.cue` makes the `swap` maps of STE-100-05 and STE-100-06 with comprehensions over `lexicon`. The comprehension sees the unified lexicon, so a user concept changes both rules.
+- **Conflicts:** some terms have two roles: approved in the lexicon or the vocabulary, and also unapproved or banned. For each such term, `#Ruleset` adds a field `conflict.<term>` with two values that do not unify. The load then fails, and the error names the term. `--allow-term should` fails in the same way.
+- **CLI values:** `--set` reads its value as CUE: `18` is a number, `["numbered","bullet"]` a list, `{"x": true}` a set. Text that is not a concrete CUE value is a string.
+- **Rule IDs:** `#RuleID` is `^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$`. The CLI checks the same pattern before the load.
+- **Keyword:** `try` is a keyword in CUE v0.17, so `ste100.cue` quotes it as a field name.
+- **Limits:** 64 sources, 256 CUE files in one directory, 1 MiB for each file and 1024 rules.
 
 ## Consequences
 - A user ruleset is data, not code. A new kind of check needs a change to lexis.

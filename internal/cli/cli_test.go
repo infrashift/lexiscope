@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"os"
+	"reflect"
 	"regexp"
 	"slices"
 	"strings"
@@ -11,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
+	"github.com/infrashift/lexis/internal/ruleset"
 	"github.com/infrashift/lexis/internal/version"
 )
 
@@ -69,99 +71,125 @@ func TestUsageErrors(t *testing.T) {
 	}
 }
 
-func TestLaterPhases(t *testing.T) {
-	cases := map[string][]string{
-		"Phase 4": {"scan", "--format", "sarif", "--sarif-version", "2.2", "--set", "STE-100-01.max_words=18", "docs"},
-		"Phase 3": {"rules", "list"},
-	}
-	for phase, args := range cases {
-		code, _, errOut := runLexis(t, args...)
-		if code != ExitFailure || !strings.Contains(errOut, "not available yet") || !strings.Contains(errOut, phase) {
-			t.Errorf("lexis %v = %d, %q", args, code, errOut)
-		}
-	}
-	if code, _, errOut := runLexis(t, "rules", "inspect", "ste-100"); code != ExitFailure || !strings.Contains(errOut, "Phase 3") {
-		t.Errorf("rules inspect = %d, %q", code, errOut)
+func TestScanWaitsForPhase4(t *testing.T) {
+	args := []string{"scan", "--format", "sarif", "--sarif-version", "2.2", "--set", "STE-100-01.max_words=18", "--omit-rule", "STE-100-07", "docs"}
+	code, _, errOut := runLexis(t, args...)
+	want := "lexis: scan docs: not available yet: ruleset ste-100 has 10 active rules, but the rule engine arrives in Phase 4 of PLAN.md\n"
+	if code != ExitFailure || errOut != want {
+		t.Errorf("lexis %v = %d, %q", args, code, errOut)
 	}
 }
 
+// parseScan parses args with the flags of lexis scan.
+func parseScan(t *testing.T, args ...string) (*scanFlags, *pflag.FlagSet) {
+	t.Helper()
+	f := &scanFlags{}
+	fl := pflag.NewFlagSet("scan", pflag.ContinueOnError)
+	f.register(fl)
+	if err := fl.Parse(args); err != nil {
+		t.Fatal(err)
+	}
+	return f, fl
+}
+
 func TestScanOptions(t *testing.T) {
-	cmd := newScanCmd()
-	err := cmd.Flags().Parse([]string{
+	f, fl := parseScan(t,
 		"-r", "ste-100,my.cue", "--enable-rule", "STE-100-05", "--disable-rule", "STE-100-07,STE-100-08",
 		"--omit-rule", "DOC-CUSTOM-01", "--set", "STE-100-01.max_words=18", "--set", "STE-100-05.swap=a,b",
 		"--allow-term", "okfw,zmake", "--format", "sarif", "--sarif-version", "2.2", "-o", "out.sarif",
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	f := scanFlagsOf(t, cmd)
-	got, err := f.options(cmd.Flags().Changed("sarif-version"), []string{"docs", "README.md"})
+		"docs", "README.md")
+	got, err := f.options(fl.Changed("sarif-version"), fl.Args())
 	if err != nil {
 		t.Fatal(err)
 	}
 	want := ScanOptions{
-		Paths:    []string{"docs", "README.md"},
-		Rulesets: []string{"ste-100", "my.cue"},
-		Enable:   []string{"STE-100-05"},
-		Omit:     []string{"STE-100-07", "STE-100-08", "DOC-CUSTOM-01"},
-		Overrides: []Override{
-			{RuleID: "STE-100-01", Param: "max_words", Value: "18"},
-			{RuleID: "STE-100-05", Param: "swap", Value: "a,b"},
+		Paths: []string{"docs", "README.md"},
+		Ruleset: ruleset.Options{
+			Rulesets: []string{"ste-100", "my.cue"},
+			Enable:   []string{"STE-100-05"},
+			Omit:     []string{"STE-100-07", "STE-100-08", "DOC-CUSTOM-01"},
+			Overrides: []ruleset.Override{
+				{RuleID: "STE-100-01", Param: "max_words", Value: "18"},
+				{RuleID: "STE-100-05", Param: "swap", Value: "a,b"},
+			},
+			AllowTerms: []string{"okfw", "zmake"},
 		},
-		AllowTerms:   []string{"okfw", "zmake"},
 		Format:       "sarif",
 		SARIFVersion: "2.2",
 		Output:       "out.sarif",
 	}
-	if !equalOptions(got, want) {
+	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("options =\n%+v\nwant\n%+v", got, want)
 	}
 }
 
 func TestScanDefaults(t *testing.T) {
-	cmd := newScanCmd()
-	if err := cmd.Flags().Parse(nil); err != nil {
-		t.Fatal(err)
-	}
-	got, err := scanFlagsOf(t, cmd).options(false, nil)
+	f, fl := parseScan(t)
+	got, err := f.options(fl.Changed("sarif-version"), fl.Args())
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := ScanOptions{Paths: []string{"."}, Rulesets: []string{"ste-100"}, Format: "text", SARIFVersion: "2.1.0", Output: "-"}
-	if !equalOptions(got, want) {
+	want := ScanOptions{Paths: []string{"."}, Ruleset: ruleset.Options{Rulesets: []string{"ste-100"}},
+		Format: "text", SARIFVersion: "2.1.0", Output: "-"}
+	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("defaults =\n%+v\nwant\n%+v", got, want)
 	}
 }
 
-// scanFlagsOf returns the scanFlags behind the RunE method value of cmd.
-func scanFlagsOf(t *testing.T, cmd *cobra.Command) *scanFlags {
-	t.Helper()
-	f := &scanFlags{}
-	get := func(name string) []string {
-		v, err := cmd.Flags().GetStringSlice(name)
-		if err != nil {
-			t.Fatal(err)
+func TestRulesList(t *testing.T) {
+	code, out, errOut := runLexis(t, "rules", "list", "--omit-rule", "STE-100-07", "--set", "STE-100-01.max_words=18",
+		"-r", "ste-100,../ruleset/testdata/add_rule.cue")
+	if code != ExitOK || errOut != "" {
+		t.Fatalf("rules list = %d, %q", code, errOut)
+	}
+	lines := strings.Split(strings.TrimSpace(out), "\n")
+	if lines[0] != "ruleset ste-100: 12 rules, 11 active, 1 omitted" || len(lines) != 14 {
+		t.Fatalf("output:\n%s", out)
+	}
+	for _, want := range []string{
+		`^ID +STATUS +SEVERITY +CHECK +LIMIT +TITLE$`,
+		`^DOC-CUSTOM-01 +active +error +regex_ban +- +Do not write TODO`,
+		`^STE-100-01 +active +error +max_words +18 +Limit the length of a procedural step$`,
+		`^STE-100-07 +omitted +warning +ambiguous_gerunds +- `,
+	} {
+		if !slices.ContainsFunc(lines, regexp.MustCompile(want).MatchString) {
+			t.Errorf("no line matches %s in:\n%s", want, out)
 		}
-		return v
 	}
-	f.rulesets, f.enable, f.omit, f.allowTerms = get("ruleset"), get("enable-rule"), get("omit-rule"), get("allow-term")
-	sets, err := cmd.Flags().GetStringArray("set")
-	if err != nil {
-		t.Fatal(err)
-	}
-	f.sets = sets
-	f.format, _ = cmd.Flags().GetString("format")
-	f.sarifVersion, _ = cmd.Flags().GetString("sarif-version")
-	f.output, _ = cmd.Flags().GetString("output")
-	return f
 }
 
-func equalOptions(a, b ScanOptions) bool {
-	return slices.Equal(a.Paths, b.Paths) && slices.Equal(a.Rulesets, b.Rulesets) &&
-		slices.Equal(a.Enable, b.Enable) && slices.Equal(a.Omit, b.Omit) &&
-		slices.Equal(a.Overrides, b.Overrides) && slices.Equal(a.AllowTerms, b.AllowTerms) &&
-		a.Format == b.Format && a.SARIFVersion == b.SARIFVersion && a.Output == b.Output
+func TestRulesInspect(t *testing.T) {
+	code, out, errOut := runLexis(t, "rules", "inspect", "ste-100")
+	if code != ExitOK || errOut != "" {
+		t.Fatalf("rules inspect = %d, %q", code, errOut)
+	}
+	for _, want := range []string{
+		"ruleset ste-100: A subset of ASD-STE100",
+		"\nSTE-100-04 (error, active)\n",
+		"  tokens: are expected to, can be seen, easily, is expected to, just, please, really, should, simply, very, will, won't, would\n",
+		"utilize -> use",
+		"  verify: not validate, confirm, ensure; nouns verification, validation, confirmation\n",
+		"\nvocabulary: 0 terms\n",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output has no %q", want)
+		}
+	}
+	code, _, errOut = runLexis(t, "rules", "inspect", "no-such-ruleset")
+	if code != ExitFailure || !strings.Contains(errOut, "not a built-in ruleset") {
+		t.Fatalf("unknown ruleset = %d, %q", code, errOut)
+	}
+}
+
+func TestRulesetErrorsReachTheCLI(t *testing.T) {
+	code, _, errOut := runLexis(t, "scan", "--set", "STE-100-01.max_words=many")
+	if code != ExitFailure || !strings.Contains(errOut, "max_words: conflicting values") {
+		t.Fatalf("scan with a bad --set = %d, %q", code, errOut)
+	}
+	code, _, errOut = runLexis(t, "rules", "list", "--omit-rule", "NO-SUCH-01")
+	if code != ExitFailure || !strings.Contains(errOut, "no rule NO-SUCH-01") {
+		t.Fatalf("rules list with an unknown rule = %d, %q", code, errOut)
+	}
 }
 
 // TestDocsListEachCommandAndFlag keeps the CLI reference page in step with

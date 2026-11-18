@@ -129,10 +129,10 @@ In Phase 2, `lexis scan` and the `lexis rules` commands check their flags. Then 
 
 Tracking: [ISSUE-003](.okfw/issues/issue-003-cue-ruleset-engine-and-the-ste-100-ruleset--01a1ed42b891.md)
 
-- [ ] Write the CUE schema in `internal/ruleset/schema.cue` and load it with `cuelang.org/go`
-- [ ] Write the `ste-100` ruleset in `rules/ste100/ste100.cue`
-- [ ] Test user overlays: add a rule, omit a rule, change `max_words`, and add approved terms
-- [ ] Add the rules reference to the docs site
+- [x] Write the CUE schema in `internal/ruleset/schema.cue` and load it with `cuelang.org/go`
+- [x] Write the `ste-100` ruleset in `rules/ste100/ste100.cue`
+- [x] Test user overlays: add a rule, omit a rule, change `max_words`, and add approved terms
+- [x] Add the rules reference to the docs site
 
 The schema:
 
@@ -144,7 +144,7 @@ The schema:
   - `severity`: `*"error" | "warning" | "note"`.
   - `scope`: `"procedural_sentence"`, `"descriptive_sentence"`, `"any_sentence"`, `"heading"`, `"comment"` or `"token"`.
   - `title` and `message`.
-  - `params`: an open struct for `max_words`, `tokens`, `swap`, `exceptions` and `pattern`.
+  - `params`: a closed struct of the known parameters, so a misspelled name fails ([ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md)).
   - `check`: one of `"max_words"`, `"banned_terms"`, `"term_substitution"`, `"passive_voice"`, `"nominalizations"`, `"ambiguous_gerunds"`, `"possessive_pronouns"`, `"one_instruction_per_sentence"` or `"regex_ban"`.
 
 The `ste-100` rules. Rules 01 to 04 are the core. They match `scripts/ste-check.py` exactly, and the parity test checks both directions. Rules 05 to 11 form the extended group. Each extended rule is a warning by default, has an exception list and has its own fixtures.
