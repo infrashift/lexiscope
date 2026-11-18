@@ -10,9 +10,9 @@ The `ZMakefile` and the `Makefile` have the same targets. zmake reads the `ZMake
 | Target | Command | Part of `check` |
 |---|---|---|
 | `check` | Runs `lint`, `test`, `wiki` and `docs-style` | default goal |
-| `build` | `go build -o bin/lexis ./cmd/lexis` | no |
+| `build` | `go build` with the version from git, into `bin/lexis` | no |
 | `test` | `go test -race -count=1 ./...` | yes |
-| `lint` | `gofmt -l`, `go vet ./...` and `go run ./cmd/nasa-lint` | yes |
+| `lint` | `gofmt -l`, `go vet ./...`, golangci-lint 2.15.0 and `go run ./cmd/nasa-lint` | yes |
 | `fmt` | `gofmt -w` on the Go directories | no |
 | `wiki` | `okfw validate --all` and `okfw validate --okf` | yes |
 | `docs-style` | `scripts/ste-check.py` | yes |

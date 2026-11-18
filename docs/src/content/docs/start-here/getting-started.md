@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-lexis has no binary release and no commands yet. Phase 2 of the plan adds the CLI. This page tells how to build the repository and run its checks.
+lexis has no binary release. The CLI exists, but the scan arrives in Phase 4. This page tells how to build the repository and run its checks.
 
 ## Requirements
 
@@ -14,6 +14,7 @@ lexis has no binary release and no commands yet. Phase 2 of the plan adds the CL
 | Go | 1.26 or later | Build and test lexis |
 | Python | 3.10 or later | Run `scripts/ste-check.py` and `scripts/nasa-lint.py` |
 | zmake or GNU Make | any | Run the targets of the `ZMakefile` or the `Makefile` |
+| golangci-lint | 2.15.0 exactly | Run the static checks of `zmake lint` |
 | okfw | 2026.10 or later | Validate the wiki in `.okfw/` |
 | bun | 1.3.9 | Build this site |
 
@@ -23,7 +24,8 @@ From Phase 4, lexis reads source comments with [ztree](https://github.com/infras
 
 1. Clone the repository.
 2. Run `zmake build` to write `bin/lexis`.
-3. Run `zmake check` to run every gate.
+3. Run `bin/lexis --version`.
+4. Run `zmake check` to run every gate.
 
 GNU Make reads the `Makefile`, which has the same targets. Run `make check` if zmake is not on the `PATH`.
 

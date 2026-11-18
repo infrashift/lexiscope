@@ -21,7 +21,7 @@ lexis needs a CLI, a CUE evaluator, a SARIF writer and a parser for the comments
 
 ## Decision
 - The module `github.com/infrashift/lexis` sets `go 1.26`. The host has Go 1.27.3.
-- The Go dependencies are `github.com/spf13/cobra`, `cuelang.org/go` and `github.com/owenrumney/go-sarif/v3`. Each phase adds a dependency when it needs it. Write an ADR before you add another one.
+- The Go dependencies are `github.com/spf13/cobra`, `cuelang.org/go` and `github.com/owenrumney/go-sarif/v3`. Each phase adds a dependency when it needs it. Phase 2 added cobra v1.10.2, with pflag v1.0.9 and mousetrap v1.1.0. Write an ADR before you add another one.
 - The comments come from ztree, a Tree-sitter runtime in Zig. lexis imports `github.com/infrashift/ztree/bindings/go`. A `replace` directive in `go.mod` points to the ztree checkout next to lexis.
 - Build ztree first: run `zig build lib --release` in the ztree root. The binding links `zig-out/lib/libztree.a`.
 - cgo works with the default C compiler. With `CC="zig cc"`, add `-Wno-gcc-install-dir-libstdcxx` on a host with two GCC installations.

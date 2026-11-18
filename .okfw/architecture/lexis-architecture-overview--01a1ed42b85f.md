@@ -23,8 +23,11 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 ## Packages
 | Package | Contents | Phase |
 |---|---|---|
-| `cmd/lexis` | The entry point and the cobra commands. The boundary that recovers assertion panics. | 2 |
-| `internal/assert` | `assert.True` for rule R5. | 1 |
+| `cmd/lexis` | The entry point. It calls `internal/cli`. | 2 |
+| `internal/cli` | The cobra commands, the flag checks and the exit statuses ([ADR-0008](/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)). | 2 |
+| `internal/output` | A writer that keeps the first write error. | 2 |
+| `cmd/nasa-lint` and `internal/nasalint` | The Go port of `scripts/nasa-lint.py`. | 2 |
+| `internal/assert` | `assert.True` for rule R5, and `assert.Recover` for the command boundary. | 1 |
 | `internal/version` | The version, commit and build date, and the SARIF versions. | 2 |
 | `internal/ruleset` | The CUE schema, the loader, the lexicon projection and the overrides. | 3 |
 | `rules/ste100` | The CUE source of the `ste-100` ruleset, embedded in the binary. | 3 |

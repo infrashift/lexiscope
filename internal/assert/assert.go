@@ -4,11 +4,6 @@
 // status 2.
 package assert
 
-import (
-	"fmt"
-	"io"
-)
-
 // ExitAssertion is the exit status of a command after a failed assertion.
 const ExitAssertion = 2
 
@@ -29,14 +24,16 @@ func True(cond bool, message string) {
 	}
 }
 
-// Recover is the boundary of a command. Defer it directly:
+// Recover is the boundary of a command. Defer it directly in a function
+// with named results, so that it can call recover:
 //
-//	defer assert.Recover(stderr, "lexis", &code)
+//	defer assert.Recover(&code, &message)
 //
-// After a failed assertion, it writes the message to w and sets *code to
-// ExitAssertion. It panics again with each other value, so a runtime error
-// keeps its stack trace.
-func Recover(w io.Writer, command string, code *int) {
+// After a failed assertion, it sets *code to ExitAssertion and *message to
+// "internal error: assertion failed: ...". The caller writes the message.
+// Recover panics again with each other value, so a runtime error keeps its
+// stack trace.
+func Recover(code *int, message *string) {
 	r := recover()
 	if r == nil {
 		return
@@ -45,6 +42,6 @@ func Recover(w io.Writer, command string, code *int) {
 	if !ok {
 		panic(r)
 	}
-	fmt.Fprintf(w, "%s: internal error: %v\n", command, f)
 	*code = ExitAssertion
+	*message = "internal error: " + f.Error()
 }

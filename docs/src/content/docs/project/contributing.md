@@ -21,4 +21,4 @@ All documentation follows ASD-STE100: the Markdown files, the wiki pages, these 
 
 ## Code rules
 
-The Go source follows the NASA Power of 10 rules. See [Rules](../../reference/rules/) for the checks.
+The Go source follows the NASA Power of 10 rules. See [Rules](../../reference/rules/) for the checks. `zmake lint` also runs golangci-lint. It needs version 2.15.0 exactly.

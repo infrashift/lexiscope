@@ -5,8 +5,7 @@ import starlight from '@astrojs/starlight';
 // Deployed to GitHub Pages by .github/workflows/docs-release.yml (ADR-0007).
 // Each PLAN.md phase adds or updates the pages for the features it delivers
 // (see the Development workflow guide in .okfw/). The sidebar groups list the
-// pages of their directory, so a new page needs no change here. Phase 2 adds
-// a Guides group with the first guide.
+// pages of their directory, so a new page needs no change here.
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://infrashift.github.io',
@@ -30,6 +29,7 @@ export default defineConfig({
 			},
 			sidebar: [
 				{ label: 'Start Here', items: [{ autogenerate: { directory: 'start-here' } }] },
+				{ label: 'Guides', items: [{ autogenerate: { directory: 'guides' } }] },
 				{ label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }] },
 				{ label: 'Project', collapsed: true, items: [{ autogenerate: { directory: 'project' } }] },
 			],

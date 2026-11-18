@@ -33,6 +33,10 @@ The user requires the Power of 10 rules for all Go code in lexis. The rules targ
 | R9 Restricted indirection | Do not declare function types or function variables. Each func literal that cobra needs has an allow comment. | Go port |
 | R10 Zero warnings | `go vet`, golangci-lint and the Go port report zero warnings. | `zmake lint` |
 
+**golangci-lint:** version 2.15.0, from the release archive with its SHA-256 sum (`9b7fe6a6…cebcea`). `zmake lint` fails when the installed version differs. `.golangci.yml` enables the `standard` set (errcheck, govet, ineffassign, staticcheck, unused) and funlen. funlen counts the lines between the braces, so its limit of 58 equals the R4 limit of 60. The `_test.go` files are exempt from funlen.
+
+**R7 and errcheck:** errcheck rejects an unchecked write, and R7 rejects `_ =`. `internal/output.Writer` keeps the first write error, and each command checks it once ([ADR-0008](/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)).
+
 **Assertions:** `assert.True` panics with an `assert.Failure` value. A failed assertion is a programmer error. The CLI recovers the panic at its boundary and exits with status 2. lexis reports bad input with an error, not with an assertion.
 
 **Exempt files:** test files (`_test.go`) are exempt from R4 and R5.

@@ -7,7 +7,7 @@ Work on one phase at a time. Inside a phase, work on one task at a time. Each ph
 Loop: do one task, run `zmake check`, and repeat until it reports zero errors and zero warnings. Then go to the next task. At the end of a phase, update the wiki and the docs site, then make one git commit. Do not push.
 
 - Architecture: [lexis architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md)
-- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md)
+- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)
 - Guides: [Development workflow](.okfw/development-workflow--01a1ed42b859.md) · [Wiki conventions](.okfw/wiki-conventions--01a1ed42b854.md)
 
 ## Rules
@@ -97,16 +97,17 @@ First ADRs:
 - [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md): the `ste-100` rule IDs, with a core that matches the oracle and extended rules.
 - [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md): SARIF 2.1.0 and 2.2 reports.
 - [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md): an Astro Starlight docs site on GitHub Pages.
+- [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md): CLI exit statuses, output errors and commands of later phases (Phase 2).
 
 ## Phase 2 — CLI, version and ruleset overrides
 
 Tracking: [ISSUE-002](.okfw/issues/issue-002-cli-version-and-ruleset-overrides-and-the-go-port-of-nasa-lint--01a1ed42b88b.md)
 
 - [x] Port `scripts/nasa-lint.py` to Go (`cmd/nasa-lint`) in a separate commit, and use the port in `zmake lint`
-- [ ] Install golangci-lint v2 at a pinned version, with errcheck, funlen and govet, and add it to `zmake lint`
-- [ ] Add `internal/version` with the `-ldflags` variables `Version`, `Commit` and `BuildDate`, and the SARIF versions `2.1.0` and `2.2`
-- [ ] Add the cobra CLI in `cmd/lexis`
-- [ ] Add the CLI guide and the CLI reference to the docs site
+- [x] Install golangci-lint v2 at a pinned version, with errcheck, funlen and govet, and add it to `zmake lint`
+- [x] Add `internal/version` with the `-ldflags` variables `Version`, `Commit` and `BuildDate`, and the SARIF versions `2.1.0` and `2.2`
+- [x] Add the cobra CLI in `cmd/lexis`
+- [x] Add the CLI guide and the CLI reference to the docs site
 
 CLI commands:
 
@@ -121,6 +122,8 @@ CLI commands:
   - `--sarif-version <2.1.0|2.2>`: the SARIF version. The default is `2.1.0`.
   - `--output`, `-o <file>`: the report file. The default is stdout.
 - `lexis rules list` and `lexis rules inspect <ruleset>` show the active rules, the omitted rules, the lexicon and the word limits.
+
+In Phase 2, `lexis scan` and the `lexis rules` commands check their flags. Then they exit with status 2 and name the phase that delivers the work: Phase 3 for `rules`, Phase 4 for `scan` ([ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)).
 
 ## Phase 3 — CUE ruleset engine and the ste-100 ruleset
 

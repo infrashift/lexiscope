@@ -1,0 +1,24 @@
+# golangci-lint v2.15.0 (pinned in ADR-0003 and the docs). `zmake lint` runs it.
+version: "2"
+
+linters:
+  # standard: errcheck, govet, ineffassign, staticcheck and unused.
+  default: standard
+  enable:
+    - funlen
+  settings:
+    funlen:
+      # R4: 60 lines from the func keyword to the last brace, the count of
+      # cmd/nasa-lint. funlen counts the lines between the braces, so 58.
+      lines: 58
+      statements: -1
+      ignore-comments: false
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
+
+formatters:
+  enable:
+    - gofmt

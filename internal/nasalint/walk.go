@@ -1,7 +1,6 @@
 package nasalint
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -14,30 +13,19 @@ import (
 	"github.com/infrashift/lexis/internal/assert"
 )
 
-// maxGoModLines bounds the scan of go.mod for the module line.
-const maxGoModLines = 10000
-
 // modulePath reads the module path from root/go.mod.
 func modulePath(root string) (string, error) {
 	assert.True(root != "", "the root is set")
-	f, err := os.Open(filepath.Join(root, "go.mod"))
+	data, err := os.ReadFile(filepath.Join(root, "go.mod"))
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
-	sc := bufio.NewScanner(f)
-	for range maxGoModLines {
-		if !sc.Scan() {
-			break
+	lines := strings.Split(string(data), "\n")
+	assert.True(len(lines) > 0, "Split gives one line or more")
+	for _, line := range lines {
+		if rest, ok := strings.CutPrefix(strings.TrimSpace(line), "module "); ok {
+			return strings.Trim(strings.TrimSpace(rest), `"`), nil
 		}
-		if rest, ok := strings.CutPrefix(strings.TrimSpace(sc.Text()), "module "); ok {
-			mod := strings.Trim(strings.TrimSpace(rest), `"`)
-			assert.True(mod != "", "the module line names a path")
-			return mod, nil
-		}
-	}
-	if err := sc.Err(); err != nil {
-		return "", err
 	}
 	return "", errors.New("go.mod has no module line")
 }

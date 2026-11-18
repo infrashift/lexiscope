@@ -10,7 +10,9 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 - **Wiki:** okfw (`.okfw/`), [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md). See the okfw block below.
 
 ## Layout
-- `cmd/lexis/` holds the entry point and the cobra commands.
+- `cmd/lexis/` holds the entry point. `internal/cli` holds the cobra commands and the exit statuses ([ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)).
+- `cmd/nasa-lint/` and `internal/nasalint/` hold the Go port of `scripts/nasa-lint.py`.
+- Write command output through `internal/output.Writer`. Do not discard a write result.
 - `internal/` holds the packages. The [architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md) lists them.
 - `rules/ste100/` holds the CUE source of the `ste-100` ruleset.
 - `docs/` holds the docs site. `docs/go.mod` keeps it out of the Go module. Do not delete that file.
@@ -21,9 +23,9 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 `ZMakefile` (zmake, modern mode) and `Makefile` (GNU Make) have the same targets. Change both files together.
 
 Run these targets with `zmake`:
-- `zmake lint` runs gofmt, `go vet` and `cmd/nasa-lint`, the Go port of `scripts/nasa-lint.py`. Run `go run ./cmd/nasa-lint --verbose` to list the functions with fewer than 2 assertions.
+- `zmake lint` runs gofmt, `go vet`, golangci-lint 2.15.0 (`.golangci.yml`) and `cmd/nasa-lint`, the Go port of `scripts/nasa-lint.py`. Run `go run ./cmd/nasa-lint --verbose` to list the functions with fewer than 2 assertions.
 - `zmake test` runs `go test -race -count=1 ./...`.
-- `zmake build` writes `bin/lexis`.
+- `zmake build` writes `bin/lexis` with the version, the commit and the commit date from git.
 - `zmake fmt` formats the Go source.
 - `zmake wiki` runs `okfw validate --all` and `okfw validate --okf`.
 - `zmake docs-style` runs `scripts/ste-check.py`.

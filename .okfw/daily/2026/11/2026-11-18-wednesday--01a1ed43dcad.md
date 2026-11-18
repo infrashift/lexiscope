@@ -18,6 +18,7 @@ timestamp: "2026-11-18T00:06:50-06:00"
 ## Tasks
 
 - [x] Phase 1: bootstrap, gates, wiki and docs site
+- [x] Phase 2: Go port of nasa-lint, golangci-lint, version and CLI
 
 ## Notes
 
@@ -25,7 +26,11 @@ timestamp: "2026-11-18T00:06:50-06:00"
 - **Learned:** `go list ./...` walks `docs/node_modules`. `docs/go.mod` stops it.
 - **Learned:** Starlight 0.41 needs `items: [{ autogenerate }]` inside a group. A group with no pages shows an empty heading.
 - **Learned:** When an agent runs it, `astro dev` runs in the background and takes the next free port. The semscope dev server holds port 4321 on this host.
-- **Next:** Phase 2. Port nasa-lint to Go, install golangci-lint, and add the cobra CLI.
+- **Changed:** Phase 2. `cmd/nasa-lint` checks R1, R2, R4, R5, R7 and R9 on Go code. golangci-lint 2.15.0 runs in `zmake lint`. `lexis version`, `scan` and `rules` exist. ADR-0008 records the exit statuses.
+- **Learned:** errcheck and R7 conflict on writes. A writer that keeps the first error satisfies both.
+- **Learned:** funlen counts the lines between the braces. Its limit of 58 equals R4.
+- **Learned:** `recover` works in a named function that the code defers directly, so the command boundary needs no function literal.
+- **Next:** Phase 3. Add the CUE schema, the loader and the ste-100 ruleset.
 
 ## End of Day
 

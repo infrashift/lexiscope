@@ -9,63 +9,78 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"os"
 
 	"github.com/infrashift/lexis/internal/assert"
 	"github.com/infrashift/lexis/internal/nasalint"
+	"github.com/infrashift/lexis/internal/output"
 )
+
+// exitFailure is the exit status of a failure that is not a finding.
+const exitFailure = 2
 
 func main() {
 	assert.True(len(os.Args) > 0, "the program has a name")
 	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
 }
 
-func run(args []string, stdout, stderr io.Writer) (code int) {
+// run returns the exit status. It writes a failure to stderr.
+func run(args []string, stdout, stderr io.Writer) int {
 	assert.True(stdout != nil && stderr != nil, "the output streams exist")
+	errOut := output.New(stderr)
+	code, failure := lint(args, output.New(stdout))
+	if failure != "" {
+		errOut.Printf("nasa-lint: %s\n", failure)
+	}
+	assert.True((code == exitFailure) == (failure != ""), "each failure has a message")
+	return code
+}
+
+func lint(args []string, out *output.Writer) (code int, failure string) {
+	assert.True(out != nil, "the writer exists")
 	assert.True(len(args) < 1<<16, "the argument count is bounded")
-	defer assert.Recover(stderr, "nasa-lint", &code)
+	defer assert.Recover(&code, &failure)
 	verbose := false
 	for _, a := range args {
 		if a != "--verbose" && a != "-v" {
-			fmt.Fprintf(stderr, "nasa-lint: unknown argument %q\nusage: nasa-lint [--verbose]\n", a)
-			return 2
+			return exitFailure, "unknown argument " + a + "\nusage: nasa-lint [--verbose]"
 		}
 		verbose = true
 	}
 	root, err := os.Getwd()
 	if err != nil {
-		fmt.Fprintf(stderr, "nasa-lint: %v\n", err)
-		return 2
+		return exitFailure, err.Error()
 	}
 	res, err := nasalint.Run(root)
 	if err != nil {
-		fmt.Fprintf(stderr, "nasa-lint: %v\n", err)
-		return 2
+		return exitFailure, err.Error()
 	}
-	write(stdout, res, verbose)
+	write(out, res, verbose)
+	if err := out.Err(); err != nil {
+		return exitFailure, err.Error()
+	}
 	if len(res.Findings) > 0 {
-		return 1
+		return 1, ""
 	}
-	return 0
+	return 0, ""
 }
 
 // write prints the findings and the summary in the format of
 // scripts/nasa-lint.py.
-func write(w io.Writer, res *nasalint.Result, verbose bool) {
-	assert.True(w != nil, "the writer exists")
+func write(out *output.Writer, res *nasalint.Result, verbose bool) {
+	assert.True(out != nil, "the writer exists")
 	assert.True(res != nil, "the result exists")
 	if verbose {
 		for _, f := range res.Funcs {
 			if f.Assertions < nasalint.MinAssertAvg {
-				fmt.Fprintf(w, "%s:%d: info: func %s has %d assertion(s)\n", f.Path, f.Line, f.Name, f.Assertions)
+				out.Printf("%s:%d: info: func %s has %d assertion(s)\n", f.Path, f.Line, f.Name, f.Assertions)
 			}
 		}
 	}
 	for _, f := range res.Findings {
-		fmt.Fprintln(w, f.String())
+		out.Printf("%s\n", f.String())
 	}
-	fmt.Fprintf(w, "nasa-lint: %d error(s); %d functions, %d assertions (average %.2f)\n",
+	out.Printf("nasa-lint: %d error(s); %d functions, %d assertions (average %.2f)\n",
 		len(res.Findings), len(res.Funcs), res.Assertions, res.Average())
 }
