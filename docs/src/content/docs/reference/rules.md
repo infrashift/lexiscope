@@ -10,7 +10,7 @@ sidebar:
 ## The ste-100 ruleset
 
 The ruleset follows `scripts/ste-check.py`, which zmake and ztree use as their writing gate.
-Rules 01 to 04 form the core group. They match the script exactly. A test compares their limits, their banned words and their passive pattern with the script. From Phase 4, a parity test also compares the findings in both directions.
+Rules 01 to 04 form the core group. They match the script exactly. A test compares their limits, their banned words and their passive pattern with the script. A parity test also compares the findings in both directions, on fixtures and on each document of the repository.
 Rules 05 to 11 form the extended group. Each extended rule gives a warning by default and has an exception list.
 
 | ID | Check | Severity | Group |

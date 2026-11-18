@@ -1,10 +1,11 @@
 // Package cli holds the cobra commands of lexis and the exit status rules.
 //
-// Exit status: 0 when the command succeeds without error findings, 1 when a
-// scan finds errors (from Phase 4), and 2 on a usage error or a failure.
+// Exit status: 0 when the command succeeds without error findings. 1 when a
+// scan finds errors. 2 on a usage error or a failure.
 package cli
 
 import (
+	"errors"
 	"io"
 
 	"github.com/spf13/cobra"
@@ -44,6 +45,9 @@ func execute(args []string, stdout, stderr io.Writer) (code int, failure string)
 	root := newRoot(stdout, stderr)
 	root.SetArgs(args)
 	if err := root.Execute(); err != nil {
+		if errors.Is(err, errFindings) {
+			return ExitFindings, ""
+		}
 		return ExitFailure, err.Error()
 	}
 	return ExitOK, ""

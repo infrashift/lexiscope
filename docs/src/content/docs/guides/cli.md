@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-This guide shows the commands that work in Phase 3. The [CLI reference](../../reference/cli/) lists each flag.
+This guide shows the common commands. The [CLI reference](../../reference/cli/) lists each flag.
 
 ## Check the version
 
@@ -18,25 +18,31 @@ The output has the version, the commit and the build date:
 lexis version v0.0.0-dev (commit: 04c24b78cf5f, built: 2026-11-18T09:46:48Z)
 ```
 
-## Prepare a scan
+## Scan the documentation
 
-`lexis scan` checks each flag and loads the ruleset before it starts. Use this to test a command line for a CI job:
+1. Run `zmake build`.
+2. Run `bin/lexis scan docs/`.
+
+lexis writes one line for each finding and a summary. The exit status is 1 when lexis finds an error, and 0 when it finds only warnings or nothing.
+
+Write a JSON report to a file:
 
 ```sh
-bin/lexis scan --format sarif --sarif-version 2.2 -o lexis.sarif \
-  --set STE-100-01.max_words=18 --omit-rule STE-100-07 docs/
+bin/lexis scan --format json -o lexis.json docs/
 ```
 
-Phase 4 adds the scan itself. Until then, a correct command line exits with status 2 and this message:
+Skip generated files with `--exclude`:
 
-```text
-lexis: scan docs/: not available yet: ruleset ste-100 has 10 active rules, but the rule engine arrives in Phase 4 of PLAN.md
+```sh
+bin/lexis scan --exclude index.md --exclude .okfw/daily .okfw
 ```
 
-An incorrect command line also exits with status 2. The message names the flag and the problem:
+## Scan source comments
 
-```text
-lexis: --sarif-version needs --format sarif
+lexis reads the comments of `.go`, `.zig`, `.py`, `.c`, `.h` and `.rs` files with ztree. It skips tool directives such as `//go:build`, and indented code examples. A comment at the end of a code line stands alone.
+
+```sh
+bin/lexis scan cmd/ internal/
 ```
 
 ## Turn off a rule

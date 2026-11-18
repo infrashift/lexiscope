@@ -66,4 +66,4 @@ Scopes: `procedural_sentence`, `descriptive_sentence`, `any_sentence`, `heading`
 | `swap` | map from a term to its replacement |
 | `pattern` | regular expression (RE2 syntax) |
 
-Phase 4 defines how each check reads its parameters.
+A word check skips code names, for example `skipFenceOrComment`: a word with a capital letter after its first letter, a digit or an underscore.

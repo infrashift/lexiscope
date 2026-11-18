@@ -6,6 +6,9 @@ GO ?= go
 GOFMT ?= $(shell $(GO) env GOROOT)/bin/gofmt
 PYTHON ?= python3
 BUN ?= bun
+ZIG ?= zig
+# The ztree checkout. go.mod points its replace directive here (ADR-0002).
+ZTREE_DIR ?= ../ztree
 GOLANGCI_LINT ?= golangci-lint
 # The pinned golangci-lint version (ADR-0003). The lint target checks it.
 GOLANGCI_LINT_VERSION := 2.15.0
@@ -18,25 +21,36 @@ VERSION_PKG := github.com/infrashift/lexis/internal/version
 LDFLAGS := -X $(VERSION_PKG).Version=$(VERSION) -X $(VERSION_PKG).Commit=$(COMMIT) -X $(VERSION_PKG).BuildDate=$(BUILD_DATE)
 # gofmt walks directories, so it gets the Go directories only, not docs/.
 GO_DIRS := cmd internal rules
+# The self-check reads the files of scripts/ste-check.py and the Go comments.
+SELF_CHECK_PATHS := PLAN.md CLAUDE.md docs/src/content/docs .okfw cmd internal rules
+SELF_CHECK_EXCLUDES := --exclude .okfw/daily --exclude .okfw/ephemeral --exclude index.md --exclude log.md
 
 ## check: run every gate (the default goal)
-@check: lint test wiki docs-style
+@check: lint test wiki docs-style self-check
+
+## ztree: build libztree.a in the ztree checkout (cgo links it)
+@ztree:
+    cd $(ZTREE_DIR) && $(ZIG) build lib --release
 
 ## build: compile the lexis binary into bin/
-@build:
+@build: ztree
     $(GO) build -ldflags '$(LDFLAGS)' -o bin/lexis ./cmd/lexis
 
 ## test: run the unit tests with the race detector
-@test:
+@test: ztree
     $(GO) test -race -count=1 ./...
 
 ## lint: check the formatting, run go vet and golangci-lint, and check the Power of 10 rules
-@lint:
+@lint: ztree
     $(GOFMT) -l $(GO_DIRS) | (! grep .)
     $(GO) vet ./...
     test "$$($(GOLANGCI_LINT) version --short)" = "$(GOLANGCI_LINT_VERSION)"
     $(GOLANGCI_LINT) run ./...
     $(GO) run ./cmd/nasa-lint
+
+## self-check: scan the documentation and the comments of lexis with lexis (an error fails)
+@self-check: build
+    bin/lexis scan $(SELF_CHECK_EXCLUDES) $(SELF_CHECK_PATHS)
 
 ## fmt: format the Go sources in place
 @fmt:

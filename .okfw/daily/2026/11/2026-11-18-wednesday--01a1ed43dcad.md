@@ -20,6 +20,7 @@ timestamp: "2026-11-18T00:06:50-06:00"
 - [x] Phase 1: bootstrap, gates, wiki and docs site
 - [x] Phase 2: Go port of nasa-lint, golangci-lint, version and CLI
 - [x] Phase 3: CUE ruleset engine and the ste-100 ruleset
+- [x] Phase 4: prose and comment engine, and parity with ste-check
 
 ## Notes
 
@@ -34,7 +35,10 @@ timestamp: "2026-11-18T00:06:50-06:00"
 - **Changed:** Phase 3. `internal/ruleset` loads CUE rulesets. `ste100.cue` defines 11 rules and a lexicon of 20 concepts. `lexis rules list` and `lexis rules inspect` work.
 - **Learned:** two CUE defaults for one field do not unify, so the schema has no default for `severity`. A comprehension in a built-in file sees the lexicon of each user file. `try` is a CUE keyword.
 - **Learned:** a test that reads the constants of `scripts/ste-check.py` keeps rules 01 to 04 equal to the oracle before the engine exists.
-- **Next:** Phase 4. Add the Markdown extractor, the comment extractor with ztree, the rule checks and the parity test.
+- **Changed:** Phase 4. `lexis scan` checks Markdown files and source comments. The parity test matches the oracle on fixtures and on each repository document. `zmake self-check` runs lexis on lexis.
+- **Learned:** Python's `\s`, `\w` and `\b` are Unicode, but Go's are ASCII. `read_text` turns a lone `\r` into a line break. GNU cp does not overwrite a file that the same command made, so a backup of two files with one name kept the wrong one.
+- **Learned:** four mutants survived the first fixtures. Each one showed a gap: a link to a page, a star inside a word, a quoted step and a lone `\r`.
+- **Next:** Phase 5. Add the SARIF reports, prove the 2.2 validation and decide the policy for the warnings of the self-check.
 
 ## End of Day
 

@@ -94,7 +94,7 @@ rules: {
 		scope:    "any_sentence"
 		check:    "nominalizations"
 		title:    "Use a verb, not a noun form of the verb"
-		message:  "\"{term}\" is a noun form of a verb. Use the verb {replacement}."
+		message:  "\"{term}\" can be a noun form of a verb. Use a verb."
 		params: {
 			suffixes: {tion: true, sion: true, ment: true, ance: true, ence: true}
 			swap: {for _, c in lexicon for _, n in c.nominalizations {(n): c.approved}}
@@ -124,7 +124,7 @@ rules: {
 		message:  "\"{term}\" is an -ing form. Use a verb or a noun."
 		params: exceptions: {
 			anything: true, bring: true, building: true, ceiling: true, during: true
-			encoding: true, everything: true, heading: true, king: true, listing: true
+			encoding: true, everything: true, finding: true, heading: true, king: true, listing: true
 			logging: true, mapping: true, morning: true, nothing: true, padding: true
 			ring: true, setting: true, sibling: true, something: true, spring: true
 			string: true, thing: true, warning: true, wing: true, binding: true

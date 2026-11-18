@@ -31,9 +31,9 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 | `internal/version` | The version, commit and build date, and the SARIF versions. | 2 |
 | `internal/ruleset` | The CUE schema (`schema.cue`), the loader, the sources and the CLI changes. `lexis rules list` and `lexis rules inspect` print its result. | 3 |
 | `rules/ste100` | The CUE source of the `ste-100` ruleset, embedded in the binary. | 3 |
-| `internal/parser` | The Markdown extractor and the comment extractor. | 4 |
-| `internal/engine` | The tokenizer, the sentence splitter and the rule checks. | 4 |
-| `internal/report` | The SARIF, text and JSON reports. | 5 |
+| `internal/parser` | The Markdown extractor (the line rules of the oracle) and the comment extractor (ztree). Each block keeps the source offset of each byte. | 4 |
+| `internal/engine` | The sentence split, the word count, the term matcher, the nine checks, the file walk and the parity test. | 4 |
+| `internal/report` | The text and JSON reports (Phase 4), and SARIF (Phase 5). | 4, 5 |
 
 ## Boundaries
 - **CUE:** `cuelang.org/go` loads and unifies the rulesets ([ADR-0004](/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md)).

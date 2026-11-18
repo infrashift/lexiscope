@@ -27,8 +27,8 @@ lexis needs a CLI, a CUE evaluator, a SARIF writer and a parser for the comments
 - cgo works with the default C compiler. With `CC="zig cc"`, add `-Wno-gcc-install-dir-libstdcxx` on a host with two GCC installations.
 
 ## Consequences
-- `go test -race ./...` needs cgo and a C compiler from Phase 4.
-- A build of lexis needs a ztree checkout and Zig 0.17.1 from Phase 4.
+- `go test -race ./...` needs cgo and a C compiler.
+- A build of lexis needs a ztree checkout and Zig 0.17.1. The `ztree` target of the ZMakefile builds `libztree.a` in `$(ZTREE_DIR)` (default `../ztree`). `build`, `test` and `lint` depend on it.
 - The C library of ztree takes no callbacks and keeps no global state, so goroutines can call it at the same time.
 
 ## Alternatives considered

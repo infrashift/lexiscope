@@ -169,17 +169,18 @@ Procedural sentences: the oracle treats only numbered list items as steps. lexis
 
 Tracking: [ISSUE-004](.okfw/issues/issue-004-prose-and-comment-engine-and-parity-with-ste-check--01a1ed42b897.md)
 
-- [ ] Add the Markdown extractor in `internal/parser`
-- [ ] Add the comment extractor in `internal/parser` with the ztree Go binding
-- [ ] Add the parity test in `internal/engine/ste_parity_test.go`
-- [ ] Add `lexis scan --ruleset ste-100 .` to `zmake check`
-- [ ] Add the comment guide to the docs site
+- [x] Add the Markdown extractor in `internal/parser`
+- [x] Add the comment extractor in `internal/parser` with the ztree Go binding
+- [x] Add the parity test in `internal/engine/ste_parity_test.go`
+- [x] Add `lexis scan --ruleset ste-100 .` to `zmake check` (the `self-check` target; an error fails, a warning does not)
+- [x] Add the comment guide to the docs site
 
 The Markdown extractor:
 
 - It removes front matter, fenced code (` ``` ` and `~~~`), HTML comments, inline code, URLs and link targets.
 - It keeps the 1-based line and the UTF-16 column of each token.
-- It tells numbered steps from other text with a bounded state machine (`[]blockFrame`). It does not use recursion.
+- It tells numbered steps from other text with the line rules of the oracle. It does not use recursion.
+- The spec [Known differences from ste-check](.okfw/specs/known-differences-from-ste-check--01a1ee352a3c.md) lists each deliberate difference from the oracle.
 
 The comment extractor:
 

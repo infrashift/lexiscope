@@ -5,7 +5,7 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 
 ## Tech Stack (WHAT)
 - **Language:** Go 1.26 or later (`go.mod`). The host has Go 1.27.3.
-- **Dependencies:** cobra, `cuelang.org/go` and go-sarif v3. From Phase 4, the ztree Go binding through cgo ([ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md)). Write an ADR before you add a dependency.
+- **Dependencies:** cobra, `cuelang.org/go` and go-sarif v3. The ztree Go binding through cgo ([ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md)). Write an ADR before you add a dependency.
 - **Docs site:** Astro Starlight in `docs/`, built with bun 1.3.9 and deployed to GitHub Pages ([ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md)).
 - **Wiki:** okfw (`.okfw/`), [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md). See the okfw block below.
 
@@ -13,7 +13,7 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 - `cmd/lexis/` holds the entry point. `internal/cli` holds the cobra commands and the exit statuses ([ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)).
 - `cmd/nasa-lint/` and `internal/nasalint/` hold the Go port of `scripts/nasa-lint.py`.
 - Write command output through `internal/output.Writer`. Do not discard a write result.
-- `internal/` holds the packages. The [architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md) lists them.
+- `internal/` holds the packages. `internal/parser` and `internal/engine` copy the oracle for the core rules: read the [Known differences from ste-check](.okfw/specs/known-differences-from-ste-check--01a1ee352a3c.md) spec before you change them. The [architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md) lists them.
 - `rules/ste100/` holds the CUE source of the `ste-100` ruleset. `internal/ruleset/schema.cue` is the schema. Run `bin/lexis rules inspect ste-100` to see the resolved ruleset.
 - In CUE, write each value that a user can change as a default (`*value | type`). Write each list of terms as a struct of `true` values.
 - `docs/` holds the docs site. `docs/go.mod` keeps it out of the Go module. Do not delete that file.
@@ -31,7 +31,9 @@ Run these targets with `zmake`:
 - `zmake wiki` runs `okfw validate --all` and `okfw validate --okf`.
 - `zmake docs-style` runs `scripts/ste-check.py`.
 - `zmake docs-dev` runs the docs site locally. `zmake docs-build` builds it into `docs/dist/`. Neither target changes `docs/bun.lock`.
-- `zmake check` runs lint, test, wiki and docs-style. It is the default goal. It does not build the docs site.
+- `zmake ztree` builds `libztree.a` in `../ztree` (set `ZTREE_DIR` for another path). `build`, `test` and `lint` run it first.
+- `zmake self-check` scans the documents and the Go comments of lexis with lexis. An error fails it.
+- `zmake check` runs lint, test, wiki, docs-style and self-check. It is the default goal. It does not build the docs site.
 
 When an agent runs it, `astro dev` runs in the background. Stop it with `bun --bun astro dev stop` in `docs/`. Do not kill other dev servers on this host.
 

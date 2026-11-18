@@ -2,7 +2,9 @@ package cli
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"slices"
@@ -71,12 +73,56 @@ func TestUsageErrors(t *testing.T) {
 	}
 }
 
-func TestScanWaitsForPhase4(t *testing.T) {
-	args := []string{"scan", "--format", "sarif", "--sarif-version", "2.2", "--set", "STE-100-01.max_words=18", "--omit-rule", "STE-100-07", "docs"}
-	code, _, errOut := runLexis(t, args...)
-	want := "lexis: scan docs: not available yet: ruleset ste-100 has 10 active rules, but the rule engine arrives in Phase 4 of PLAN.md\n"
-	if code != ExitFailure || errOut != want {
-		t.Errorf("lexis %v = %d, %q", args, code, errOut)
+func TestScan(t *testing.T) {
+	dir := t.TempDir()
+	write := func(name, text string) {
+		if err := os.WriteFile(filepath.Join(dir, name), []byte(text), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	write("bad.md", "# Title\n\nIt will work. Processing is slow.\n")
+	write("ok.md", "The tool reads the file.\n")
+	write("skip.md", "This should not count.\n")
+	t.Chdir(dir)
+
+	code, out, errOut := runLexis(t, "scan", "--exclude", "skip.md")
+	want := "bad.md:3:4: error: STE-100-04: Do not use \"will\".\n" +
+		"bad.md:3:15: warning: STE-100-07: \"Processing\" is an -ing form. Use a verb or a noun.\n" +
+		"lexis: 1 error(s), 1 warning(s), 0 note(s) in 2 file(s), ruleset ste-100\n"
+	if code != ExitFindings || out != want || errOut != "" {
+		t.Fatalf("scan = %d\n%s\nwant\n%s\nstderr %q", code, out, want, errOut)
+	}
+	if code, out, _ := runLexis(t, "scan", "ok.md"); code != ExitOK || !strings.HasPrefix(out, "lexis: 0 error(s)") {
+		t.Fatalf("clean scan = %d, %q", code, out)
+	}
+	if code, _, _ := runLexis(t, "scan", "--omit-rule", "STE-100-04", "bad.md"); code != ExitOK {
+		t.Fatalf("a scan with warnings only = %d, want 0", code)
+	}
+	code, _, errOut = runLexis(t, "scan", "--format", "json", "-o", "report.json", "bad.md")
+	data, err := os.ReadFile("report.json")
+	if code != ExitFindings || errOut != "" || err != nil {
+		t.Fatalf("json scan = %d, %q, %v", code, errOut, err)
+	}
+	var doc struct {
+		Summary  struct{ Errors, Warnings, Files int }
+		Findings []struct {
+			RuleID string `json:"rule_id"`
+			Line   int
+			Column int
+		}
+	}
+	if err := json.Unmarshal(data, &doc); err != nil {
+		t.Fatal(err)
+	}
+	if doc.Summary.Errors != 1 || doc.Summary.Files != 1 || len(doc.Findings) != 2 || doc.Findings[0].RuleID != "STE-100-04" || doc.Findings[0].Column != 4 {
+		t.Fatalf("json report = %+v", doc)
+	}
+	code, _, errOut = runLexis(t, "scan", "--format", "sarif")
+	if code != ExitFailure || !strings.Contains(errOut, "SARIF arrives in Phase 5") {
+		t.Fatalf("sarif scan = %d, %q", code, errOut)
+	}
+	if code, _, errOut := runLexis(t, "scan", "missing.md"); code != ExitFailure || !strings.Contains(errOut, "missing.md") {
+		t.Fatalf("missing file = %d, %q", code, errOut)
 	}
 }
 
@@ -97,7 +143,7 @@ func TestScanOptions(t *testing.T) {
 		"-r", "ste-100,my.cue", "--enable-rule", "STE-100-05", "--disable-rule", "STE-100-07,STE-100-08",
 		"--omit-rule", "DOC-CUSTOM-01", "--set", "STE-100-01.max_words=18", "--set", "STE-100-05.swap=a,b",
 		"--allow-term", "okfw,zmake", "--format", "sarif", "--sarif-version", "2.2", "-o", "out.sarif",
-		"docs", "README.md")
+		"--exclude", "a/*", "--exclude", "b.md", "docs", "README.md")
 	got, err := f.options(fl.Changed("sarif-version"), fl.Args())
 	if err != nil {
 		t.Fatal(err)
@@ -117,6 +163,7 @@ func TestScanOptions(t *testing.T) {
 		Format:       "sarif",
 		SARIFVersion: "2.2",
 		Output:       "out.sarif",
+		Excludes:     []string{"a/*", "b.md"},
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("options =\n%+v\nwant\n%+v", got, want)
@@ -182,7 +229,7 @@ func TestRulesInspect(t *testing.T) {
 }
 
 func TestRulesetErrorsReachTheCLI(t *testing.T) {
-	code, _, errOut := runLexis(t, "scan", "--set", "STE-100-01.max_words=many")
+	code, _, errOut := runLexis(t, "scan", "--set", "STE-100-01.max_words=many", "../../PLAN.md")
 	if code != ExitFailure || !strings.Contains(errOut, "max_words: conflicting values") {
 		t.Fatalf("scan with a bad --set = %d, %q", code, errOut)
 	}

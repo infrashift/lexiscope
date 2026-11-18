@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-lexis has no binary release. `lexis rules` works, but the scan arrives in Phase 4. This page tells how to build the repository and run its checks.
+lexis has no binary release. This page tells how to build the repository and run its checks.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ lexis has no binary release. `lexis rules` works, but the scan arrives in Phase 
 | okfw | 2026.10 or later | Validate the wiki in `.okfw/` |
 | bun | 1.3.9 | Build this site |
 
-From Phase 4, lexis reads source comments with [ztree](https://github.com/infrashift/ztree), a Tree-sitter runtime in Zig. You then also need Zig 0.17.1 and a ztree checkout next to the lexis checkout.
+lexis reads source comments with [ztree](https://github.com/infrashift/ztree), a Tree-sitter runtime in Zig. You also need Zig 0.17.1, a C compiler, and a ztree checkout next to the lexis checkout. `zmake build` builds the ztree library first.
 
 ## Build and check
 

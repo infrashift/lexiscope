@@ -7,14 +7,14 @@ sidebar:
 
 <!-- internal/cli/cli_test.go checks that this page lists each command and each flag. -->
 
-The `lexis rules` commands work from Phase 3. `lexis scan` checks its flags and loads the ruleset now. It checks files from Phase 4. Until then it exits with status 2 and names the phase.
+Each command below works. `lexis scan --format sarif` arrives in Phase 5. Until then it exits with status 2 and names the phase.
 
 ## Exit status
 
 | Status | Meaning |
 |---|---|
 | 0 | The command succeeded. A scan found no error findings. |
-| 1 | A scan found one or more error findings (from Phase 4). |
+| 1 | A scan found one or more error findings. Warnings and notes do not change the status. |
 | 2 | A usage error, a failure, or a command that a later phase delivers. |
 
 lexis writes each failure to stderr as `lexis: <message>`.
@@ -42,7 +42,9 @@ The `zmake build` target sets the version from `git describe` and the date from 
 lexis scan [flags] [paths...]
 ```
 
-Checks Markdown files and the comments of Go, Zig, Python, C and Rust files. Without paths, it checks the current directory.
+Checks Markdown files (`.md`, `.mdx`, `.markdown`) and the comments of Go, Zig, Python, C and Rust files (`.go`, `.zig`, `.py`, `.c`, `.h`, `.rs`). Without paths, it checks the current directory.
+
+A path can be a file or a directory. In a directory, lexis checks each file of a known type. It does not enter hidden directories, `node_modules`, `vendor`, `testdata` or `dist`. To check a hidden directory, name it as a path, for example `.okfw`. A named file of another type is an error.
 
 | Flag | Default | Meaning |
 |---|---|---|
@@ -54,6 +56,18 @@ Checks Markdown files and the comments of Go, Zig, Python, C and Rust files. Wit
 | `--format` | `text` | The report format: `text`, `json` or `sarif`. |
 | `--sarif-version` | `2.1.0` | The SARIF version: `2.1.0` or `2.2`. It needs `--format sarif`. |
 | `--output`, `-o` | `-` | The report file. `-` is stdout. |
+| `--exclude` | none | Skip each path that matches the pattern. Repeat the flag for each pattern. |
+
+An exclude pattern uses the syntax of Go's `path.Match`. It matches a path, each parent directory of the path, or the base name. For example, `--exclude .okfw/daily` skips the directory and its files, and `--exclude index.md` skips each file with that name.
+
+The text report has one line for each finding, then a summary:
+
+```text
+docs/guide.md:12:9: error: STE-100-04: Do not use "will".
+lexis: 1 error(s), 0 warning(s), 0 note(s) in 14 file(s), ruleset ste-100
+```
+
+The line and the column start at 1. The column counts UTF-16 code units, as SARIF does. The JSON report has a `summary` object and a `findings` list with the same fields.
 
 A rule ID has capital letters, digits and hyphens, for example `STE-100-01` or `DOC-CUSTOM-01`. A parameter name has lowercase letters, digits and underscores. lexis rejects a rule that `--enable-rule` and `--omit-rule` both name.
 

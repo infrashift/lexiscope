@@ -26,13 +26,15 @@ type ScanOptions struct {
 	Ruleset      ruleset.Options
 	Format       string
 	SARIFVersion string
-	Output       string // "-" is stdout
+	Output       string   // "-" is stdout
+	Excludes     []string // path.Match patterns of paths to skip
 }
 
 // scanFlags holds the raw flag values of lexis scan.
 type scanFlags struct {
 	rules                        rulesetFlags
 	format, sarifVersion, output string
+	excludes                     []string
 }
 
 func newScanCmd() *cobra.Command {
@@ -56,28 +58,14 @@ func (f *scanFlags) register(fl *pflag.FlagSet) {
 	fl.StringVar(&f.format, "format", "text", "report format: text, json or sarif")
 	fl.StringVar(&f.sarifVersion, "sarif-version", version.DefaultSARIFVersion, "SARIF version: 2.1.0 or 2.2")
 	fl.StringVarP(&f.output, "output", "o", "-", "report file; - is stdout")
-}
-
-func (f *scanFlags) run(cmd *cobra.Command, args []string) error {
-	assert.True(cmd != nil, "cobra gives the command")
-	assert.True(f != nil, "the flags exist")
-	opts, err := f.options(cmd.Flags().Changed("sarif-version"), args)
-	if err != nil {
-		return err
-	}
-	rs, err := ruleset.Load(opts.Ruleset)
-	if err != nil {
-		return err
-	}
-	return fmt.Errorf("scan %s: %w: ruleset %s has %d active rules, but the rule engine arrives in Phase 4 of PLAN.md",
-		strings.Join(opts.Paths, " "), errNotAvailable, rs.Name, len(rs.Active()))
+	fl.StringArrayVar(&f.excludes, "exclude", nil, "skip the paths that match this pattern")
 }
 
 // options checks the flag values and returns the scan options.
 func (f *scanFlags) options(sarifVersionSet bool, args []string) (ScanOptions, error) {
 	assert.True(f != nil, "the flags exist")
 	assert.True(len(args) <= maxArgs, "the command line is bounded")
-	o := ScanOptions{Paths: args, Format: f.format, SARIFVersion: f.sarifVersion, Output: f.output}
+	o := ScanOptions{Paths: args, Format: f.format, SARIFVersion: f.sarifVersion, Output: f.output, Excludes: f.excludes}
 	if len(o.Paths) == 0 {
 		o.Paths = []string{"."}
 	}

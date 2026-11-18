@@ -49,6 +49,10 @@ The oracle has no check for synonyms, nominalizations, `-ing` forms, `your`, mar
 
 **Parity test:** the test copies each fixture into a temporary `docs/src/content/docs/` directory and runs the unchanged oracle there. The oracle reports the first line of each paragraph. The test maps each lexis position to the first line of its paragraph before it compares. A deliberate difference, for example a `~~~` fence, gets its own fixture and an entry in a spec.
 
+**Phase 4 result:** the parity test runs the unchanged oracle on 20 fixtures and on each repository document. It also runs a copy of the oracle with a step limit of 15, against lexis with `--set STE-100-01.max_words=15`. The extractor copies the Python semantics of the oracle: Unicode `\s` and `\b`, universal newlines, and the order of the cleanup steps. [Known differences from ste-check](/specs/known-differences-from-ste-check--01a1ee352a3c.md) lists the three deliberate differences.
+
+**Self-check:** `zmake self-check` runs `lexis scan` on the documents of the oracle and on the Go comments. An error fails the gate. A warning of an extended rule does not fail it, because the heuristics give false findings.
+
 ## Consequences
 - Rules 01 to 04 keep the limits of the oracle, for example its word count.
 - The extended rules can give false warnings. Their exception lists and fixtures control this.
