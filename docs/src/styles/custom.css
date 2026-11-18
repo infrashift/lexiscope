@@ -1,0 +1,35 @@
+/* lexis Starlight theme: a teal accent, so the site looks different from the
+   orange of zmake.
+
+   Starlight's own theme rules live in a cascade layer, and unlayered rules
+   like these win over layered ones regardless of specificity. A plain :root
+   override of a scale color therefore leaks into light mode as well, so the
+   dark-only values are scoped to data-theme="dark" (which Starlight sets on
+   <html> after resolving "auto"). */
+:root {
+	--sl-content-width: 52rem;
+}
+
+:root[data-theme='dark'] {
+	--sl-color-accent-low: hsl(170, 55%, 13%);
+	--sl-color-accent: hsl(168, 62%, 47%);
+	--sl-color-accent-high: hsl(166, 70%, 82%);
+	--sl-color-black: hsl(185, 40%, 7%);
+	--sl-color-gray-6: hsl(185, 30%, 13%);
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: hsl(166, 60%, 89%);
+	--sl-color-accent: hsl(172, 85%, 26%);
+	--sl-color-accent-high: hsl(176, 80%, 16%);
+}
+
+/* Inline code contrast */
+:root[data-theme='light'] .sl-markdown-content :not(pre) > code {
+	background-color: hsl(168, 35%, 93%);
+	color: hsl(176, 70%, 20%);
+}
+
+.sl-markdown-content table :not(pre) > code {
+	white-space: nowrap;
+}

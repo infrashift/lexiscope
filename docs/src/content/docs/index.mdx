@@ -1,0 +1,38 @@
+---
+title: lexis
+description: lexis is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE, for example ASD-STE100.
+template: splash
+hero:
+  tagline: A documentation linter in Go. lexis checks Markdown files and source code comments against rulesets in CUE. The first ruleset is ASD-STE100.
+  actions:
+    - text: Get started
+      link: start-here/getting-started/
+      icon: right-arrow
+    - text: GitHub
+      link: https://github.com/infrashift/lexis
+      icon: external
+      variant: minimal
+---
+
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="No release yet">
+lexis has finished Phase 1 of its plan. The repository has the gates and the package layout, but no commands yet.
+See the [roadmap](project/roadmap/).
+</Aside>
+
+<CardGrid>
+	<Card title="Rules in CUE" icon="setting">
+		Each ruleset is a CUE file. A user file can add a rule, turn off a rule or change a limit.
+		One lexicon holds the approved term for each concept.
+	</Card>
+	<Card title="Prose and comments" icon="document">
+		lexis reads Markdown files. It also reads the comments of Go, Zig, Python, C and Rust files with ztree.
+	</Card>
+	<Card title="SARIF output" icon="list-format">
+		lexis writes SARIF 2.1.0 and 2.2 reports for code scanning tools. It also writes text and JSON.
+	</Card>
+	<Card title="Strict code rules" icon="approve-check">
+		The lexis source follows the NASA Power of 10 rules. Its own documentation follows ASD-STE100.
+	</Card>
+</CardGrid>

@@ -1,0 +1,48 @@
+# lexis development gates in modern mode. The Makefile has the same targets.
+# `@name:` declares each task, so this file has no .PHONY list.
+# zmake reads this file before the Makefile. GNU Make reads the Makefile.
+
+GO ?= go
+GOFMT ?= $(shell $(GO) env GOROOT)/bin/gofmt
+PYTHON ?= python3
+BUN ?= bun
+# gofmt walks directories, so it gets the Go directories only, not docs/.
+GO_DIRS := cmd internal rules
+
+## check: run every gate (the default goal)
+@check: lint test wiki docs-style
+
+## build: compile the lexis binary into bin/
+@build:
+    $(GO) build -o bin/lexis ./cmd/lexis
+
+## test: run the unit tests with the race detector
+@test:
+    $(GO) test -race -count=1 ./...
+
+## lint: check the formatting, run go vet and check the Power of 10 rules
+@lint:
+    $(GOFMT) -l $(GO_DIRS) | (! grep .)
+    $(GO) vet ./...
+    $(PYTHON) -I scripts/nasa-lint.py
+
+## fmt: format the Go sources in place
+@fmt:
+    $(GOFMT) -w $(GO_DIRS)
+
+## wiki: validate the OKF wiki
+@wiki:
+    okfw validate --all
+    okfw validate --okf
+
+## docs-style: check the documentation against ASD-STE100 rules
+@docs-style:
+    $(PYTHON) -I scripts/ste-check.py
+
+## docs-dev: run the Astro Starlight site locally with bun (default http://localhost:4321/lexis/)
+@docs-dev:
+    cd docs && $(BUN) install --frozen-lockfile && $(BUN) --bun run dev
+
+## docs-build: build the site into docs/dist (the same build as the Pages deploy)
+@docs-build:
+    cd docs && $(BUN) install --frozen-lockfile && $(BUN) --bun run build
