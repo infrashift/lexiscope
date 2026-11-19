@@ -13,4 +13,5 @@
 * [ADR-0007: Document lexis with Astro Starlight on GitHub Pages](adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) - An Astro Starlight site in docs/, built with bun and deployed to GitHub Pages by GitHub Actions; the docs toolchain stays outside the Go gates.
 * [ADR-0008: CLI exit statuses, output errors and commands of later phases](adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) - lexis exits with 0, 1 or 2, keeps the first output error in one writer, and its scan and rules commands check flags before their engines exist.
 * [ADR-0009: The self-check fails on each finding, with a repository vocabulary](adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) - zmake self-check fails on each finding, and vocabulary.cue holds the technical terms of lexis that STE-100-06 and STE-100-07 do not report.
+* [ADR-0010: A ztree error fails the scan](adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md) - When ztree cannot parse a source file, lexis stops the scan with status 2 and names the file and the ztree error.
 

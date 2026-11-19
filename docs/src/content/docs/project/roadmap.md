@@ -14,3 +14,4 @@ sidebar:
 | 3 | CUE ruleset engine and the `ste-100` ruleset | done |
 | 4 | Prose and comment engine, and parity with `scripts/ste-check.py` | done |
 | 5 | SARIF reports and the self-check | done |
+| 6 | Comment tests for each ztree grammar, and a ztree error fails the scan | done |

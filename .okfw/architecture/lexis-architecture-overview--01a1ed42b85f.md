@@ -37,6 +37,6 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 
 ## Boundaries
 - **CUE:** `cuelang.org/go` loads and unifies the rulesets ([ADR-0004](/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md)).
-- **ztree:** the Go binding `github.com/infrashift/ztree/bindings/go` gives the comment spans of Go, Zig, Python, C and Rust files through cgo ([ADR-0002](/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md)).
+- **ztree:** the Go binding `github.com/infrashift/ztree/bindings/go` gives the comment spans of Go, Zig, Python, C and Rust files through cgo ([ADR-0002](/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md)). A ztree error, such as a parse limit, fails the scan ([ADR-0010](/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md)). The span of a Rust doc comment ends after the line break, so the extractor removes the line break.
 - **SARIF:** `github.com/owenrumney/go-sarif/v3` writes SARIF 2.1.0 and 2.2 ([ADR-0006](/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md)). `internal/report` builds a 2.1.0 report, converts it to 2.2 when the user asks, and validates it before it writes it.
 - **Docs site:** `docs/` is a separate bun project. The Go module does not include it ([ADR-0007](/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md)).

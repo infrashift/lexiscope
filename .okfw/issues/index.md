@@ -9,4 +9,6 @@
 * [ISSUE-003: CUE ruleset engine and the ste-100 ruleset](issue-003-cue-ruleset-engine-and-the-ste-100-ruleset--01a1ed42b891.md) - Add the CUE schema, the loader, the lexicon projection, the overrides and the ste-100 ruleset.
 * [ISSUE-004: Prose and comment engine, and parity with ste-check](issue-004-prose-and-comment-engine-and-parity-with-ste-check--01a1ed42b897.md) - Add the Markdown extractor, the comment extractor with ztree, the rule checks and the parity test against the oracle.
 * [ISSUE-005: SARIF reports and the self-check](issue-005-sarif-reports-and-the-self-check--01a1ed42b89d.md) - Add the SARIF 2.1.0 and 2.2 reports and run the self-check on the repository.
+* [ISSUE-006: ztree comment coverage](issue-006-ztree-comment-coverage--01a1f474ef49.md) - Test the comments of each ztree grammar that lexis reads, and record what lexis does when ztree cannot parse a file.
+* [ISSUE-007: C++ comments](issue-007-c-comments--01a1f4750b43.md) - lexis does not read the comments of C++ files, although ztree has a C++ grammar.
 

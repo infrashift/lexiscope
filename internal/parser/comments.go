@@ -2,7 +2,6 @@ package parser
 
 import (
 	"errors"
-	"fmt"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -50,7 +49,7 @@ func Comments(lang ztree.Lang, src []byte) ([]Block, error) {
 	}
 	spans, err := ztree.ExtractComments(lang, src)
 	if err != nil {
-		return nil, fmt.Errorf("ztree: %w", err)
+		return nil, err // Each ztree error starts with "ztree:".
 	}
 	var prose []proseLine
 	group, prevEnd, prevOwnLine := 0, int32(-1), false
@@ -58,6 +57,9 @@ func Comments(lang ztree.Lang, src []byte) ([]Block, error) {
 		start, end := int32(s.StartByte), int32(s.EndByte)
 		own := ownLine(src, start)
 		lineComment := !strings.HasPrefix(string(src[start:end]), "/*")
+		if lineComment {
+			end = trimLineBreak(src, start, end)
+		}
 		if !own || !prevOwnLine || !lineComment || !adjacent(lines, prevEnd, start) {
 			group++
 		}
@@ -65,6 +67,17 @@ func Comments(lang ztree.Lang, src []byte) ([]Block, error) {
 		prevEnd, prevOwnLine = end, own && lineComment
 	}
 	return paragraphs(prose, true)
+}
+
+// trimLineBreak returns the end of the line comment src[start:end] without
+// its line break. A Rust doc comment (/// or //!) ends after the line break.
+func trimLineBreak(src []byte, start, end int32) int32 {
+	assert.True(start < end && int(end) <= len(src), "the comment is in the source")
+	for end > start+1 && (src[end-1] == '\n' || src[end-1] == '\r') {
+		end--
+	}
+	assert.True(end > start, "a line comment keeps its marker")
+	return end
 }
 
 // ownLine reports whether only white space precedes off on its line.

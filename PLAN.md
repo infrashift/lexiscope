@@ -7,7 +7,7 @@ Work on one phase at a time. Inside a phase, work on one task at a time. Each ph
 Loop: do one task, run `zmake check`, and repeat until it reports zero errors and zero warnings. Then go to the next task. At the end of a phase, update the wiki and the docs site, then make one git commit. Do not push.
 
 - Architecture: [lexis architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md)
-- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)
+- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) · [ADR-0010](.okfw/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md)
 - Guides: [Development workflow](.okfw/development-workflow--01a1ed42b859.md) · [Wiki conventions](.okfw/wiki-conventions--01a1ed42b854.md)
 
 ## Rules
@@ -230,3 +230,16 @@ The self-check:
 `zmake self-check` does steps 2 to 5. It loads `vocabulary.cue`, the technical terms of this repository, and uses `--fail-on note`, so each finding fails it ([ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)).
 
 Result: go-sarif validates SARIF 2.2 reports. The 2.2 schema uses no keyword of the newer drafts, and the tests prove that `Validate()` rejects broken reports. So lexis needs no second validator, and 2.2 is not experimental.
+
+## Phase 6 — ztree comment coverage
+
+Issue: [ISSUE-006](.okfw/issues/issue-006-ztree-comment-coverage--01a1f474ef49.md)
+
+- [x] Add comment tests for Zig, C and Rust, and for C++ code in a `.h` file
+- [x] Test that a ztree error names the file, and record that it fails the scan
+- [x] Check whether the Go build cache sees a new `libztree.a`
+- [x] Update the wiki and the docs site
+
+Result: the Rust test found a defect. The span of a Rust doc comment (`///` or `//!`) ends after the line break, so a failed assertion stopped lexis. The extractor now removes the line break. The Go build cache does not see a new `libztree.a`: ztree ISSUE-018 records it.
+
+C++ files stay out of scope. [ISSUE-007](.okfw/issues/issue-007-c-comments--01a1f4750b43.md) records the change.

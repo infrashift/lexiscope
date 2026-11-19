@@ -1,12 +1,15 @@
 package engine
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
+
+	ztree "github.com/infrashift/ztree/bindings/go"
 
 	"github.com/infrashift/lexis/internal/ruleset"
 )
@@ -173,6 +176,58 @@ func f() {
 	}
 	if got := check(t, e, "x.txt", "This should not count.\n"); len(got) != 0 {
 		t.Fatalf("a text file has findings: %q", got)
+	}
+}
+
+// TestGrammarComments reads the comment forms of each ztree grammar that
+// lexis reads, other than Go and Python (ISSUE-006). A comment marker in a
+// string is not a comment.
+func TestGrammarComments(t *testing.T) {
+	e := engineFor(t, ruleset.Options{})
+	cases := []struct{ path, src string }{
+		{"x.zig", "//! The module will load.\nconst std = @import(\"std\");\n\n/// The function should return.\nfn f() void {\n    const s = \"// will not count\";\n    _ = s; // A side note will count.\n}\n"},
+		{"x.c", "/* The header will hold\n * the types. */\n#include <stdio.h>\n// The macro should expand.\nconst char *s = \"/* will not count */\";\nint x; // A side note will count.\n"},
+		{"x.rs", "//! The crate will build.\n/// The function should return.\nfn f() {\n    let s = \"// will not count\";\n    /* A block will count. */\n}\n"},
+	}
+	want := [][]string{
+		{"1:16 STE-100-04 will", "4:18 STE-100-04 should", "7:27 STE-100-04 will"},
+		{"1:15 STE-100-04 will", "4:14 STE-100-04 should", "6:23 STE-100-04 will"},
+		{"1:15 STE-100-04 will", "2:18 STE-100-04 should", "5:16 STE-100-04 will"},
+	}
+	for i, c := range cases {
+		if got := check(t, e, c.path, c.src); !slices.Equal(got, want[i]) {
+			t.Errorf("%s: findings = %q, want %q", c.path, got, want[i])
+		}
+	}
+	// A Rust doc comment ends after its line break. Two adjacent lines are
+	// still one comment, so the sentence has 27 words.
+	long := "/// The parser reads each line of the file and keeps the offset of each byte\n" +
+		"/// so that a finding names the exact line and the exact column.\nfn g() {}\n"
+	if got := check(t, e, "y.rs", long); !slices.Equal(got, []string{"1:5 STE-100-02 "}) {
+		t.Errorf("y.rs: findings = %q", got)
+	}
+}
+
+// TestManyStackHeads reads the comment of a .h file with C++ code that
+// needs 71 GLR stack heads in ztree. ztree failed on it with 64 heads
+// (ztree ADR-0013); the input comes from the ztree parser tests.
+func TestManyStackHeads(t *testing.T) {
+	e := engineFor(t, ruleset.Options{})
+	src := "(a,b&c(d,e&,f(g,h&,i(const,const j&);/* The note will count. */\n&"
+	if got := check(t, e, "x.h", src); !slices.Equal(got, []string{"1:50 STE-100-04 will"}) {
+		t.Fatalf("findings = %q", got)
+	}
+}
+
+// TestParseLimit proves that a ztree error names the file and wraps the
+// ztree error (ADR-0010). A table of 1.5 million items reaches a ztree
+// limit.
+func TestParseLimit(t *testing.T) {
+	e := engineFor(t, ruleset.Options{})
+	src := "package p\n\n// The table will not parse.\nvar t = []int{" + strings.Repeat("1,", 1_500_000) + "}\n"
+	_, err := e.Check("big.go", []byte(src))
+	if !errors.Is(err, ztree.ErrLimitReached) || !strings.HasPrefix(err.Error(), "big.go: ") {
+		t.Fatalf("err = %v, want big.go and ztree.ErrLimitReached", err)
 	}
 }
 
