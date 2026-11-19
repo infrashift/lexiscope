@@ -7,7 +7,7 @@ import (
 	"go/types"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // nodeCtx carries facts from a parent node to its children. ast.Preorder

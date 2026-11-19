@@ -1,13 +1,13 @@
-# PLAN.md — lexis
+# PLAN.md — lexiscope
 
-lexis is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. The first ruleset is `ste-100`, a subset of ASD-STE100 (Simplified Technical English). lexis writes text, JSON and SARIF reports.
+lexiscope is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. The first ruleset is `ste-100`, a subset of ASD-STE100 (Simplified Technical English). lexiscope writes text, JSON and SARIF reports.
 
 Work on one phase at a time. Inside a phase, work on one task at a time. Each phase has a mirror issue in the OKF wiki (`.okfw/issues/`). At the end of a phase, tick this checklist and the acceptance criteria of the issue.
 
 Loop: do one task, run `zmake check`, and repeat until it reports zero errors and zero warnings. Then go to the next task. At the end of a phase, update the wiki and the docs site, then make one git commit. Do not push.
 
-- Architecture: [lexis architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md)
-- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) · [ADR-0010](.okfw/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md)
+- Architecture: [lexiscope architecture overview](.okfw/architecture/lexiscope-architecture-overview--01a1ed42b85f.md)
+- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) · [ADR-0010](.okfw/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md) · [ADR-0011](.okfw/decisions/adr-0011-semscope-checks-the-power-of-10-rules-in-the-lint-task--01a1f5140d5e.md) · [ADR-0012](.okfw/decisions/adr-0012-the-tool-is-lexiscope-with-lexis-as-a-short-alias--01a1f543cb28.md)
 - Guides: [Development workflow](.okfw/development-workflow--01a1ed42b859.md) · [Wiki conventions](.okfw/wiki-conventions--01a1ed42b854.md)
 
 ## Rules
@@ -24,7 +24,7 @@ Loop: do one task, run `zmake check`, and repeat until it reports zero errors an
 | Static analysis | `golangci-lint run` (v2, pinned version) | 2 |
 | Wiki | `okfw validate --all --okf` | 1 |
 | Writing style | `scripts/ste-check.py` | 1 |
-| Self-check | `lexis scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note` | 4, zero results from 5 |
+| Self-check | `lexiscope scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note` | 4, zero results from 5 |
 
 The gate does not build the docs site, so the Go checks do not need bun. `zmake docs-build` builds the site, and the Pages workflow builds it for each pull request.
 
@@ -34,7 +34,7 @@ ADR-0003 adapts the rules to Go. The Go port of `nasa-lint.py` checks R1, R2, R4
 
 - **R1 (simple control flow):** No recursion, direct or indirect. No `goto`. Walk the Markdown tree and the comment list with explicit, bounded stacks.
 - **R2 (fixed loop bounds):** Each loop has a static upper bound, for example `MaxFiles`, `MaxTokensPerFile`, `MaxSentencesPerFile` or `MaxASTNodes`. A loop that reaches its bound returns an error. A bare `for {}` is an error.
-- **R3 (allocation):** This rule is a deviation, as in zmake and ztree. Go allocates on the heap and has a garbage collector. lexis sets hard caps on each buffer and allocates each buffer once per file.
+- **R3 (allocation):** This rule is a deviation, as in zmake and ztree. Go allocates on the heap and has a garbage collector. lexiscope sets hard caps on each buffer and allocates each buffer once per file.
 - **R4 (short functions):** A function has 60 lines or fewer.
 - **R5 (assertions):** The average is two or more `assert.` calls per function. `internal/assert` panics on a programmer error. The CLI recovers the panic at its boundary and exits with status 2.
 - **R6 (smallest scope):** Declare each variable in the smallest scope.
@@ -52,7 +52,7 @@ All Markdown files, wiki pages, docs pages, CLI help text and code comments foll
 3. A be-verb before a word that ends in `-ed` is a passive warning.
 4. The oracle bans 13 words and phrases, for example `should`, `will` and `just`.
 
-lexis adds more checks. They apply to lexis output, and the authors of this repository follow them too:
+lexiscope adds more checks. They apply to lexiscope output, and the authors of this repository follow them too:
 
 - Do not use marketing words, for example `seamless`, `robust`, `powerful` or `effortless`.
 - Do not use the second-person possessive pronoun. Write "the ruleset file".
@@ -265,3 +265,15 @@ Issue: [ISSUE-008](.okfw/issues/issue-008-semscope-in-the-lint-task--01a1f5142ec
 - [x] Record the decision in ADR-0011, and update CLAUDE.md, the wiki and the docs site
 
 Result: semscope and `cmd/nasa-lint` give 0 findings, 174 functions and 352 assertions. Without semscope, the lint task writes a note and passes.
+
+## Phase 9 — The tool is lexiscope
+
+Issue: [ISSUE-009](.okfw/issues/issue-009-the-tool-is-lexiscope--01a1f543cb30.md)
+
+- [x] Change the module path to `github.com/infrashift/lexiscope`, and move the entry point to `cmd/lexiscope`
+- [x] Change the help, the version line, the error prefix, the summary line and the SARIF driver name to `lexiscope`
+- [x] Make the link `lexis` to `lexiscope` in `zmake build` and `zmake install`, and check the alias in the self-check
+- [x] Change the docs site to the base path `/lexiscope/`, and change the current documents of the wiki
+- [x] Record the decision in ADR-0012, and update CLAUDE.md, the wiki and the docs site
+
+Result: both names start the CLI, and the help shows `lexiscope`. ADRs, closed issues, daily notes and the text of completed phases keep the old name as records.

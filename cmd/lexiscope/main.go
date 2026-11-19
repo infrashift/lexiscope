@@ -1,12 +1,12 @@
-// Command lexis checks Markdown files and source code comments against CUE
+// Command lexiscope checks Markdown files and source code comments against CUE
 // rulesets. Package internal/cli holds the commands.
 package main
 
 import (
 	"os"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/cli"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/cli"
 )
 
 func main() {

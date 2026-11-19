@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/output"
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/output"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 func newRulesCmd() *cobra.Command {

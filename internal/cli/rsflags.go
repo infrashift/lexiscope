@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 // maxListItems bounds each list flag.
@@ -21,8 +21,8 @@ var (
 	paramRE  = regexp.MustCompile(`^[a-z][a-z0-9_]*$`)
 )
 
-// rulesetFlags are the flags that select and change a ruleset. lexis scan
-// and lexis rules list share them.
+// rulesetFlags are the flags that select and change a ruleset. lexiscope scan
+// and lexiscope rules list share them.
 type rulesetFlags struct {
 	rulesets, enable, omit, sets, allowTerms []string
 }

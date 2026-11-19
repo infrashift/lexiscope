@@ -6,7 +6,7 @@ import (
 	_ "embed"
 	"slices"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Name is the name of the built-in ruleset.

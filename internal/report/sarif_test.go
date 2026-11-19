@@ -13,9 +13,9 @@ import (
 	v210 "github.com/owenrumney/go-sarif/v3/pkg/report/v210/sarif"
 	v22 "github.com/owenrumney/go-sarif/v3/pkg/report/v22/sarif"
 
-	"github.com/infrashift/lexis/internal/engine"
-	"github.com/infrashift/lexis/internal/output"
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/engine"
+	"github.com/infrashift/lexiscope/internal/output"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 // scan checks one Markdown text with ste-100 minus STE-100-11, and returns
@@ -103,7 +103,7 @@ func TestSARIF(t *testing.T) {
 		}
 		run := doc.Runs[0]
 		d := run.Tool.Driver
-		if d.Name != "lexis" || d.Version == "" || d.InformationURI != InformationURI || run.ColumnKind != "utf16CodeUnits" {
+		if d.Name != "lexiscope" || d.Version == "" || d.InformationURI != InformationURI || run.ColumnKind != "utf16CodeUnits" {
 			t.Fatalf("%s: driver %+v, column kind %q", version, d, run.ColumnKind)
 		}
 		// The active rules only: the scan omits STE-100-11.

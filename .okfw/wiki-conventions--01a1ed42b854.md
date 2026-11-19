@@ -12,7 +12,7 @@ description: "Layout, writing style and authoring rules for architecture notes, 
 
 # Wiki conventions
 
-This guide defines how the lexis OKF wiki (`.okfw/`) stores project knowledge.
+This guide defines how the lexiscope OKF wiki (`.okfw/`) stores project knowledge.
 
 - Create concepts with `okfw create` or the okfw MCP `create` tool. Do not write frontmatter by hand.
 - Search before you write. Link to related concepts.
@@ -51,14 +51,14 @@ All documentation follows ASD-STE100 Simplified Technical English. This includes
 - Use active voice and simple present tense: "The parser reads the document."
 - Start each procedural step with an imperative verb: Run, Read, Inspect, Verify, Add, Set.
 - Keep procedural steps to 20 words or fewer. Keep descriptive sentences to 25 words or fewer.
-- Use a verb, not a noun form: "lexis checks the file", not "The file check occurs".
+- Use a verb, not a noun form: "lexiscope checks the file", not "The file check occurs".
 - Do not use `your`. Write "the ruleset file".
 - Use one term for one concept. This wiki uses these terms:
   - *rule*: one check with a stable ID, for example `STE-100-01`.
   - *ruleset*: a set of rules in CUE, for example `ste-100`.
   - *lexicon*: the map from each concept to its approved term, its unapproved synonyms and its nominalizations.
   - *finding*: one result of one rule at one position.
-  - *oracle*: `scripts/ste-check.py`. The parity test compares lexis with it.
+  - *oracle*: `scripts/ste-check.py`. The parity test compares lexiscope with it.
   - *core rule* and *extended rule*: the two groups of `ste-100` rules ([ADR-0005](/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md)).
   - *step*: a numbered list item. *descriptive sentence*: each other sentence.
   - *comment*: the text of one source code comment. ztree gives its span.

@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Kind is the kind of a block.

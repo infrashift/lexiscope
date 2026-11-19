@@ -12,24 +12,24 @@ import (
 	"github.com/owenrumney/go-sarif/v3/pkg/report/convert"
 	v210 "github.com/owenrumney/go-sarif/v3/pkg/report/v210/sarif"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/engine"
-	"github.com/infrashift/lexis/internal/output"
-	"github.com/infrashift/lexis/internal/ruleset"
-	"github.com/infrashift/lexis/internal/version"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/engine"
+	"github.com/infrashift/lexiscope/internal/output"
+	"github.com/infrashift/lexiscope/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/version"
 )
 
 const (
 	// InformationURI is tool.driver.informationUri.
-	InformationURI = "https://github.com/infrashift/lexis"
+	InformationURI = "https://github.com/infrashift/lexiscope"
 	// RulesHelpURI is the helpUri of each rule: the rules reference.
-	RulesHelpURI = "https://infrashift.github.io/lexis/reference/rules/"
+	RulesHelpURI = "https://infrashift.github.io/lexiscope/reference/rules/"
 )
 
 // SARIF writes the findings as one SARIF run of the version 2.1.0 or 2.2.
-// root is the directory of the relative artifact URIs. lexis builds a 2.1.0
+// root is the directory of the relative artifact URIs. lexiscope builds a 2.1.0
 // report, and go-sarif converts it to 2.2 without loss. Each report must
-// pass `Validate` before lexis writes it (ADR-0006).
+// pass `Validate` before lexiscope writes it (ADR-0006).
 func SARIF(out *output.Writer, sarifVersion, root string, rs *ruleset.Ruleset, findings []engine.Finding) error {
 	assert.True(out != nil, "the writer exists")
 	assert.True(slices.Contains(version.SARIFVersions(), sarifVersion), "the options checked the SARIF version")
@@ -63,9 +63,9 @@ func SARIF(out *output.Writer, sarifVersion, root string, rs *ruleset.Ruleset, f
 func build(root string, rs *ruleset.Ruleset, findings []engine.Finding) (*v210.Report, error) {
 	assert.True(rs != nil, "the ruleset is resolved")
 	assert.True(root != "", "the root is set")
-	run := v210.NewRunWithInformationURI("lexis", InformationURI)
+	run := v210.NewRunWithInformationURI("lexiscope", InformationURI)
 	run.Tool.Driver.WithVersion(version.Get().Version)
-	// lexis reads lines as Python's universal newlines do (internal/parser).
+	// lexiscope reads lines as Python's universal newlines do (internal/parser).
 	run.WithColumnKind("utf16CodeUnits").NewlineSequences = []string{"\r\n", "\n", "\r"}
 	for _, rule := range rs.Active() {
 		run.AddRule(rule.ID).

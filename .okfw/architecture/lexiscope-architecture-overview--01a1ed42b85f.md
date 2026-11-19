@@ -1,20 +1,20 @@
 ---
 id: "01a1ed42-b85f-748e-ba6a-49ec6bae2e7d"
-title: "lexis architecture overview"
+title: "lexiscope architecture overview"
 type: "Architecture"
 tags:
   - "architecture"
 created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
-description: "The packages of lexis, the data flow from a file to a report, and the boundaries to CUE, ztree and SARIF."
+timestamp: "2026-11-19T13:25:02-06:00"
+description: "The packages of lexiscope, the data flow from a file to a report, and the boundaries to CUE, ztree and SARIF."
 ---
 
-# lexis architecture overview
+# lexiscope architecture overview
 
-lexis is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. This overview describes the plan. Each phase updates it when the code exists.
+lexiscope is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. This overview describes the plan. Each phase updates it when the code exists. `lexis` is a short alias of the tool, a symbolic link to the `lexiscope` binary ([ADR-0012](/decisions/adr-0012-the-tool-is-lexiscope-with-lexis-as-a-short-alias--01a1f543cb28.md)).
 
 ## Data flow
-1. `cmd/lexis` reads the flags and the paths.
+1. `cmd/lexiscope` reads the flags and the paths.
 2. `internal/ruleset` loads the ruleset, applies the user overlays and the CLI overrides, and makes rules from the lexicon.
 3. `internal/parser` reads each file. It gives the prose of a Markdown file, or the comments of a source file.
 4. `internal/engine` splits the prose into sentences and runs each active rule. Each rule gives findings.
@@ -23,13 +23,13 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 ## Packages
 | Package | Contents | Phase |
 |---|---|---|
-| `cmd/lexis` | The entry point. It calls `internal/cli`. | 2 |
+| `cmd/lexiscope` | The entry point. It calls `internal/cli`. | 2 |
 | `internal/cli` | The cobra commands, the flag checks and the exit statuses ([ADR-0008](/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)). | 2 |
 | `internal/output` | A writer that keeps the first write error. | 2 |
 | `cmd/nasa-lint` and `internal/nasalint` | The Go port of `scripts/nasa-lint.py`. | 2 |
 | `internal/assert` | `assert.True` for rule R5, and `assert.Recover` for the command boundary. | 1 |
 | `internal/version` | The version, commit and build date, and the SARIF versions. | 2 |
-| `internal/ruleset` | The CUE schema (`schema.cue`), the loader, the sources and the CLI changes. `lexis rules list` and `lexis rules inspect` print its result. | 3 |
+| `internal/ruleset` | The CUE schema (`schema.cue`), the loader, the sources and the CLI changes. `lexiscope rules list` and `lexiscope rules inspect` print its result. | 3 |
 | `rules/ste100` | The CUE source of the `ste-100` ruleset, embedded in the binary. | 3 |
 | `internal/parser` | The Markdown extractor (the line rules of the oracle) and the comment extractor (ztree). Each block keeps the source offset of each byte. | 4 |
 | `internal/engine` | The sentence split, the word count, the term matcher, the nine checks, the file walk and the parity test. | 4 |

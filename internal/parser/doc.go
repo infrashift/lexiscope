@@ -15,7 +15,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Limits of the extractor.

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Writer writes formatted text to an io.Writer.

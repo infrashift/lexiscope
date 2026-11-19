@@ -9,8 +9,8 @@ import (
 
 	"cuelang.org/go/cue"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/rules/ste100"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/rules/ste100"
 )
 
 // source is one CUE file of a load.
@@ -22,7 +22,7 @@ type source struct {
 // Builtins returns the names of the built-in rulesets.
 func Builtins() []string {
 	names := []string{ste100.Name}
-	assert.True(len(names) == 1, "lexis has one built-in ruleset")
+	assert.True(len(names) == 1, "lexiscope has one built-in ruleset")
 	assert.True(names[0] != "", "a built-in ruleset has a name")
 	return names
 }

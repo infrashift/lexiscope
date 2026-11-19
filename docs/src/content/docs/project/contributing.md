@@ -1,6 +1,6 @@
 ---
 title: Contributing
-description: The work loop and the gates of the lexis repository.
+description: The work loop and the gates of the lexiscope repository.
 sidebar:
   order: 2
 ---
@@ -17,7 +17,7 @@ At the end of a phase, update the wiki in `.okfw/` and the pages of this site. T
 
 ## Writing style
 
-All documentation follows ASD-STE100: the Markdown files, the wiki pages, these pages, the CLI help text and the code comments. `zmake docs-style` checks the Markdown files and the wiki pages. `zmake self-check` runs lexis on its own documentation and comments, and each finding fails it. Add a technical term of the project to `vocabulary.cue`. Rewrite other text.
+All documentation follows ASD-STE100: the Markdown files, the wiki pages, these pages, the CLI help text and the code comments. `zmake docs-style` checks the Markdown files and the wiki pages. `zmake self-check` runs lexiscope on its own documentation and comments, and each finding fails it. Add a technical term of the project to `vocabulary.cue`. Rewrite other text.
 
 ## Code rules
 

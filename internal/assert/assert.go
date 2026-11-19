@@ -1,4 +1,4 @@
-// Package assert checks the preconditions and invariants of lexis code (rule
+// Package assert checks the preconditions and invariants of lexiscope code (rule
 // R5 of the NASA Power of 10). A failed assertion is a programmer error, so
 // it panics. The CLI recovers the panic at its boundary and exits with
 // status 2.

@@ -39,7 +39,7 @@ func TestLdflagsOverlay(t *testing.T) {
 func TestGetUsesLdflags(t *testing.T) {
 	t.Cleanup(func() { Version, Commit, BuildDate = "", "", "" })
 	Version, Commit, BuildDate = "v9.9.9", "feedbee", "2026-01-02T03:04:05Z"
-	if got, want := Get().String(), "lexis version v9.9.9 (commit: feedbee, built: 2026-01-02T03:04:05Z)"; got != want {
+	if got, want := Get().String(), "lexiscope version v9.9.9 (commit: feedbee, built: 2026-01-02T03:04:05Z)"; got != want {
 		t.Fatalf("Get().String() = %q, want %q", got, want)
 	}
 }

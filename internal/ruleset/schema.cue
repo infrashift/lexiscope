@@ -1,4 +1,4 @@
-// The schema of a lexis ruleset (ADR-0004). internal/ruleset unifies
+// The schema of a lexiscope ruleset (ADR-0004). internal/ruleset unifies
 // #Ruleset with the built-in ruleset, each user file and the CLI flags.
 // Each ruleset file can refer to the definitions of this file.
 

@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-A ruleset is CUE data. lexis unifies the schema, the built-in ruleset and each file that `--ruleset` names. The [ruleset schema](../../reference/ruleset-schema/) lists each field.
+A ruleset is CUE data. lexiscope unifies the schema, the built-in ruleset and each file that `--ruleset` names. The [ruleset schema](../../reference/ruleset-schema/) lists each field.
 
 ## How changes combine
 
@@ -15,7 +15,7 @@ CUE unification does not depend on the order of the files. A field can get one c
 
 1. Write a file, for example `house.cue`.
 2. Add the changes below that the project needs.
-3. Run `lexis rules list -r ste-100,house.cue` to see the result.
+3. Run `lexiscope rules list -r ste-100,house.cue` to see the result.
 
 Turn off a rule:
 
@@ -51,7 +51,7 @@ A user file can add a concept, but it can not change the lists of a built-in con
 
 ## Keep a vocabulary file
 
-A project can keep its technical terms in one file, for example `vocabulary.cue`, and load it with each scan. The lexis repository does this for its self-check:
+A project can keep its technical terms in one file, for example `vocabulary.cue`, and load it with each scan. The lexiscope repository does this for its self-check:
 
 ```cue
 vocabulary: {
@@ -61,7 +61,7 @@ vocabulary: {
 ```
 
 ```sh
-bin/lexis scan --ruleset ste-100 --ruleset vocabulary.cue .
+bin/lexiscope scan --ruleset ste-100 --ruleset vocabulary.cue .
 ```
 
 Add a term only when it names a concept of the project, a tool or a standard. Rewrite other text. The vocabulary applies to STE-100-06 and STE-100-07 only. The load fails when a vocabulary term is also an unapproved term of the lexicon or a banned term, for example of STE-100-04 or STE-100-09.
@@ -97,7 +97,7 @@ rules: "HS-01": {
 }
 ```
 
-Run `lexis rules list -r house/` to load each `.cue` file of the directory `house/`.
+Run `lexiscope rules list -r house/` to load each `.cue` file of the directory `house/`.
 
 ## Errors that the schema finds
 

@@ -8,7 +8,7 @@ tags:
   - "meta"
 created: "2026-11-18T00:05:35-06:00"
 timestamp: "2026-11-18T00:05:35-06:00"
-description: "The loop for each lexis phase: do one task, run zmake check until green, update the wiki and the docs site, then commit."
+description: "The loop for each lexiscope phase: do one task, run zmake check until green, update the wiki and the docs site, then commit."
 ---
 
 # Development workflow

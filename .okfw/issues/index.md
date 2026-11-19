@@ -12,4 +12,5 @@
 * [ISSUE-006: ztree comment coverage](issue-006-ztree-comment-coverage--01a1f474ef49.md) - Test the comments of each ztree grammar that lexis reads, and record what lexis does when ztree cannot parse a file.
 * [ISSUE-007: C++ comments](issue-007-c-comments--01a1f4750b43.md) - lexis does not read the comments of C++ files, although ztree has a C++ grammar.
 * [ISSUE-008: semscope in the lint task](issue-008-semscope-in-the-lint-task--01a1f5142ec2.md) - zmake lint checks the Power of 10 rules with cmd/nasa-lint only, and lexis has no semscope overlay.
+* [ISSUE-009: The tool is lexiscope](issue-009-the-tool-is-lexiscope--01a1f543cb30.md) - The tool gets the official name lexiscope, and lexis stays as a short alias.
 

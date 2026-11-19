@@ -9,10 +9,10 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://infrashift.github.io',
-	base: '/lexis',
+	base: '/lexiscope',
 	integrations: [
 		starlight({
-			title: 'lexis',
+			title: 'lexiscope',
 			description:
 				'A documentation linter in Go: it checks Markdown files and source code comments against CUE rulesets such as ASD-STE100.',
 			favicon: '/favicon.svg',
@@ -21,11 +21,11 @@ export default defineConfig({
 				{
 					icon: 'github',
 					label: 'GitHub',
-					href: 'https://github.com/infrashift/lexis',
+					href: 'https://github.com/infrashift/lexiscope',
 				},
 			],
 			editLink: {
-				baseUrl: 'https://github.com/infrashift/lexis/edit/main/docs/',
+				baseUrl: 'https://github.com/infrashift/lexiscope/edit/main/docs/',
 			},
 			sidebar: [
 				{ label: 'Start Here', items: [{ autogenerate: { directory: 'start-here' } }] },

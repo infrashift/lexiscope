@@ -5,7 +5,7 @@ import (
 	"slices"
 	"unicode/utf8"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Lines is the line table of one file. A line ends at "\r\n", "\r" or "\n",

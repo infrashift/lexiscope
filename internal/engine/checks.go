@@ -5,8 +5,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/parser"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/parser"
 )
 
 // minGerund is the shortest word that the -ing check reads, so "ring" and

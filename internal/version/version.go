@@ -1,5 +1,5 @@
-// Package version holds the version, commit and build date of lexis, and the
-// SARIF versions that lexis writes.
+// Package version holds the version, commit and build date of lexiscope, and the
+// SARIF versions that lexiscope writes.
 //
 // The build sets Version, Commit and BuildDate with -ldflags -X (see the
 // build target of the ZMakefile). A build without these flags, for example
@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"runtime/debug"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // The build sets these variables with -ldflags -X. An empty value means
@@ -24,11 +24,11 @@ var (
 // DefaultSARIFVersion is the SARIF version of --format sarif.
 const DefaultSARIFVersion = "2.1.0"
 
-// SARIFVersions returns the SARIF versions that lexis writes.
+// SARIFVersions returns the SARIF versions that lexiscope writes.
 func SARIFVersions() []string {
 	v := []string{"2.1.0", "2.2"}
 	assert.True(v[0] == DefaultSARIFVersion, "the default comes first")
-	assert.True(len(v) == 2, "lexis writes two SARIF versions")
+	assert.True(len(v) == 2, "lexiscope writes two SARIF versions")
 	return v
 }
 
@@ -101,10 +101,10 @@ func (i Info) Details() string {
 	return fmt.Sprintf("%s (commit: %s, built: %s)", i.Version, i.Commit, i.BuildDate)
 }
 
-// String returns the version line: "lexis version <details>".
+// String returns the version line: "lexiscope version <details>".
 func (i Info) String() string {
-	s := "lexis version " + i.Details()
-	assert.True(len(s) > len("lexis version "), "the line has details")
+	s := "lexiscope version " + i.Details()
+	assert.True(len(s) > len("lexiscope version "), "the line has details")
 	assert.True(s[len(s)-1] == ')', "the line ends with the details")
 	return s
 }

@@ -10,12 +10,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/engine"
-	"github.com/infrashift/lexis/internal/output"
-	"github.com/infrashift/lexis/internal/parser"
-	"github.com/infrashift/lexis/internal/report"
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/engine"
+	"github.com/infrashift/lexiscope/internal/output"
+	"github.com/infrashift/lexiscope/internal/parser"
+	"github.com/infrashift/lexiscope/internal/report"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 // errFindings marks a scan with a finding at the --fail-on severity or

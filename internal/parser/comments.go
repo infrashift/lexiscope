@@ -9,7 +9,7 @@ import (
 
 	ztree "github.com/infrashift/ztree/bindings/go"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // directiveRE matches a tool directive after //, for example //go:build,

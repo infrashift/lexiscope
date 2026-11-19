@@ -11,7 +11,7 @@ import (
 
 	ztree "github.com/infrashift/ztree/bindings/go"
 
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 func engineFor(t *testing.T, o ruleset.Options) *Engine {
@@ -180,7 +180,7 @@ func f() {
 }
 
 // TestGrammarComments reads the comment forms of each ztree grammar that
-// lexis reads, other than Go and Python (ISSUE-006). A comment marker in a
+// lexiscope reads, other than Go and Python (ISSUE-006). A comment marker in a
 // string is not a comment.
 func TestGrammarComments(t *testing.T) {
 	e := engineFor(t, ruleset.Options{})
@@ -201,7 +201,7 @@ func TestGrammarComments(t *testing.T) {
 			t.Errorf("%s: findings = %q, want %q", c.path, got, want[i])
 		}
 	}
-	// lexis reads each C++ file extension of semscope (ISSUE-007). A .h file
+	// lexiscope reads each C++ file extension of semscope (ISSUE-007). A .h file
 	// stays C.
 	for _, ext := range []string{".cc", ".cpp", ".cxx", ".hh", ".hpp", ".hxx"} {
 		src := "// The method should return.\ntemplate <typename T> T f(T x);\n"

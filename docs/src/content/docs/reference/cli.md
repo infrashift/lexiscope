@@ -1,13 +1,13 @@
 ---
 title: CLI
-description: The commands, flags and exit statuses of lexis.
+description: The commands, flags and exit statuses of lexiscope.
 sidebar:
   order: 0
 ---
 
 <!-- internal/cli/cli_test.go checks that this page lists each command and each flag. -->
 
-This page lists each command and each flag of lexis.
+This page lists each command and each flag of lexiscope.
 
 ## Exit status
 
@@ -17,34 +17,36 @@ This page lists each command and each flag of lexis.
 | 1 | A scan found one or more findings at the `--fail-on` severity or higher. The default is `error`, so warnings and notes do not change the status. |
 | 2 | A usage error or a failure, for example a SARIF report that fails validation. |
 
-lexis writes each failure to stderr as `lexis: <message>`.
+lexiscope writes each failure to stderr as `lexiscope: <message>`.
 
-## `lexis`
+## `lexiscope`
+
+`lexis` is a short alias of `lexiscope`. `zmake build` and `zmake install` make it as a symbolic link, so both names start the same binary. The help text always shows `lexiscope`.
 
 | Flag | Meaning |
 |---|---|
 | `--version`, `-v` | Write the version line and exit. |
 | `--help`, `-h` | Write the help text and exit. |
 
-## `lexis version`
+## `lexiscope version`
 
-Writes the version line, the same line as `lexis --version`:
+Writes the version line, the same line as `lexiscope --version`:
 
 ```text
-lexis version v0.1.0 (commit: 1a2b3c4d5e6f, built: 2026-11-18T06:00:00Z)
+lexiscope version v0.1.0 (commit: 1a2b3c4d5e6f, built: 2026-11-18T06:00:00Z)
 ```
 
 The `zmake build` target sets the version from `git describe` and the date from the time of the last commit. A build without these values, for example `go install`, reads the version and the commit that Go stamps into the binary.
 
-## `lexis scan`
+## `lexiscope scan`
 
 ```text
-lexis scan [flags] [paths...]
+lexiscope scan [flags] [paths...]
 ```
 
 Checks Markdown files (`.md`, `.mdx`, `.markdown`) and the comments of Go, Zig, Python, C, C++ and Rust files. The source extensions are `.go`, `.zig`, `.py`, `.c`, `.h`, `.rs` and the C++ extensions `.cc`, `.cpp`, `.cxx`, `.hh`, `.hpp`, `.hxx`. A `.h` file is C. Without paths, it checks the current directory.
 
-A path can be a file or a directory. In a directory, lexis checks each file of a known type. It does not enter hidden directories, `node_modules`, `vendor`, `testdata` or `dist`. To check a hidden directory, name it as a path, for example `.okfw`. A named file of another type is an error.
+A path can be a file or a directory. In a directory, lexiscope checks each file of a known type. It does not enter hidden directories, `node_modules`, `vendor`, `testdata` or `dist`. To check a hidden directory, name it as a path, for example `.okfw`. A named file of another type is an error.
 
 | Flag | Default | Meaning |
 |---|---|---|
@@ -65,14 +67,14 @@ The text report has one line for each finding, then a summary:
 
 ```text
 docs/guide.md:12:9: error: STE-100-04: Do not use "will".
-lexis: 1 error(s), 0 warning(s), 0 note(s) in 14 file(s), ruleset ste-100
+lexiscope: 1 error(s), 0 warning(s), 0 note(s) in 14 file(s), ruleset ste-100
 ```
 
 The line and the column start at 1. The column counts UTF-16 code units, as SARIF does. The JSON report has a `summary` object and a `findings` list with the same fields. [Write a SARIF report](../../guides/sarif/) tells what a SARIF report holds.
 
-A rule ID has capital letters, digits and hyphens, for example `STE-100-01` or `DOC-CUSTOM-01`. A parameter name has lowercase letters, digits and underscores. lexis rejects a rule that `--enable-rule` and `--omit-rule` both name.
+A rule ID has capital letters, digits and hyphens, for example `STE-100-01` or `DOC-CUSTOM-01`. A parameter name has lowercase letters, digits and underscores. lexiscope rejects a rule that `--enable-rule` and `--omit-rule` both name.
 
-## `lexis rules list`
+## `lexiscope rules list`
 
 Lists each rule of the resolved ruleset after each change: its status, its severity, its check, its word limit and its title.
 
@@ -85,7 +87,7 @@ Lists each rule of the resolved ruleset after each change: its status, its sever
 | `--allow-term` | none | Add approved technical terms. |
 
 ```text
-$ lexis rules list --omit-rule STE-100-07 --set STE-100-01.max_words=18
+$ lexiscope rules list --omit-rule STE-100-07 --set STE-100-01.max_words=18
 ruleset ste-100: 11 rules, 10 active, 1 omitted
 ID          STATUS   SEVERITY  CHECK                         LIMIT  TITLE
 STE-100-01  active   error     max_words                     18     Limit the length of a procedural step
@@ -93,17 +95,17 @@ STE-100-01  active   error     max_words                     18     Limit the le
 STE-100-07  omitted  warning   ambiguous_gerunds             -      Avoid unclear -ing forms
 ```
 
-## `lexis rules inspect`
+## `lexiscope rules inspect`
 
 ```text
-lexis rules inspect <ruleset>
+lexiscope rules inspect <ruleset>
 ```
 
 Shows each rule with its parameters, then the lexicon and the vocabulary of one ruleset. The argument is a built-in name, a CUE file or a directory.
 
 ## Values of `--set`
 
-lexis reads the value of `--set` as CUE. The value of a parameter in a CUE file has the same syntax. Text that is not valid CUE is a string.
+lexiscope reads the value of `--set` as CUE. The value of a parameter in a CUE file has the same syntax. Text that is not valid CUE is a string.
 
 | Flag | Effect |
 |---|---|

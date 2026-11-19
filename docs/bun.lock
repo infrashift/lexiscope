@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "lexis-docs",
+      "name": "lexiscope-docs",
       "dependencies": {
         "@astrojs/starlight": "^0.41.5",
         "astro": "^7.1.6",

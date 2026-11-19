@@ -9,18 +9,18 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/ruleset"
-	"github.com/infrashift/lexis/internal/version"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/version"
 )
 
-// Output formats of lexis scan.
+// Output formats of lexiscope scan.
 var formats = []string{"text", "json", "sarif"}
 
 // Severities of --fail-on, from the most severe.
 var severities = []string{"error", "warning", "note"}
 
-// ScanOptions is the checked command line of lexis scan.
+// ScanOptions is the checked command line of lexiscope scan.
 type ScanOptions struct {
 	Paths        []string
 	Ruleset      ruleset.Options
@@ -31,7 +31,7 @@ type ScanOptions struct {
 	FailOn       string   // the least severe finding that gives exit status 1
 }
 
-// scanFlags holds the raw flag values of lexis scan.
+// scanFlags holds the raw flag values of lexiscope scan.
 type scanFlags struct {
 	rules                                rulesetFlags
 	format, sarifVersion, output, failOn string
@@ -43,7 +43,7 @@ func newScanCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "scan [paths...]",
 		Short: "Check files and directories against the active rules",
-		Long: "lexis scan checks Markdown files and the comments of Go, Zig, Python, C, C++ and Rust files.\n" +
+		Long: "lexiscope scan checks Markdown files and the comments of Go, Zig, Python, C, C++ and Rust files.\n" +
 			"Without paths, it checks the current directory.",
 		RunE: f.run, // nasa-lint: allow(R9) cobra calls the command through RunE.
 	}
@@ -51,7 +51,7 @@ func newScanCmd() *cobra.Command {
 	return cmd
 }
 
-// register adds the flags of lexis scan to fl.
+// register adds the flags of lexiscope scan to fl.
 func (f *scanFlags) register(fl *pflag.FlagSet) {
 	assert.True(f != nil, "the flags exist")
 	assert.True(fl != nil, "the flag set exists")
@@ -89,7 +89,7 @@ func (f *scanFlags) options(sarifVersionSet bool, args []string) (ScanOptions, e
 }
 
 func checkFormat(format, sarifVersion string, sarifVersionSet bool) error {
-	assert.True(len(formats) == 3, "lexis has three report formats")
+	assert.True(len(formats) == 3, "lexiscope has three report formats")
 	assert.True(sarifVersion != "" || sarifVersionSet, "the SARIF version has a default")
 	if !slices.Contains(formats, format) {
 		return fmt.Errorf("--format: %q is not one of %s", format, strings.Join(formats, ", "))

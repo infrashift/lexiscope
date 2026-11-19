@@ -10,7 +10,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // modulePath reads the module path from root/go.mod.

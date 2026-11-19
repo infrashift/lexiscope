@@ -1,15 +1,15 @@
 ---
-title: lexis
-description: lexis is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE, for example ASD-STE100.
+title: lexiscope
+description: lexiscope is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE, for example ASD-STE100.
 template: splash
 hero:
-  tagline: A documentation linter in Go. lexis checks Markdown files and source code comments against rulesets in CUE. The first ruleset is ASD-STE100.
+  tagline: A documentation linter in Go. lexiscope checks Markdown files and source code comments against rulesets in CUE. The first ruleset is ASD-STE100.
   actions:
     - text: Get started
       link: start-here/getting-started/
       icon: right-arrow
     - text: GitHub
-      link: https://github.com/infrashift/lexis
+      link: https://github.com/infrashift/lexiscope
       icon: external
       variant: minimal
 ---
@@ -17,7 +17,7 @@ hero:
 import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
 
 <Aside type="caution" title="No release yet">
-lexis has finished each phase of its plan. `lexis scan` writes text, JSON and SARIF reports, but lexis has no binary release.
+lexiscope has finished each phase of its plan. `lexiscope scan` writes text, JSON and SARIF reports, but lexiscope has no binary release.
 See the [roadmap](project/roadmap/).
 </Aside>
 
@@ -27,12 +27,12 @@ See the [roadmap](project/roadmap/).
 		One lexicon holds the approved term for each concept.
 	</Card>
 	<Card title="Prose and comments" icon="document">
-		lexis reads Markdown files. It also reads the comments of Go, Zig, Python, C, C++ and Rust files with ztree.
+		lexiscope reads Markdown files. It also reads the comments of Go, Zig, Python, C, C++ and Rust files with ztree.
 	</Card>
 	<Card title="SARIF output" icon="list-format">
-		lexis writes SARIF 2.1.0 and 2.2 reports for code scanning tools. It also writes text and JSON.
+		lexiscope writes SARIF 2.1.0 and 2.2 reports for code scanning tools. It also writes text and JSON.
 	</Card>
 	<Card title="Strict code rules" icon="approve-check">
-		The lexis source follows the NASA Power of 10 rules. Its own documentation follows ASD-STE100.
+		The lexiscope source follows the NASA Power of 10 rules. Its own documentation follows ASD-STE100.
 	</Card>
 </CardGrid>

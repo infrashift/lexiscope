@@ -1,6 +1,6 @@
 name: Deploy Docs to GitHub Pages
 
-# Publishes the Astro site in docs/ to https://infrashift.github.io/lexis/
+# Publishes the Astro site in docs/ to https://infrashift.github.io/lexiscope/
 # (ADR-0007). The repository's Pages source must be "GitHub Actions"
 # (Settings → Pages). With "Deploy from a branch", GitHub runs its own Jekyll
 # build of docs/ instead, and the deploy step below has no Pages site to

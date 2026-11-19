@@ -12,9 +12,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/nasalint"
-	"github.com/infrashift/lexis/internal/output"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/nasalint"
+	"github.com/infrashift/lexiscope/internal/output"
 )
 
 // exitFailure is the exit status of a failure that is not a finding.

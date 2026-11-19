@@ -1,5 +1,5 @@
 // Package nasalint checks the Go source of a module against the NASA Power of
-// 10 rules, as ADR-0003 of the lexis wiki adapts them. It is the Go port of
+// 10 rules, as ADR-0003 of the lexiscope wiki adapts them. It is the Go port of
 // scripts/nasa-lint.py, which reads Zig only.
 //
 // The checks:
@@ -25,7 +25,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Limits of one run. A run that exceeds a limit stops with an error.

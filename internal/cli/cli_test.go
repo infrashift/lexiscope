@@ -14,8 +14,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/infrashift/lexis/internal/ruleset"
-	"github.com/infrashift/lexis/internal/version"
+	"github.com/infrashift/lexiscope/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/version"
 )
 
 func runLexis(t *testing.T, args ...string) (int, string, string) {
@@ -25,21 +25,21 @@ func runLexis(t *testing.T, args ...string) (int, string, string) {
 	return code, stdout.String(), stderr.String()
 }
 
-var versionLine = regexp.MustCompile(`^lexis version \S+ \(commit: \S+, built: \S+\)\n$`)
+var versionLine = regexp.MustCompile(`^lexiscope version \S+ \(commit: \S+, built: \S+\)\n$`)
 
 func TestVersion(t *testing.T) {
 	for _, args := range [][]string{{"--version"}, {"-v"}, {"version"}} {
 		code, out, errOut := runLexis(t, args...)
 		if code != ExitOK || errOut != "" || !versionLine.MatchString(out) {
-			t.Errorf("lexis %v = %d, %q, %q", args, code, out, errOut)
+			t.Errorf("lexiscope %v = %d, %q, %q", args, code, out, errOut)
 		}
 	}
 	t.Cleanup(func() { version.Version, version.Commit, version.BuildDate = "", "", "" })
 	version.Version, version.Commit, version.BuildDate = "v1.0.0", "abc1234", "2026-11-18T00:00:00Z"
-	want := "lexis version v1.0.0 (commit: abc1234, built: 2026-11-18T00:00:00Z)\n"
+	want := "lexiscope version v1.0.0 (commit: abc1234, built: 2026-11-18T00:00:00Z)\n"
 	for _, args := range [][]string{{"--version"}, {"version"}} {
 		if _, out, _ := runLexis(t, args...); out != want {
-			t.Errorf("lexis %v = %q, want %q", args, out, want)
+			t.Errorf("lexiscope %v = %q, want %q", args, out, want)
 		}
 	}
 }
@@ -68,8 +68,8 @@ func TestUsageErrors(t *testing.T) {
 	}
 	for _, c := range cases {
 		code, out, errOut := runLexis(t, c.args...)
-		if code != ExitFailure || out != "" || !strings.HasPrefix(errOut, "lexis: ") || !strings.Contains(errOut, c.msg) {
-			t.Errorf("lexis %v = %d, %q, %q; want status 2 and %q", c.args, code, out, errOut, c.msg)
+		if code != ExitFailure || out != "" || !strings.HasPrefix(errOut, "lexiscope: ") || !strings.Contains(errOut, c.msg) {
+			t.Errorf("lexiscope %v = %d, %q, %q; want status 2 and %q", c.args, code, out, errOut, c.msg)
 		}
 	}
 }
@@ -89,11 +89,11 @@ func TestScan(t *testing.T) {
 	code, out, errOut := runLexis(t, "scan", "--exclude", "skip.md")
 	want := "bad.md:3:4: error: STE-100-04: Do not use \"will\".\n" +
 		"bad.md:3:15: warning: STE-100-07: \"Processing\" is an -ing form. Use a verb or a noun.\n" +
-		"lexis: 1 error(s), 1 warning(s), 0 note(s) in 2 file(s), ruleset ste-100\n"
+		"lexiscope: 1 error(s), 1 warning(s), 0 note(s) in 2 file(s), ruleset ste-100\n"
 	if code != ExitFindings || out != want || errOut != "" {
 		t.Fatalf("scan = %d\n%s\nwant\n%s\nstderr %q", code, out, want, errOut)
 	}
-	if code, out, _ := runLexis(t, "scan", "ok.md"); code != ExitOK || !strings.HasPrefix(out, "lexis: 0 error(s)") {
+	if code, out, _ := runLexis(t, "scan", "ok.md"); code != ExitOK || !strings.HasPrefix(out, "lexiscope: 0 error(s)") {
 		t.Fatalf("clean scan = %d, %q", code, out)
 	}
 	if code, _, _ := runLexis(t, "scan", "--omit-rule", "STE-100-04", "bad.md"); code != ExitOK {
@@ -152,7 +152,7 @@ func TestScan(t *testing.T) {
 	}
 }
 
-// parseScan parses args with the flags of lexis scan.
+// parseScan parses args with the flags of lexiscope scan.
 func parseScan(t *testing.T, args ...string) (*scanFlags, *pflag.FlagSet) {
 	t.Helper()
 	f := &scanFlags{}

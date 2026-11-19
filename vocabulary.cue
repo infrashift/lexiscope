@@ -1,8 +1,8 @@
-// The vocabulary of the lexis repository: technical terms of this project
+// The vocabulary of the lexiscope repository: technical terms of this project
 // that the extended rules STE-100-06 and STE-100-07 do not report. The
 // self-check loads this file over the built-in ste-100 ruleset:
 //
-//	lexis scan --ruleset ste-100 --ruleset vocabulary.cue ...
+//	lexiscope scan --ruleset ste-100 --ruleset vocabulary.cue ...
 //
 // Add a term only when it names a concept of the project, a tool or a
 // standard. Rewrite other prose.
@@ -10,7 +10,7 @@ vocabulary: {
 	// Project process: ADRs, issues and the Power of 10 rules.
 	acceptance:  true // acceptance criteria of an issue
 	decision:    true // architecture decision record
-	deviation:   true // a Power of 10 rule that lexis does not follow
+	deviation:   true // a Power of 10 rule that lexiscope does not follow
 	development: true // the development workflow
 	resolution:  true // the Resolution section of an issue
 	allocation:  true // Power of 10 rule R3

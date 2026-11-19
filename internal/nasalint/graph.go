@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // callGraph is the call graph of one package. Node k is the function

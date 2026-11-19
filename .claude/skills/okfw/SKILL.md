@@ -1,6 +1,6 @@
 ---
 name: okfw
-description: Search lexis's OKF wiki (.okfw/) for project knowledge that is not in the code — design decisions and the reasoning behind them, security and dependency findings, operational and deployment context, open work, and orientation notes. Check here before deriving an answer from scratch or re-running an analysis. Use for "why is it built this way", "has X been considered before", "what do we know about Y", "what's the risk in Z". Also use to capture new notes, decisions, and daily journal entries.
+description: Search lexiscope's OKF wiki (.okfw/) for project knowledge that is not in the code — design decisions and the reasoning behind them, security and dependency findings, operational and deployment context, open work, and orientation notes. Check here before deriving an answer from scratch or re-running an analysis. Use for "why is it built this way", "has X been considered before", "what do we know about Y", "what's the risk in Z". Also use to capture new notes, decisions, and daily journal entries.
 ---
 
 # OKF Wiki (`okfw`)

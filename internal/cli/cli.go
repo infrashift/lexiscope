@@ -1,4 +1,4 @@
-// Package cli holds the cobra commands of lexis and the exit status rules.
+// Package cli holds the cobra commands of lexiscope and the exit status rules.
 //
 // Exit status: 0 when the command succeeds without error findings. 1 when a
 // scan finds errors. 2 on a usage error or a failure.
@@ -10,12 +10,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/output"
-	"github.com/infrashift/lexis/internal/version"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/output"
+	"github.com/infrashift/lexiscope/internal/version"
 )
 
-// Exit statuses of lexis.
+// Exit statuses of lexiscope.
 const (
 	ExitOK       = 0
 	ExitFindings = 1
@@ -25,14 +25,14 @@ const (
 // maxArgs bounds the command line.
 const maxArgs = 1 << 16
 
-// Main runs lexis with args and returns the exit status. It writes each
+// Main runs lexiscope with args and returns the exit status. It writes each
 // failure to stderr.
 func Main(args []string, stdout, stderr io.Writer) int {
 	assert.True(stdout != nil && stderr != nil, "the output streams exist")
 	assert.True(len(args) <= maxArgs, "the command line is bounded")
 	code, failure := execute(args, stdout, stderr)
 	if failure != "" {
-		output.New(stderr).Printf("lexis: %s\n", failure)
+		output.New(stderr).Printf("lexiscope: %s\n", failure)
 	}
 	return code
 }
@@ -58,10 +58,11 @@ func newRoot(stdout, stderr io.Writer) *cobra.Command {
 	assert.True(stdout != nil, "stdout exists")
 	assert.True(stderr != nil, "stderr exists")
 	root := &cobra.Command{
-		Use:   "lexis",
+		Use:   "lexiscope",
 		Short: "Check documentation and code comments against CUE rulesets",
-		Long: "lexis checks Markdown files and the comments of source files against rulesets in CUE.\n" +
-			"The built-in ruleset is ste-100, a subset of ASD-STE100.",
+		Long: "lexiscope checks Markdown files and the comments of source files against rulesets in CUE.\n" +
+			"The built-in ruleset is ste-100, a subset of ASD-STE100.\n" +
+			"lexis is a short alias of lexiscope.",
 		Version:       version.Get().Details(),
 		SilenceErrors: true,
 		SilenceUsage:  true,

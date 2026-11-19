@@ -13,7 +13,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // pkgCheck holds the state of the check of one package.

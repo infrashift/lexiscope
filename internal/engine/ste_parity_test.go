@@ -1,10 +1,10 @@
 package engine
 
-// The parity test of ADR-0005. lexis and scripts/ste-check.py (the oracle)
+// The parity test of ADR-0005. lexiscope and scripts/ste-check.py (the oracle)
 // report the same core findings (STE-100-01 to 04) in both directions. The
 // test reads each fixture and each document of this repository. The oracle
 // reports the first line of a paragraph, so the test compares the block
-// line of each lexis finding.
+// line of each lexiscope finding.
 
 import (
 	"errors"
@@ -19,7 +19,7 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 var (
@@ -28,7 +28,7 @@ var (
 	oracleTerm  = regexp.MustCompile(`^(banned word or phrase|possible passive voice): (.*)$`)
 )
 
-// repoRoot is the root of the lexis repository.
+// repoRoot is the root of the lexiscope repository.
 const repoRoot = "../.."
 
 // oracleScript returns the absolute path of the oracle.
@@ -202,7 +202,7 @@ func diff(t *testing.T, name string, oracle, lexis []string) {
 	}
 	extra = lexis
 	if len(missing)+len(extra) > 0 {
-		t.Errorf("%s: lexis differs from ste-check.py\nonly the oracle:\n  %s\nonly lexis:\n  %s",
+		t.Errorf("%s: lexiscope differs from ste-check.py\nonly the oracle:\n  %s\nonly lexiscope:\n  %s",
 			name, strings.Join(missing, "\n  "), strings.Join(extra, "\n  "))
 	}
 }
@@ -263,7 +263,7 @@ func oracleFiles(t *testing.T, root string) []string {
 	return files
 }
 
-// TestParityChangedRules changes the oracle and lexis in the same way: a
+// TestParityChangedRules changes the oracle and lexiscope in the same way: a
 // word limit of 15 for steps, and no passive check.
 func TestParityChangedRules(t *testing.T) {
 	root, files := stage(t, "violations")
@@ -293,7 +293,7 @@ func TestParityChangedRules(t *testing.T) {
 }
 
 // TestDivergences checks each deliberate difference (spec "Known differences
-// from ste-check"): the oracle reports the fixture, and lexis does not.
+// from ste-check"): the oracle reports the fixture, and lexiscope does not.
 func TestDivergences(t *testing.T) {
 	root, files := stage(t, "divergent")
 	oracle := runOracle(t, oracleScript(t), root)
@@ -310,6 +310,6 @@ func TestDivergences(t *testing.T) {
 		}
 	}
 	if len(lexis) != 0 {
-		t.Errorf("lexis reports findings in the divergent fixtures: %q", lexis)
+		t.Errorf("lexiscope reports findings in the divergent fixtures: %q", lexis)
 	}
 }

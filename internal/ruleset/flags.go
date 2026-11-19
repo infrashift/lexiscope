@@ -5,7 +5,7 @@ import (
 
 	"cuelang.org/go/cue"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // maxFlagItems bounds each list of CLI changes.

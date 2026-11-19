@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="lexis">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="lexiscope">
   <rect width="64" height="64" rx="14" fill="#0b1f1f"/>
   <!-- the L of the wordmark, with a check-mark tail -->
   <path d="M18 12 H27 V43 H46 V52 H18 Z" fill="#2ec4a6"/>

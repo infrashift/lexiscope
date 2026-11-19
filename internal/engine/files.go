@@ -8,8 +8,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/parser"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/parser"
 )
 
 // MaxFiles bounds the files of one scan.
@@ -22,7 +22,7 @@ const maxWalkSteps = 1 << 20
 // also skips each hidden directory, unless the user names it as a path.
 var skippedDirs = []string{"node_modules", "vendor", "testdata", "dist"}
 
-// IsChecked reports whether lexis reads the file: Markdown, or a source file
+// IsChecked reports whether lexiscope reads the file: Markdown, or a source file
 // of a ztree grammar.
 func IsChecked(name string) bool {
 	assert.True(name != "", "the file has a name")
@@ -82,7 +82,7 @@ func visit(p string, named bool, excludes []string) ([]string, bool, error) {
 	}
 	if !info.IsDir() {
 		if named && !IsChecked(p) {
-			return nil, false, fmt.Errorf("%s: lexis reads Markdown files and .go, .zig, .py, .c, .h, .rs and C++ files", p)
+			return nil, false, fmt.Errorf("%s: lexiscope reads Markdown files and .go, .zig, .py, .c, .h, .rs and C++ files", p)
 		}
 		return nil, IsChecked(p), nil
 	}

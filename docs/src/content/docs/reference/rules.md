@@ -1,11 +1,11 @@
 ---
 title: Rules
-description: The rules of the ste-100 ruleset, and the Power of 10 rules that the lexis source follows.
+description: The rules of the ste-100 ruleset, and the Power of 10 rules that the lexiscope source follows.
 sidebar:
   order: 1
 ---
 
-`rules/ste100/ste100.cue` defines these rules. Run `lexis rules inspect ste-100` to see each parameter, the lexicon and the vocabulary. To change a rule, see [Write a ruleset](../../guides/rulesets/).
+`rules/ste100/ste100.cue` defines these rules. Run `lexiscope rules inspect ste-100` to see each parameter, the lexicon and the vocabulary. To change a rule, see [Write a ruleset](../../guides/rulesets/).
 
 ## The ste-100 ruleset
 
@@ -31,7 +31,7 @@ The banned words and phrases of STE-100-04 are `should`, `will`, `won't`, `would
 
 A numbered list item is a step. Each other sentence is descriptive. The `procedural_markers` parameter can also make bullet items steps.
 
-## Power of 10 rules for the lexis source
+## Power of 10 rules for the lexiscope source
 
 ADR-0003 in the wiki adapts the NASA Power of 10 rules to Go. `cmd/nasa-lint` is the Go port of `scripts/nasa-lint.py`. `zmake lint` runs it. The port checks these rules:
 
@@ -44,7 +44,7 @@ ADR-0003 in the wiki adapts the NASA Power of 10 rules to Go. `cmd/nasa-lint` is
 | R7 | No `_ =` discard, and no blank result of a call, for example `x, _ := f()` |
 | R9 | No function types, no function literals and no function values |
 
-Test files (`_test.go`) are exempt. Rule R3 is a deviation: lexis sets hard caps on each buffer, but Go allocates on the heap.
+Test files (`_test.go`) are exempt. Rule R3 is a deviation: lexiscope sets hard caps on each buffer, but Go allocates on the heap.
 
 When `semscope` is on the PATH, `zmake lint` also runs `semscope scan -r nasa-p10 -r .semscope.cue`. The overlay `.semscope.cue` turns off R3 and R6, and it excludes `scripts/`. Without semscope, the lint task writes a note and `cmd/nasa-lint` checks the rules alone.
 

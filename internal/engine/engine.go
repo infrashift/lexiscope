@@ -15,9 +15,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/parser"
-	"github.com/infrashift/lexis/internal/ruleset"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/parser"
+	"github.com/infrashift/lexiscope/internal/ruleset"
 )
 
 // Finding is one result of one rule. Line and Column are 1-based. Columns
@@ -139,7 +139,7 @@ func extract(path string, src []byte) ([]parser.Block, error) {
 	return nil, nil
 }
 
-// IsMarkdown reports whether lexis reads path as Markdown.
+// IsMarkdown reports whether lexiscope reads path as Markdown.
 func IsMarkdown(path string) bool {
 	assert.True(path != "", "the file has a path")
 	ext := filepath.Ext(path)

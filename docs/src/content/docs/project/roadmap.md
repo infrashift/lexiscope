@@ -1,6 +1,6 @@
 ---
 title: Roadmap
-description: The phases of the lexis plan and their status.
+description: The phases of the lexiscope plan and their status.
 sidebar:
   order: 1
 ---
@@ -17,3 +17,4 @@ sidebar:
 | 6 | Comment tests for each ztree grammar, and a ztree error fails the scan | done |
 | 7 | C++ comments | done |
 | 8 | semscope in the lint task | done |
+| 9 | The tool is `lexiscope`, with the short alias `lexis` | done |

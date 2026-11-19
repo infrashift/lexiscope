@@ -1,6 +1,6 @@
 ---
 title: Ruleset Schema
-description: The fields of a lexis ruleset, a rule and its parameters.
+description: The fields of a lexiscope ruleset, a rule and its parameters.
 sidebar:
   order: 3
 ---
@@ -31,7 +31,7 @@ A set of terms is a CUE struct with `true` values: `{okfw: true}`. A file adds a
 
 | Field | Type | Meaning |
 |---|---|---|
-| `id` | string | The key of the rule. lexis sets it. |
+| `id` | string | The key of the rule. lexiscope sets it. |
 | `enabled` | bool | `true` by default. |
 | `severity` | `error`, `warning` or `note` | Required. |
 | `scope` | see below | The text that the rule reads. |

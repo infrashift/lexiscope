@@ -5,9 +5,9 @@ package report
 import (
 	"encoding/json"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/engine"
-	"github.com/infrashift/lexis/internal/output"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/engine"
+	"github.com/infrashift/lexiscope/internal/output"
 )
 
 // Summary counts the files and the findings of a scan.
@@ -46,7 +46,7 @@ func Text(out *output.Writer, findings []engine.Finding, s Summary) {
 	for _, f := range findings {
 		out.Printf("%s:%d:%d: %s: %s: %s\n", f.Path, f.Line, f.Column, f.Severity, f.RuleID, f.Message)
 	}
-	out.Printf("lexis: %d error(s), %d warning(s), %d note(s) in %d file(s), ruleset %s\n",
+	out.Printf("lexiscope: %d error(s), %d warning(s), %d note(s) in %d file(s), ruleset %s\n",
 		s.Errors, s.Warnings, s.Notes, s.Files, s.Ruleset)
 }
 

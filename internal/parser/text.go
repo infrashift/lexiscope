@@ -3,7 +3,7 @@ package parser
 import (
 	"regexp"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // Text is prose with the source offset of each byte. Off[i] is the offset

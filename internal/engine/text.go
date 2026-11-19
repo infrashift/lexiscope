@@ -5,8 +5,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/infrashift/lexis/internal/assert"
-	"github.com/infrashift/lexis/internal/parser"
+	"github.com/infrashift/lexiscope/internal/assert"
+	"github.com/infrashift/lexiscope/internal/parser"
 )
 
 // span is the byte range [start, end) of a block text.

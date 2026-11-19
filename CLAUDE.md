@@ -1,7 +1,9 @@
-# CLAUDE.md — lexis
+# CLAUDE.md — lexiscope
 
 ## Purpose (WHY)
-lexis is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. The first ruleset is `ste-100`, a subset of ASD-STE100. lexis writes SARIF, text and JSON reports. `PLAN.md` holds the phases.
+lexiscope is a documentation linter in Go. It checks Markdown files and source code comments against rulesets in CUE. The first ruleset is `ste-100`, a subset of ASD-STE100. lexiscope writes SARIF, text and JSON reports. `PLAN.md` holds the phases.
+
+`lexiscope` is the official name. `lexis` is a short alias: a symbolic link to `lexiscope` ([ADR-0012](.okfw/decisions/adr-0012-the-tool-is-lexiscope-with-lexis-as-a-short-alias--01a1f543cb28.md)). Use `lexiscope` in new text. ADRs, closed issues and daily notes keep the old name as records.
 
 ## Tech Stack (WHAT)
 - **Language:** Go 1.26.10 or later (`go.mod`; go-sarif needs it). The host has Go 1.27.3.
@@ -10,13 +12,13 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 - **Wiki:** okfw (`.okfw/`), [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md). See the okfw block below.
 
 ## Layout
-- `cmd/lexis/` holds the entry point. `internal/cli` holds the cobra commands and the exit statuses ([ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)).
+- `cmd/lexiscope/` holds the entry point. `internal/cli` holds the cobra commands and the exit statuses ([ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md)).
 - `cmd/nasa-lint/` and `internal/nasalint/` hold the Go port of `scripts/nasa-lint.py`.
 - Write command output through `internal/output.Writer`. Do not discard a write result.
 - `internal/report` writes text, JSON and SARIF. It builds SARIF 2.1.0 and converts it to 2.2 with go-sarif.
-- `internal/` holds the packages. `internal/parser` and `internal/engine` copy the oracle for the core rules: read the [Known differences from ste-check](.okfw/specs/known-differences-from-ste-check--01a1ee352a3c.md) spec before you change them. The [architecture overview](.okfw/architecture/lexis-architecture-overview--01a1ed42b85f.md) lists them.
+- `internal/` holds the packages. `internal/parser` and `internal/engine` copy the oracle for the core rules: read the [Known differences from ste-check](.okfw/specs/known-differences-from-ste-check--01a1ee352a3c.md) spec before you change them. The [architecture overview](.okfw/architecture/lexiscope-architecture-overview--01a1ed42b85f.md) lists them.
 - `vocabulary.cue` holds the technical terms of this repository for the self-check. Add a term only when it names a concept of the project, a tool or a standard. Rewrite other text. Put a code name in a comment in backticks.
-- `rules/ste100/` holds the CUE source of the `ste-100` ruleset. `internal/ruleset/schema.cue` is the schema. Run `bin/lexis rules inspect ste-100` to see the resolved ruleset.
+- `rules/ste100/` holds the CUE source of the `ste-100` ruleset. `internal/ruleset/schema.cue` is the schema. Run `bin/lexiscope rules inspect ste-100` to see the resolved ruleset.
 - In CUE, write each value that a user can change as a default (`*value | type`). Write each list of terms as a struct of `true` values.
 - `docs/` holds the docs site. `docs/go.mod` keeps it out of the Go module. Do not delete that file.
 - `.github/workflows/docs-release.yml` builds the docs site and deploys it to GitHub Pages.
@@ -28,14 +30,14 @@ lexis is a documentation linter in Go. It checks Markdown files and source code 
 Run these targets with `zmake`:
 - `zmake lint` runs gofmt, `go vet`, golangci-lint 2.15.0 (`.golangci.yml`) and `cmd/nasa-lint`, the Go port of `scripts/nasa-lint.py`. When `semscope` is on the PATH, it also runs `semscope scan -r nasa-p10 -r .semscope.cue` ([ADR-0011](.okfw/decisions/adr-0011-semscope-checks-the-power-of-10-rules-in-the-lint-task--01a1f5140d5e.md)). Run `go run ./cmd/nasa-lint --verbose` to list the functions with fewer than 2 assertions.
 - `zmake test` runs `go test -race -count=1 ./...`.
-- `zmake build` writes `bin/lexis` with the version, the commit and the commit date from git.
-- `zmake install` runs `build` and copies `bin/lexis` into `$(PREFIX)/bin` (`PREFIX` is `~/.local` by default).
+- `zmake build` writes `bin/lexiscope` with the version, the commit and the commit date from git. It also makes the link `bin/lexis`.
+- `zmake install` runs `build`, copies `bin/lexiscope` into `$(PREFIX)/bin` and makes the link `lexis` there (`PREFIX` is `~/.local` by default).
 - `zmake fmt` formats the Go source.
 - `zmake wiki` runs `okfw validate --all` and `okfw validate --okf`.
 - `zmake docs-style` runs `scripts/ste-check.py`.
 - `zmake docs-dev` runs the docs site locally. `zmake docs-build` builds it into `docs/dist/`. Neither target changes `docs/bun.lock`.
 - `zmake ztree` builds `libztree.a` in `../ztree` (set `ZTREE_DIR` for another path). `build`, `test` and `lint` run it first.
-- `zmake self-check` scans the documents and the Go comments of lexis with lexis and `vocabulary.cue`, then writes `lexis-self.sarif` and `lexis-self-v22.sarif`. Each finding fails it ([ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)).
+- `zmake self-check` scans the documents and the Go comments of lexiscope with lexiscope and `vocabulary.cue`, then writes `lexiscope-self.sarif` and `lexiscope-self-v22.sarif`. Each finding fails it ([ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md)).
 - `zmake check` runs lint, test, wiki, docs-style and self-check. It is the default goal. It does not build the docs site.
 
 When an agent runs it, `astro dev` runs in the background. Stop it with `bun --bun astro dev stop` in `docs/`. Do not kill other dev servers on this host.
@@ -54,7 +56,7 @@ When an agent runs it, `astro dev` runs in the background. Stop it with `bun --b
 <!-- BEGIN okfw -->
 ## Project knowledge base (okfw)
 
-lexis keeps a local-first OKF wiki in `.okfw/`: markdown concepts with
+lexiscope keeps a local-first OKF wiki in `.okfw/`: markdown concepts with
 YAML frontmatter, linked to each other. The files are the whole database —
 search and the link graph are computed from them on demand, so there is no
 index to build and nothing to sync. Each directory's `index.md` is generated

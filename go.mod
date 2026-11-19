@@ -1,4 +1,4 @@
-module github.com/infrashift/lexis
+module github.com/infrashift/lexiscope
 
 go 1.26.10
 

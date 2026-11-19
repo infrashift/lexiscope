@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/infrashift/lexis/internal/assert"
+	"github.com/infrashift/lexiscope/internal/assert"
 )
 
 // okfwMarker starts the generated okfw block of CLAUDE.md. The oracle does
@@ -59,7 +59,7 @@ func Markdown(name string, src []byte) ([]Block, error) {
 }
 
 // frontMatterEnd returns the first line after the front matter. The oracle
-// knows YAML front matter (---). lexis also knows TOML front matter (+++).
+// knows YAML front matter (---). lexiscope also knows TOML front matter (+++).
 // Without a line that closes it, the front matter runs to the end of the file.
 func frontMatterEnd(lines *Lines) int {
 	assert.True(lines != nil, "the table exists")
@@ -102,7 +102,7 @@ func (st *mdState) scan(i int) {
 
 // skipFenceOrComment tracks fenced code and multi-line HTML comments. It
 // reports whether the line belongs to one of them. The oracle knows ```
-// fences only. lexis also knows ~~~ fences and multi-line HTML comments.
+// fences only. lexiscope also knows ~~~ fences and multi-line HTML comments.
 func (st *mdState) skipFenceOrComment(s string) bool {
 	assert.True(st.fence == 0 || !st.comment, "a fence and a comment do not nest")
 	assert.True(!strings.ContainsRune(s, '\n'), "the text is one line")

@@ -1,4 +1,4 @@
-# lexis development gates. Plain GNU Make syntax. The ZMakefile has the same targets.
+# lexiscope development gates. Plain GNU Make syntax. The ZMakefile has the same targets.
 
 GO ?= go
 GOFMT ?= $(shell $(GO) env GOROOT)/bin/gofmt
@@ -8,7 +8,7 @@ ZIG ?= zig
 # The ztree checkout. go.mod points its replace directive here (ADR-0002).
 ZTREE_DIR ?= ../ztree
 GOLANGCI_LINT ?= golangci-lint
-# The install target copies bin/lexis into $(PREFIX)/bin.
+# The install target copies bin/lexiscope into $(PREFIX)/bin, with the alias lexis (ADR-0012).
 PREFIX ?= $(HOME)/.local
 # semscope checks the Power of 10 rules with .semscope.cue when it is on the PATH (ADR-0011).
 SEMSCOPE ?= semscope
@@ -19,14 +19,14 @@ GOLANGCI_LINT_VERSION := 2.15.0
 VERSION ?= $(shell git describe --tags --match 'v[0-9]*' --dirty 2>/dev/null || echo v0.0.0-dev)
 COMMIT ?= $(shell git rev-parse --short=12 HEAD 2>/dev/null || echo unknown)$(shell git diff --quiet HEAD 2>/dev/null || echo -dirty)
 BUILD_DATE ?= $(shell TZ=UTC git log -1 --format=%cd --date=format-local:%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo unknown)
-VERSION_PKG := github.com/infrashift/lexis/internal/version
+VERSION_PKG := github.com/infrashift/lexiscope/internal/version
 LDFLAGS := -X $(VERSION_PKG).Version=$(VERSION) -X $(VERSION_PKG).Commit=$(COMMIT) -X $(VERSION_PKG).BuildDate=$(BUILD_DATE)
 # gofmt walks directories, so it gets the Go directories only, not docs/.
 GO_DIRS := cmd internal rules
 # The self-check reads the files of scripts/ste-check.py and the Go comments,
 # with the vocabulary of this repository. Each finding fails it.
 SELF_CHECK_PATHS := PLAN.md CLAUDE.md docs/src/content/docs .okfw cmd internal rules
-SELF_CHECK_SCAN := bin/lexis scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note \
+SELF_CHECK_SCAN := bin/lexiscope scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note \
 	--exclude .okfw/daily --exclude .okfw/ephemeral --exclude index.md --exclude log.md
 
 .PHONY: check ztree build install test lint self-check fmt wiki docs-style docs-dev docs-build
@@ -38,14 +38,16 @@ check: lint test wiki docs-style self-check
 ztree:
 	cd $(ZTREE_DIR) && $(ZIG) build lib --release
 
-## build: compile the lexis binary into bin/
+## build: compile the lexiscope binary into bin/, with the alias bin/lexis
 build: ztree
-	$(GO) build -ldflags '$(LDFLAGS)' -o bin/lexis ./cmd/lexis
+	$(GO) build -ldflags '$(LDFLAGS)' -o bin/lexiscope ./cmd/lexiscope
+	ln -sf lexiscope bin/lexis
 
-## install: copy the lexis binary into $(PREFIX)/bin (default ~/.local/bin)
+## install: copy the lexiscope binary into $(PREFIX)/bin (default ~/.local/bin), with the alias lexis
 install: build
 	install -d $(PREFIX)/bin
-	install -m 0755 bin/lexis $(PREFIX)/bin/lexis
+	install -m 0755 bin/lexiscope $(PREFIX)/bin/lexiscope
+	ln -sf lexiscope $(PREFIX)/bin/lexis
 
 ## test: run the unit tests with the race detector
 test: ztree
@@ -60,12 +62,13 @@ lint: ztree
 	$(GO) run ./cmd/nasa-lint
 	if command -v $(SEMSCOPE) >/dev/null 2>&1; then $(SEMSCOPE) scan -r nasa-p10 -r .semscope.cue --fail-level warning .; else echo "lint: $(SEMSCOPE) not found, so cmd/nasa-lint checks the Power of 10 rules alone"; fi
 
-## self-check: scan the documentation and the comments of lexis with lexis, and write both SARIF reports (each finding fails)
+## self-check: scan the documentation and the comments of lexiscope with lexiscope, and write both SARIF reports (each finding fails)
 self-check: build
+	bin/lexiscope --version
 	bin/lexis --version
 	$(SELF_CHECK_SCAN) $(SELF_CHECK_PATHS)
-	$(SELF_CHECK_SCAN) --format sarif -o lexis-self.sarif $(SELF_CHECK_PATHS)
-	$(SELF_CHECK_SCAN) --format sarif --sarif-version 2.2 -o lexis-self-v22.sarif $(SELF_CHECK_PATHS)
+	$(SELF_CHECK_SCAN) --format sarif -o lexiscope-self.sarif $(SELF_CHECK_PATHS)
+	$(SELF_CHECK_SCAN) --format sarif --sarif-version 2.2 -o lexiscope-self-v22.sarif $(SELF_CHECK_PATHS)
 
 ## fmt: format the Go sources in place
 fmt:
@@ -80,7 +83,7 @@ wiki:
 docs-style:
 	$(PYTHON) -I scripts/ste-check.py
 
-## docs-dev: run the Astro Starlight site locally with bun (default http://localhost:4321/lexis/)
+## docs-dev: run the Astro Starlight site locally with bun (default http://localhost:4321/lexiscope/)
 docs-dev:
 	cd docs && $(BUN) install --frozen-lockfile && $(BUN) --bun run dev
 
