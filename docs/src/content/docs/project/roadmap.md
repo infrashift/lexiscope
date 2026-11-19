@@ -16,3 +16,4 @@ sidebar:
 | 5 | SARIF reports and the self-check | done |
 | 6 | Comment tests for each ztree grammar, and a ztree error fails the scan | done |
 | 7 | C++ comments | done |
+| 8 | semscope in the lint task | done |

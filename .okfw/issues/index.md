@@ -11,4 +11,5 @@
 * [ISSUE-005: SARIF reports and the self-check](issue-005-sarif-reports-and-the-self-check--01a1ed42b89d.md) - Add the SARIF 2.1.0 and 2.2 reports and run the self-check on the repository.
 * [ISSUE-006: ztree comment coverage](issue-006-ztree-comment-coverage--01a1f474ef49.md) - Test the comments of each ztree grammar that lexis reads, and record what lexis does when ztree cannot parse a file.
 * [ISSUE-007: C++ comments](issue-007-c-comments--01a1f4750b43.md) - lexis does not read the comments of C++ files, although ztree has a C++ grammar.
+* [ISSUE-008: semscope in the lint task](issue-008-semscope-in-the-lint-task--01a1f5142ec2.md) - zmake lint checks the Power of 10 rules with cmd/nasa-lint only, and lexis has no semscope overlay.
 

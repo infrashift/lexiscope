@@ -10,6 +10,8 @@ ZIG ?= zig
 # The ztree checkout. go.mod points its replace directive here (ADR-0002).
 ZTREE_DIR ?= ../ztree
 GOLANGCI_LINT ?= golangci-lint
+# semscope checks the Power of 10 rules with .semscope.cue when it is on the PATH (ADR-0011).
+SEMSCOPE ?= semscope
 # The pinned golangci-lint version (ADR-0003). The lint target checks it.
 GOLANGCI_LINT_VERSION := 2.15.0
 # Version metadata for -ldflags (internal/version). The date is the commit
@@ -42,13 +44,14 @@ SELF_CHECK_SCAN := bin/lexis scan --ruleset ste-100 --ruleset vocabulary.cue --f
 @test: ztree
     $(GO) test -race -count=1 ./...
 
-## lint: check the formatting, run go vet and golangci-lint, and check the Power of 10 rules
+## lint: check the formatting, run go vet and golangci-lint, and check the Power of 10 rules (cmd/nasa-lint, and semscope when it is on the PATH)
 @lint: ztree
     $(GOFMT) -l $(GO_DIRS) | (! grep .)
     $(GO) vet ./...
     test "$$($(GOLANGCI_LINT) version --short)" = "$(GOLANGCI_LINT_VERSION)"
     $(GOLANGCI_LINT) run ./...
     $(GO) run ./cmd/nasa-lint
+    if command -v $(SEMSCOPE) >/dev/null 2>&1; then $(SEMSCOPE) scan -r nasa-p10 -r .semscope.cue --fail-level warning .; else echo "lint: $(SEMSCOPE) not found, so cmd/nasa-lint checks the Power of 10 rules alone"; fi
 
 ## self-check: scan the documentation and the comments of lexis with lexis, and write both SARIF reports (each finding fails)
 @self-check: build

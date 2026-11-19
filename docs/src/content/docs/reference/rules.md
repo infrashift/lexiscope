@@ -46,4 +46,6 @@ ADR-0003 in the wiki adapts the NASA Power of 10 rules to Go. `cmd/nasa-lint` is
 
 Test files (`_test.go`) are exempt. Rule R3 is a deviation: lexis sets hard caps on each buffer, but Go allocates on the heap.
 
+When `semscope` is on the PATH, `zmake lint` also runs `semscope scan -r nasa-p10 -r .semscope.cue`. The overlay `.semscope.cue` turns off R3 and R6, and it excludes `scripts/`. Without semscope, the lint task writes a note and `cmd/nasa-lint` checks the rules alone.
+
 To allow one finding, add a comment on the same line or the line above, for example `// nasa-lint: allow(R9) <reason>`. Give a reason in each comment.

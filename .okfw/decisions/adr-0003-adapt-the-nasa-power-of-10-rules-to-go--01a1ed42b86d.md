@@ -55,6 +55,8 @@ The user requires the Power of 10 rules for all Go code in lexis. The rules targ
 - **Limit of the port:** imports resolve to empty packages. So the port misses a function of another package as a value, for example `strings.ToUpper`.
 - **Exit status:** 0 without findings, 1 with findings, 2 on a failure.
 
+**semscope:** `.semscope.cue` applies this ADR to the `nasa-p10` ruleset of semscope. `zmake lint` runs semscope when it is on the PATH ([ADR-0011](/decisions/adr-0011-semscope-checks-the-power-of-10-rules-in-the-lint-task--01a1f5140d5e.md)). It turns off R3 and R6 and excludes `scripts/`. Run `semscope scan -r nasa-p10 -r .semscope.cue .`. On 2026-11-19, semscope and the Go port gave 0 findings, 174 functions and 352 assertions. Without the overlay, semscope gives an R3 finding for each `append` and `make`. It also gives R6 findings for package variables and an R5 finding for the Python scripts.
+
 `assert.Recover` is the boundary of each command. Defer it directly, so it can call `recover`. It recovers an `assert.Failure` only. Each other panic keeps its stack trace.
 
 ## Consequences

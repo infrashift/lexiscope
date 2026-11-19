@@ -255,3 +255,13 @@ Issue: [ISSUE-007](.okfw/issues/issue-007-c-comments--01a1f4750b43.md)
 Result: C++ comments have the same forms as C comments. A raw string that holds `//` gives no finding. A `.h` file stays C.
 
 The scan of V8 found a defect that also affects C files. A backslash at the end of a `//` comment continues the comment on the next line. Then one comment span holds more lines, and a failed assertion stopped lexis. The extractor now reads each line of a line comment separately.
+
+## Phase 8 — semscope in the lint task
+
+Issue: [ISSUE-008](.okfw/issues/issue-008-semscope-in-the-lint-task--01a1f5142ec2.md)
+
+- [x] Add `.semscope.cue`, the overlay of ADR-0003 for the `nasa-p10` ruleset of semscope
+- [x] Run semscope in `zmake lint` and `make lint` when it is on the PATH
+- [x] Record the decision in ADR-0011, and update CLAUDE.md, the wiki and the docs site
+
+Result: semscope and `cmd/nasa-lint` give 0 findings, 174 functions and 352 assertions. Without semscope, the lint task writes a note and passes.
