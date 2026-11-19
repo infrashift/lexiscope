@@ -12,6 +12,7 @@ The `ZMakefile` and the `Makefile` have the same targets. zmake reads the `ZMake
 | `check` | Runs `lint`, `test`, `wiki`, `docs-style` and `self-check` | default goal |
 | `ztree` | Builds `libztree.a` in `../ztree`, or in `ZTREE_DIR` | through `build`, `test` and `lint` |
 | `build` | `go build` with the version from git, into `bin/lexis` | no |
+| `install` | Runs `build`, then copies `bin/lexis` into `$(PREFIX)/bin`. `PREFIX` is `~/.local` by default. | no |
 | `test` | `go test -race -count=1 ./...` | yes |
 | `lint` | `gofmt -l`, `go vet ./...`, golangci-lint 2.15.0 and `go run ./cmd/nasa-lint` | yes |
 | `fmt` | `gofmt -w` on the Go directories | no |

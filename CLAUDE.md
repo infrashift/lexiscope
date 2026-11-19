@@ -29,6 +29,7 @@ Run these targets with `zmake`:
 - `zmake lint` runs gofmt, `go vet`, golangci-lint 2.15.0 (`.golangci.yml`) and `cmd/nasa-lint`, the Go port of `scripts/nasa-lint.py`. When `semscope` is on the PATH, it also runs `semscope scan -r nasa-p10 -r .semscope.cue` ([ADR-0011](.okfw/decisions/adr-0011-semscope-checks-the-power-of-10-rules-in-the-lint-task--01a1f5140d5e.md)). Run `go run ./cmd/nasa-lint --verbose` to list the functions with fewer than 2 assertions.
 - `zmake test` runs `go test -race -count=1 ./...`.
 - `zmake build` writes `bin/lexis` with the version, the commit and the commit date from git.
+- `zmake install` runs `build` and copies `bin/lexis` into `$(PREFIX)/bin` (`PREFIX` is `~/.local` by default).
 - `zmake fmt` formats the Go source.
 - `zmake wiki` runs `okfw validate --all` and `okfw validate --okf`.
 - `zmake docs-style` runs `scripts/ste-check.py`.

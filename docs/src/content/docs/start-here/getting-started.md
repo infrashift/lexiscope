@@ -26,6 +26,7 @@ lexis reads source comments with [ztree](https://github.com/infrashift/ztree), a
 2. Run `zmake build` to write `bin/lexis`.
 3. Run `bin/lexis --version`.
 4. Run `zmake check` to run every gate.
+5. Run `zmake install` to copy `bin/lexis` into `~/.local/bin`. Set `PREFIX` for a different directory, for example `zmake install PREFIX=/usr/local`.
 
 GNU Make reads the `Makefile`, which has the same targets. Run `make check` if zmake is not on the `PATH`.
 

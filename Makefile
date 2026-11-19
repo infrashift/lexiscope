@@ -8,6 +8,8 @@ ZIG ?= zig
 # The ztree checkout. go.mod points its replace directive here (ADR-0002).
 ZTREE_DIR ?= ../ztree
 GOLANGCI_LINT ?= golangci-lint
+# The install target copies bin/lexis into $(PREFIX)/bin.
+PREFIX ?= $(HOME)/.local
 # semscope checks the Power of 10 rules with .semscope.cue when it is on the PATH (ADR-0011).
 SEMSCOPE ?= semscope
 # The pinned golangci-lint version (ADR-0003). The lint target checks it.
@@ -27,7 +29,7 @@ SELF_CHECK_PATHS := PLAN.md CLAUDE.md docs/src/content/docs .okfw cmd internal r
 SELF_CHECK_SCAN := bin/lexis scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note \
 	--exclude .okfw/daily --exclude .okfw/ephemeral --exclude index.md --exclude log.md
 
-.PHONY: check ztree build test lint self-check fmt wiki docs-style docs-dev docs-build
+.PHONY: check ztree build install test lint self-check fmt wiki docs-style docs-dev docs-build
 
 ## check: run every gate (the default goal)
 check: lint test wiki docs-style self-check
@@ -39,6 +41,11 @@ ztree:
 ## build: compile the lexis binary into bin/
 build: ztree
 	$(GO) build -ldflags '$(LDFLAGS)' -o bin/lexis ./cmd/lexis
+
+## install: copy the lexis binary into $(PREFIX)/bin (default ~/.local/bin)
+install: build
+	install -d $(PREFIX)/bin
+	install -m 0755 bin/lexis $(PREFIX)/bin/lexis
 
 ## test: run the unit tests with the race detector
 test: ztree
