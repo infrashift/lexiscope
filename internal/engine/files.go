@@ -82,7 +82,7 @@ func visit(p string, named bool, excludes []string) ([]string, bool, error) {
 	}
 	if !info.IsDir() {
 		if named && !IsChecked(p) {
-			return nil, false, fmt.Errorf("%s: lexis reads Markdown files and .go, .zig, .py, .c, .h and .rs files", p)
+			return nil, false, fmt.Errorf("%s: lexis reads Markdown files and .go, .zig, .py, .c, .h, .rs and C++ files", p)
 		}
 		return nil, IsChecked(p), nil
 	}

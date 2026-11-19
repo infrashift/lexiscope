@@ -42,7 +42,7 @@ The `zmake build` target sets the version from `git describe` and the date from 
 lexis scan [flags] [paths...]
 ```
 
-Checks Markdown files (`.md`, `.mdx`, `.markdown`) and the comments of Go, Zig, Python, C and Rust files (`.go`, `.zig`, `.py`, `.c`, `.h`, `.rs`). Without paths, it checks the current directory.
+Checks Markdown files (`.md`, `.mdx`, `.markdown`) and the comments of Go, Zig, Python, C, C++ and Rust files. The source extensions are `.go`, `.zig`, `.py`, `.c`, `.h`, `.rs` and the C++ extensions `.cc`, `.cpp`, `.cxx`, `.hh`, `.hpp`, `.hxx`. A `.h` file is C. Without paths, it checks the current directory.
 
 A path can be a file or a directory. In a directory, lexis checks each file of a known type. It does not enter hidden directories, `node_modules`, `vendor`, `testdata` or `dist`. To check a hidden directory, name it as a path, for example `.okfw`. A named file of another type is an error.
 

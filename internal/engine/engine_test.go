@@ -188,15 +188,25 @@ func TestGrammarComments(t *testing.T) {
 		{"x.zig", "//! The module will load.\nconst std = @import(\"std\");\n\n/// The function should return.\nfn f() void {\n    const s = \"// will not count\";\n    _ = s; // A side note will count.\n}\n"},
 		{"x.c", "/* The header will hold\n * the types. */\n#include <stdio.h>\n// The macro should expand.\nconst char *s = \"/* will not count */\";\nint x; // A side note will count.\n"},
 		{"x.rs", "//! The crate will build.\n/// The function should return.\nfn f() {\n    let s = \"// will not count\";\n    /* A block will count. */\n}\n"},
+		{"x.cpp", "/* The class will hold\n * the state. */\n#include <string>\n// The method should return.\nconst char *s = R\"(// will not count)\";\nint x; // A side note will count.\n"},
 	}
 	want := [][]string{
 		{"1:16 STE-100-04 will", "4:18 STE-100-04 should", "7:27 STE-100-04 will"},
 		{"1:15 STE-100-04 will", "4:14 STE-100-04 should", "6:23 STE-100-04 will"},
 		{"1:15 STE-100-04 will", "2:18 STE-100-04 should", "5:16 STE-100-04 will"},
+		{"1:14 STE-100-04 will", "4:15 STE-100-04 should", "6:23 STE-100-04 will"},
 	}
 	for i, c := range cases {
 		if got := check(t, e, c.path, c.src); !slices.Equal(got, want[i]) {
 			t.Errorf("%s: findings = %q, want %q", c.path, got, want[i])
+		}
+	}
+	// lexis reads each C++ file extension of semscope (ISSUE-007). A .h file
+	// stays C.
+	for _, ext := range []string{".cc", ".cpp", ".cxx", ".hh", ".hpp", ".hxx"} {
+		src := "// The method should return.\ntemplate <typename T> T f(T x);\n"
+		if got := check(t, e, "z"+ext, src); !slices.Equal(got, []string{"1:15 STE-100-04 should"}) {
+			t.Errorf("z%s: findings = %q", ext, got)
 		}
 	}
 	// A Rust doc comment ends after its line break. Two adjacent lines are
@@ -205,6 +215,21 @@ func TestGrammarComments(t *testing.T) {
 		"/// so that a finding names the exact line and the exact column.\nfn g() {}\n"
 	if got := check(t, e, "y.rs", long); !slices.Equal(got, []string{"1:5 STE-100-02 "}) {
 		t.Errorf("y.rs: findings = %q", got)
+	}
+}
+
+// TestContinuedLineComment reads a C or C++ line comment that ends in a
+// backslash. The comment continues on the next line, so one span holds more
+// lines (ISSUE-007). The V8 sources draw diagrams that way.
+func TestContinuedLineComment(t *testing.T) {
+	e := engineFor(t, ruleset.Options{})
+	src := "// The diagram will show the graph: \\\n//    a --> b \\\n// The next line should count.\n" +
+		"int x; // The value will \\\nshould be zero.\n"
+	want := []string{"1:16 STE-100-04 will", "3:18 STE-100-04 should", "4:21 STE-100-04 will", "5:1 STE-100-04 should"}
+	for _, path := range []string{"x.c", "x.h", "x.cpp"} {
+		if got := check(t, e, path, src); !slices.Equal(got, want) {
+			t.Errorf("%s: findings = %q, want %q", path, got, want)
+		}
 	}
 }
 

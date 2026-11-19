@@ -243,3 +243,15 @@ Issue: [ISSUE-006](.okfw/issues/issue-006-ztree-comment-coverage--01a1f474ef49.m
 Result: the Rust test found a defect. The span of a Rust doc comment (`///` or `//!`) ends after the line break, so a failed assertion stopped lexis. The extractor now removes the line break. The Go build cache does not see a new `libztree.a`: ztree ISSUE-018 records it.
 
 C++ files stay out of scope. [ISSUE-007](.okfw/issues/issue-007-c-comments--01a1f4750b43.md) records the change.
+
+## Phase 7 — C++ comments
+
+Issue: [ISSUE-007](.okfw/issues/issue-007-c-comments--01a1f4750b43.md)
+
+- [x] Map `.cc`, `.cpp`, `.cxx`, `.hh`, `.hpp` and `.hxx` to the C++ grammar of ztree, and test each extension
+- [x] Scan real C and C++ trees: V8, OpenSSL, ICU, the libstdc++ headers and the Linux headers
+- [x] Update the CLI help, the wiki and the docs site
+
+Result: C++ comments have the same forms as C comments. A raw string that holds `//` gives no finding. A `.h` file stays C.
+
+The scan of V8 found a defect that also affects C files. A backslash at the end of a `//` comment continues the comment on the next line. Then one comment span holds more lines, and a failed assertion stopped lexis. The extractor now reads each line of a line comment separately.

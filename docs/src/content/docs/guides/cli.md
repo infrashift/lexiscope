@@ -45,7 +45,7 @@ bin/lexis scan --exclude index.md --exclude .okfw/daily .okfw
 
 ## Scan source comments
 
-lexis reads the comments of `.go`, `.zig`, `.py`, `.c`, `.h` and `.rs` files with ztree. It skips tool directives such as `//go:build`, and indented code examples. A comment at the end of a code line stands alone.
+lexis reads the comments of `.go`, `.zig`, `.py`, `.c`, `.h` and `.rs` files with ztree. It also reads the C++ files `.cc`, `.cpp`, `.cxx`, `.hh`, `.hpp` and `.hxx`. A `.h` file is C. It skips tool directives such as `//go:build`, and indented code examples. A comment at the end of a code line stands alone.
 
 ```sh
 bin/lexis scan cmd/ internal/

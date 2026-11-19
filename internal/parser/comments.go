@@ -29,6 +29,8 @@ func LangOf(name string) (ztree.Lang, bool) {
 		return ztree.LangPython, true
 	case ".c", ".h":
 		return ztree.LangC, true
+	case ".cc", ".cpp", ".cxx", ".hh", ".hpp", ".hxx":
+		return ztree.LangCPP, true
 	case ".rs":
 		return ztree.LangRust, true
 	}
@@ -126,12 +128,37 @@ func commentLines(lines *Lines, src []byte, start, end int32, group int) []prose
 	if strings.HasPrefix(text, "//") {
 		marker = "//"
 	}
-	content := strings.TrimPrefix(text, marker)
+	// In C and C++, a backslash at the end of a line comment continues the
+	// comment on the next line. Each line is a separate comment line.
+	parts := strings.Split(text, "\n")
+	off := start
+	for k, line := range parts {
+		body := line
+		if k > 0 {
+			body = strings.TrimLeft(body, " \t")
+		}
+		lead := int32(len(line) - len(body))
+		if k < len(parts)-1 {
+			body = strings.TrimSuffix(strings.TrimSuffix(body, "\r"), "\\")
+		}
+		out = appendLineComment(out, lines, body, marker, off+lead, group)
+		off += int32(len(line)) + 1
+	}
+	assert.True(off == end+1, "the lines cover the comment")
+	return out
+}
+
+// appendLineComment adds the prose of one line of a line comment. The line
+// starts at off. A tool directive and a shebang line are not prose.
+func appendLineComment(out []proseLine, lines *Lines, line, marker string, off int32, group int) []proseLine {
+	assert.True(off >= 0, "an offset is not negative")
+	assert.True(marker == "//" || marker == "#", "the marker is known")
+	content := strings.TrimPrefix(line, marker)
 	if marker == "//" && directiveRE.MatchString(content) || strings.HasPrefix(content, "!") && marker == "#" {
-		return nil
+		return out
 	}
 	content = strings.TrimLeft(content, "/!") // doc comments: ///, //!
-	return appendProse(out, lines, content, end-int32(len(content)), group)
+	return appendProse(out, lines, content, off+int32(len(line)-len(content)), group)
 }
 
 // appendProse adds one comment line unless it is empty, code or a skipped
