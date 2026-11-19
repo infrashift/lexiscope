@@ -34,7 +34,7 @@ lexis reads comments with ztree ([ADR-0002](/decisions/adr-0002-go-1-26-a-small-
 - The Rust case found a defect. ztree ends the span of a Rust doc comment after the line break. So `appendProse` failed its assertion "the content is one line", and lexis exited with status 2. `parser.Comments` now removes the line break from the end of each line comment. Two adjacent `///` lines form one comment again.
 - `TestManyStackHeads` reads a `.h` file with C++ code that needs 71 stack heads in ztree. ztree failed on it before ztree ADR-0013.
 - `TestParseLimit` proves that a ztree error names the file and wraps `ztree.ErrLimitReached`. [ADR-0010](/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md) records that the error fails the scan. The message has one `ztree:` prefix now, not two.
-- The Go build cache does not see a new `libztree.a`. After a debug build of the library, `go test -c` gave the same test binary as before. ztree ISSUE-018 proposes a fix. Until then, run `go clean -cache` after a new `libztree.a`.
+- The Go build cache does not see a new `libztree.a`. After a debug build of the library, `go test -c` gave the same test binary as before. ztree ISSUE-018 records it. ztree Phase 17 (ztree ADR-0016) fixes it: `zig build lib` writes the SHA-256 of `libztree.a` into the binding. The next Go build of lexis links the new library, so `go clean -cache` is not necessary.
 - C++ files stay out of scope: [ISSUE-007](/issues/issue-007-c-comments--01a1f4750b43.md).
 
 ## Related
