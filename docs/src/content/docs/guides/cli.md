@@ -45,7 +45,7 @@ bin/lexiscope scan --exclude index.md --exclude .okfw/daily .okfw
 
 ## Scan source comments
 
-lexiscope reads the comments of `.go`, `.zig`, `.py`, `.c`, `.h` and `.rs` files with ztree. It also reads the C++ files `.cc`, `.cpp`, `.cxx`, `.hh`, `.hpp` and `.hxx`. A `.h` file is C. It skips tool directives such as `//go:build`, and indented code examples. A comment at the end of a code line stands alone.
+lexiscope reads the comments of `.go`, `.zig`, `.py`, `.c`, `.h`, `.rs` and `.cs` files with ztree. It also reads the C++ files `.cc`, `.cpp`, `.cxx`, `.hh`, `.hpp` and `.hxx`. A `.h` file is C. A C# doc comment (`///`) can start with XML doc tags, such as `<summary>` and `<param name="x">`. lexiscope removes these tags and checks the text in them. It skips the lines of a `<code>` block. It skips tool directives such as `//go:build`, and indented code examples. A comment at the end of a code line stands alone.
 
 ```sh
 bin/lexiscope scan cmd/ internal/

@@ -7,7 +7,7 @@ Work on one phase at a time. Inside a phase, work on one task at a time. Each ph
 Loop: do one task, run `zmake check`, and repeat until it reports zero errors and zero warnings. Then go to the next task. At the end of a phase, update the wiki and the docs site, then make one git commit. Do not push.
 
 - Architecture: [lexiscope architecture overview](.okfw/architecture/lexiscope-architecture-overview--01a1ed42b85f.md)
-- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) · [ADR-0010](.okfw/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md) · [ADR-0011](.okfw/decisions/adr-0011-semscope-checks-the-power-of-10-rules-in-the-lint-task--01a1f5140d5e.md) · [ADR-0012](.okfw/decisions/adr-0012-the-tool-is-lexiscope-with-lexis-as-a-short-alias--01a1f543cb28.md)
+- Decisions: [ADR-0001](.okfw/decisions/adr-0001-adopt-an-okf-wiki-okfw-for-project-knowledge--01a1ed42b864.md) · [ADR-0002](.okfw/decisions/adr-0002-go-1-26-a-small-set-of-dependencies-and-comments-from-ztree-through-cgo--01a1ed42b868.md) · [ADR-0003](.okfw/decisions/adr-0003-adapt-the-nasa-power-of-10-rules-to-go--01a1ed42b86d.md) · [ADR-0004](.okfw/decisions/adr-0004-cue-rulesets-and-one-lexicon-as-the-source-of-the-substitution-rules--01a1ed42b872.md) · [ADR-0005](.okfw/decisions/adr-0005-the-ste-100-rule-ids-with-a-core-group-that-matches-the-oracle-and-an-extended-group--01a1ed42b876.md) · [ADR-0006](.okfw/decisions/adr-0006-sarif-2-1-0-and-2-2-reports-with-go-sarif-v3--01a1ed42b87b.md) · [ADR-0007](.okfw/decisions/adr-0007-document-lexis-with-astro-starlight-on-github-pages--01a1ed42b880.md) · [ADR-0008](.okfw/decisions/adr-0008-cli-exit-statuses-output-errors-and-commands-of-later-phases--01a1ee1490ca.md) · [ADR-0009](.okfw/decisions/adr-0009-the-self-check-fails-on-each-finding-with-a-repository-vocabulary--01a1ee772cc7.md) · [ADR-0010](.okfw/decisions/adr-0010-a-ztree-error-fails-the-scan--01a1f4789ef0.md) · [ADR-0011](.okfw/decisions/adr-0011-semscope-checks-the-power-of-10-rules-in-the-lint-task--01a1f5140d5e.md) · [ADR-0012](.okfw/decisions/adr-0012-the-tool-is-lexiscope-with-lexis-as-a-short-alias--01a1f543cb28.md) · [ADR-0013](.okfw/decisions/adr-0013-lexiscope-checks-the-text-in-the-xml-doc-tags-of-c-sharp--01a1fec6a230.md)
 - Guides: [Development workflow](.okfw/development-workflow--01a1ed42b859.md) · [Wiki conventions](.okfw/wiki-conventions--01a1ed42b854.md)
 
 ## Rules
@@ -277,3 +277,14 @@ Issue: [ISSUE-009](.okfw/issues/issue-009-the-tool-is-lexiscope--01a1f543cb30.md
 - [x] Record the decision in ADR-0012, and update CLAUDE.md, the wiki and the docs site
 
 Result: both names start the CLI, and the help shows `lexiscope`. ADRs, closed issues, daily notes and the text of completed phases keep the old name as records.
+
+## Phase 10 — C# comments
+
+Issue: [ISSUE-010](.okfw/issues/issue-010-c-sharp-comments--01a1fec6a21f.md)
+
+- [x] Map `.cs` to `ztree.LangCSharp` in `parser.LangOf`
+- [x] Remove the XML doc tags at the start of a C# `///` line, and skip the lines of a `<code>` block
+- [x] Record the decision in ADR-0013, and update the help, the error text, the wiki and the docs site
+
+Result: lexiscope reads C# comments. The text in the summary, parameter and return tags counts. A code block and a comment marker in a string give no finding.
+

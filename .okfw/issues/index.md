@@ -13,4 +13,5 @@
 * [ISSUE-007: C++ comments](issue-007-c-comments--01a1f4750b43.md) - lexis does not read the comments of C++ files, although ztree has a C++ grammar.
 * [ISSUE-008: semscope in the lint task](issue-008-semscope-in-the-lint-task--01a1f5142ec2.md) - zmake lint checks the Power of 10 rules with cmd/nasa-lint only, and lexis has no semscope overlay.
 * [ISSUE-009: The tool is lexiscope](issue-009-the-tool-is-lexiscope--01a1f543cb30.md) - The tool gets the official name lexiscope, and lexis stays as a short alias.
+* [ISSUE-010: C# comments](issue-010-c-sharp-comments--01a1fec6a21f.md) - lexiscope does not read the comments of C# files, and it skips the prose in the XML doc tags of a C# doc comment.
 
