@@ -18,3 +18,4 @@ sidebar:
 | 7 | C++ comments | done |
 | 8 | semscope in the lint task | done |
 | 9 | The tool is `lexiscope`, with the short alias `lexis` | done |
+| 10 | C# comments and the text of XML doc tags | done |

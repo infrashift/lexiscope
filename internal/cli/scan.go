@@ -43,7 +43,7 @@ func newScanCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "scan [paths...]",
 		Short: "Check files and directories against the active rules",
-		Long: "lexiscope scan checks Markdown files and the comments of Go, Zig, Python, C, C++ and Rust files.\n" +
+		Long: "lexiscope scan checks Markdown files and the comments of Go, Zig, Python, C, C++, Rust and C# files.\n" +
 			"Without paths, it checks the current directory.",
 		RunE: f.run, // nasa-lint: allow(R9) cobra calls the command through RunE.
 	}
