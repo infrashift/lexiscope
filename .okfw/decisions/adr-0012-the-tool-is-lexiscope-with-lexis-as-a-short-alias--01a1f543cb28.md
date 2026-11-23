@@ -1,12 +1,12 @@
 ---
-id: "01a1f543-cb28-7d36-93d5-6239939d237f"
+x-okfw-id: "01a1f543-cb28-7d36-93d5-6239939d237f"
 title: "ADR-0012: The tool is lexiscope, with lexis as a short alias"
 type: "ADR"
 tags:
   - "adr"
   - "cli"
-created: "2026-11-19T13:23:43-06:00"
-timestamp: "2026-11-19T13:23:43-06:00"
+x-okfw-created: "2026-11-19T13:23:43-06:00"
+x-okfw-timestamp: "2026-11-19T13:23:43-06:00"
 description: "The official name of the tool is lexiscope; lexis is a symbolic link to it, and the module, the URLs and the current documents use the new name."
 ---
 

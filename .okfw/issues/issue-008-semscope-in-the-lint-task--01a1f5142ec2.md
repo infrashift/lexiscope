@@ -1,15 +1,15 @@
 ---
-id: "01a1f514-2ec2-76af-b5ef-2698aaf2f956"
+x-okfw-id: "01a1f514-2ec2-76af-b5ef-2698aaf2f956"
 title: "ISSUE-008: semscope in the lint task"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "closed"
   - "phase-8"
   - "power-of-10"
-created: "2026-11-19T12:31:43-06:00"
-timestamp: "2026-11-19T12:31:43-06:00"
+x-okfw-created: "2026-11-19T12:31:43-06:00"
+x-okfw-timestamp: "2026-11-19T12:31:43-06:00"
 description: "zmake lint checks the Power of 10 rules with cmd/nasa-lint only, and lexis has no semscope overlay."
 ---
 

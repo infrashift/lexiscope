@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b864-7056-91b8-45af1d0e7b08"
+x-okfw-id: "01a1ed42-b864-7056-91b8-45af1d0e7b08"
 title: "ADR-0001: Adopt an OKF wiki (okfw) for project knowledge"
 type: "ADR"
 tags:
   - "adr"
   - "meta"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "lexis keeps decisions, specs and tracked work in an OKF wiki in .okfw/, managed with okfw and its MCP server."
 ---
 

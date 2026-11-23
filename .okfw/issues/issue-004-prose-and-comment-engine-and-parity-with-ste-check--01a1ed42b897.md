@@ -1,15 +1,15 @@
 ---
-id: "01a1ed42-b897-76c0-9c5c-608603e65a67"
+x-okfw-id: "01a1ed42-b897-76c0-9c5c-608603e65a67"
 title: "ISSUE-004: Prose and comment engine, and parity with ste-check"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "phase-4"
   - "engine"
   - "closed"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T04:31:12-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T04:31:12-06:00"
 description: "Add the Markdown extractor, the comment extractor with ztree, the rule checks and the parity test against the oracle."
 ---
 

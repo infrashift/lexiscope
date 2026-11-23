@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b868-7bb6-bc24-a408254ad25d"
+x-okfw-id: "01a1ed42-b868-7bb6-bc24-a408254ad25d"
 title: "ADR-0002: Go 1.26, a small set of dependencies, and comments from ztree through cgo"
 type: "ADR"
 tags:
   - "adr"
   - "toolchain"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "lexis needs Go 1.26 or later, uses cobra, CUE and go-sarif as its only Go dependencies, and reads source comments with ztree through cgo."
 ---
 

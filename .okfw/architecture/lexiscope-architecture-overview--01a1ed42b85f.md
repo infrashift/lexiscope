@@ -1,11 +1,11 @@
 ---
-id: "01a1ed42-b85f-748e-ba6a-49ec6bae2e7d"
+x-okfw-id: "01a1ed42-b85f-748e-ba6a-49ec6bae2e7d"
 title: "lexiscope architecture overview"
 type: "Architecture"
 tags:
   - "architecture"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-19T13:25:02-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-19T13:25:02-06:00"
 description: "The packages of lexiscope, the data flow from a file to a report, and the boundaries to CUE, ztree and SARIF."
 ---
 

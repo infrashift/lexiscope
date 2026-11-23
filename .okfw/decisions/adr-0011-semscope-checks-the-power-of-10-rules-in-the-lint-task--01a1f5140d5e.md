@@ -1,12 +1,12 @@
 ---
-id: "01a1f514-0d5e-7c08-8ece-1b6c888559fe"
+x-okfw-id: "01a1f514-0d5e-7c08-8ece-1b6c888559fe"
 title: "ADR-0011: semscope checks the Power of 10 rules in the lint task"
 type: "ADR"
 tags:
   - "adr"
   - "power-of-10"
-created: "2026-11-19T12:31:34-06:00"
-timestamp: "2026-11-19T12:31:34-06:00"
+x-okfw-created: "2026-11-19T12:31:34-06:00"
+x-okfw-timestamp: "2026-11-19T12:31:34-06:00"
 description: "zmake lint runs semscope with the nasa-p10 ruleset and the .semscope.cue overlay when semscope is on the PATH, after cmd/nasa-lint."
 ---
 
