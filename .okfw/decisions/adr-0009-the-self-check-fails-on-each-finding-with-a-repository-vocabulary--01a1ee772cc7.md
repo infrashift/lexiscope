@@ -1,12 +1,12 @@
 ---
-id: "01a1ee77-2cc7-79ea-8041-20cd6e5f9eb7"
+x-okfw-id: "01a1ee77-2cc7-79ea-8041-20cd6e5f9eb7"
 title: "ADR-0009: The self-check fails on each finding, with a repository vocabulary"
 type: "ADR"
 tags:
   - "adr"
   - "self-check"
-created: "2026-11-18T05:42:30-06:00"
-timestamp: "2026-11-18T05:42:30-06:00"
+x-okfw-created: "2026-11-18T05:42:30-06:00"
+x-okfw-timestamp: "2026-11-18T05:42:30-06:00"
 description: "zmake self-check fails on each finding, and vocabulary.cue holds the technical terms of lexis that STE-100-06 and STE-100-07 do not report."
 ---
 

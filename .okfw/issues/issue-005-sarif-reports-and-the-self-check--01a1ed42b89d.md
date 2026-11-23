@@ -1,15 +1,15 @@
 ---
-id: "01a1ed42-b89d-7750-9844-16bccaa789d0"
+x-okfw-id: "01a1ed42-b89d-7750-9844-16bccaa789d0"
 title: "ISSUE-005: SARIF reports and the self-check"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "closed"
   - "phase-5"
   - "report"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "Add the SARIF 2.1.0 and 2.2 reports and run the self-check on the repository."
 ---
 

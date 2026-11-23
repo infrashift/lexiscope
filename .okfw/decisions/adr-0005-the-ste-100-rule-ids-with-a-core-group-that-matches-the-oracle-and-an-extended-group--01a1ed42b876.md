@@ -1,13 +1,13 @@
 ---
-id: "01a1ed42-b876-7d06-b9ee-df3065fe5c9a"
+x-okfw-id: "01a1ed42-b876-7d06-b9ee-df3065fe5c9a"
 title: "ADR-0005: The ste-100 rule IDs, with a core group that matches the oracle and an extended group"
 type: "ADR"
 tags:
   - "adr"
   - "ruleset"
   - "ste-100"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "STE-100-01 to 04 match scripts/ste-check.py exactly in both directions; STE-100-05 to 11 are warnings with exception lists and their own fixtures."
 ---
 

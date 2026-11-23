@@ -1,15 +1,15 @@
 ---
-id: "01a1f474-ef49-79bb-b1f1-e76fc33d0a35"
+x-okfw-id: "01a1f474-ef49-79bb-b1f1-e76fc33d0a35"
 title: "ISSUE-006: ztree comment coverage"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "closed"
   - "phase-6"
   - "parser"
-created: "2026-11-19T09:37:46-06:00"
-timestamp: "2026-11-19T09:37:46-06:00"
+x-okfw-created: "2026-11-19T09:37:46-06:00"
+x-okfw-timestamp: "2026-11-19T09:37:46-06:00"
 description: "Test the comments of each ztree grammar that lexis reads, and record what lexis does when ztree cannot parse a file."
 ---
 

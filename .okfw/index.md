@@ -1,5 +1,7 @@
 ---
-okf_version: "0.2"
+okf_version: "0.3"
+description: "Design record for lexiscope (lexis), the ASD-STE100 prose and comment checker: ADRs on CUE rulesets, the lexicon, SARIF output, ztree integration and ste-check parity, plus phase issues."
+title: "lexiscope"
 ---
 
 # /

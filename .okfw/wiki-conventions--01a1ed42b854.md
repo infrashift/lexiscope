@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b854-79cc-8016-b5f49fdac3e1"
+x-okfw-id: "01a1ed42-b854-79cc-8016-b5f49fdac3e1"
 title: "Wiki conventions"
 type: "Guide"
 tags:
   - "conventions"
   - "meta"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "Layout, writing style and authoring rules for architecture notes, specs, ADRs, issues and daily notes in this wiki."
 ---
 

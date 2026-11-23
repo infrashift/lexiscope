@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b87b-7b52-83d8-ba09fc8bf50f"
+x-okfw-id: "01a1ed42-b87b-7b52-83d8-ba09fc8bf50f"
 title: "ADR-0006: SARIF 2.1.0 and 2.2 reports with go-sarif v3"
 type: "ADR"
 tags:
   - "adr"
   - "report"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "lexis writes SARIF 2.1.0 by default and SARIF 2.2 on request with go-sarif v3, and proves that validation rejects a broken 2.2 report."
 ---
 

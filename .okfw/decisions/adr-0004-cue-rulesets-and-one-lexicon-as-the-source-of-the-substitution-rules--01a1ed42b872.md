@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b872-70ed-807e-3f6ca3893b88"
+x-okfw-id: "01a1ed42-b872-70ed-807e-3f6ca3893b88"
 title: "ADR-0004: CUE rulesets and one lexicon as the source of the substitution rules"
 type: "ADR"
 tags:
   - "adr"
   - "ruleset"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "lexis defines each ruleset in CUE, keys rules by stable ID, and makes the substitution and nominalization rules from one lexicon."
 ---
 
