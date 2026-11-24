@@ -31,9 +31,38 @@ Documentation: <https://infrashift.github.io/lexiscope/>
 
 Rules STE-100-01 to 04 match `scripts/ste-check.py` exactly.
 
+## Install
+
+The [v0.1.0 release](https://github.com/infrashift/lexiscope/releases/tag/v0.1.0) has static Linux binaries:
+
+| File | Platform |
+|---|---|
+| `lexiscope-linux-amd64` | Linux on x86-64 |
+| `lexiscope-linux-arm64` | Linux on ARM64 |
+| `lexiscope-SHA256SUMS` | The SHA-256 sums of the binaries |
+
+The release has no test of the arm64 binary on an arm64 host. Build lexiscope from source for other platforms.
+
+1. Download the binary for the platform and `lexiscope-SHA256SUMS`.
+2. Run `sha256sum -c --ignore-missing lexiscope-SHA256SUMS` to check the download.
+3. Copy the binary into a directory on the `PATH` with the name `lexiscope`.
+4. Make the link `lexis` to use the short alias.
+5. Run `lexiscope --version`.
+
+These commands install the amd64 binary into `~/.local/bin`:
+
+```sh
+curl -LO https://github.com/infrashift/lexiscope/releases/download/v0.1.0/lexiscope-linux-amd64
+curl -LO https://github.com/infrashift/lexiscope/releases/download/v0.1.0/lexiscope-SHA256SUMS
+sha256sum -c --ignore-missing lexiscope-SHA256SUMS
+install -m 755 lexiscope-linux-amd64 ~/.local/bin/lexiscope
+ln -s lexiscope ~/.local/bin/lexis
+lexiscope --version
+```
+
 ## Build
 
-lexiscope has no binary release. Build it from source.
+Build lexiscope from source for other platforms, or to change it.
 
 | Tool | Version |
 |---|---|

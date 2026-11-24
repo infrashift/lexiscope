@@ -19,3 +19,9 @@ sidebar:
 | 8 | semscope in the lint task | done |
 | 9 | The tool is `lexiscope`, with the short alias `lexis` | done |
 | 10 | C# comments and the text of XML doc tags | done |
+
+## Releases
+
+| Version | Date | Content |
+|---|---|---|
+| [v0.1.0](https://github.com/infrashift/lexiscope/releases/tag/v0.1.0) | 2026-11-21 | Phases 1 to 10. Static Linux binaries for amd64 and arm64. |
