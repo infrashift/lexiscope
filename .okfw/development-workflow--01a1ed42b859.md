@@ -1,13 +1,13 @@
 ---
-id: "01a1ed42-b859-7667-a4f2-d6cbd596a2d5"
+x-okfw-id: "01a1ed42-b859-7667-a4f2-d6cbd596a2d5"
 title: "Development workflow"
 type: "Guide"
 tags:
   - "conventions"
   - "workflow"
   - "meta"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "The loop for each lexiscope phase: do one task, run zmake check until green, update the wiki and the docs site, then commit."
 ---
 

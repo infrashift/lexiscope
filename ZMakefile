@@ -27,7 +27,7 @@ LDFLAGS := -X $(VERSION_PKG).Version=$(VERSION) -X $(VERSION_PKG).Commit=$(COMMI
 GO_DIRS := cmd internal rules
 # The self-check reads the files of scripts/ste-check.py and the Go comments,
 # with the vocabulary of this repository. Each finding fails it.
-SELF_CHECK_PATHS := PLAN.md CLAUDE.md docs/src/content/docs .okfw cmd internal rules
+SELF_CHECK_PATHS := README.md PLAN.md CLAUDE.md docs/src/content/docs .okfw cmd internal rules
 SELF_CHECK_SCAN := bin/lexiscope scan --ruleset ste-100 --ruleset vocabulary.cue --fail-on note \
 	--exclude .okfw/daily --exclude .okfw/ephemeral --exclude index.md --exclude log.md
 

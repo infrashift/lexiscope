@@ -1,15 +1,15 @@
 ---
-id: "01a1ed42-b88b-7eca-a21d-cb5916646909"
+x-okfw-id: "01a1ed42-b88b-7eca-a21d-cb5916646909"
 title: "ISSUE-002: CLI, version and ruleset overrides, and the Go port of nasa-lint"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "phase-2"
   - "cli"
   - "closed"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T03:55:25-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T03:55:25-06:00"
 description: "Add the cobra CLI, the version package, golangci-lint and a Go port of nasa-lint.py."
 ---
 

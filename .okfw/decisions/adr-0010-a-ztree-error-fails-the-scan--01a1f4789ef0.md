@@ -1,13 +1,13 @@
 ---
-id: "01a1f478-9ef0-782e-a81e-f19838cee835"
+x-okfw-id: "01a1f478-9ef0-782e-a81e-f19838cee835"
 title: "ADR-0010: A ztree error fails the scan"
 type: "ADR"
 tags:
   - "adr"
   - "parser"
   - "cli"
-created: "2026-11-19T09:41:48-06:00"
-timestamp: "2026-11-19T09:41:48-06:00"
+x-okfw-created: "2026-11-19T09:41:48-06:00"
+x-okfw-timestamp: "2026-11-19T09:41:48-06:00"
 description: "When ztree cannot parse a source file, lexis stops the scan with status 2 and names the file and the ztree error."
 ---
 

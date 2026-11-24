@@ -1,15 +1,15 @@
 ---
-id: "01a1f543-cb30-7631-b61a-04f58f1c6cf2"
+x-okfw-id: "01a1f543-cb30-7631-b61a-04f58f1c6cf2"
 title: "ISSUE-009: The tool is lexiscope"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "closed"
   - "phase-9"
   - "cli"
-created: "2026-11-19T13:23:43-06:00"
-timestamp: "2026-11-19T13:23:43-06:00"
+x-okfw-created: "2026-11-19T13:23:43-06:00"
+x-okfw-timestamp: "2026-11-19T13:23:43-06:00"
 description: "The tool gets the official name lexiscope, and lexis stays as a short alias."
 ---
 

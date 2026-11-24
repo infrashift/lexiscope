@@ -1,13 +1,13 @@
 ---
-id: "01a1ee35-2a3c-7eb6-852d-94d88b100402"
+x-okfw-id: "01a1ee35-2a3c-7eb6-852d-94d88b100402"
 title: "Known differences from ste-check"
 type: "Spec"
 tags:
   - "spec"
   - "ste-100"
   - "parity"
-created: "2026-11-18T04:30:24-06:00"
-timestamp: "2026-11-18T04:30:24-06:00"
+x-okfw-created: "2026-11-18T04:30:24-06:00"
+x-okfw-timestamp: "2026-11-18T04:30:24-06:00"
 description: "The deliberate differences between lexiscope and scripts/ste-check.py, the oracle behavior that lexiscope copies, and the parity test."
 ---
 

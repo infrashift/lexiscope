@@ -1,5 +1,7 @@
 ---
-okf_version: "0.2"
+okf_version: "0.3"
+description: "The design decisions, architecture, specs and phase issues of lexiscope, a documentation linter in Go."
+title: "lexiscope wiki"
 ---
 
 # /

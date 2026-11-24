@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b86d-7603-9bd7-269009e66544"
+x-okfw-id: "01a1ed42-b86d-7603-9bd7-269009e66544"
 title: "ADR-0003: Adapt the NASA Power of 10 rules to Go"
 type: "ADR"
 tags:
   - "adr"
   - "power-of-10"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "How lexis applies each Power of 10 rule to Go code, which rules the Go port of nasa-lint checks, and the deviation for R3."
 ---
 

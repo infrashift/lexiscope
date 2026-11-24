@@ -1,15 +1,15 @@
 ---
-id: "01a1f475-0b43-784c-bd6f-77d518600e6c"
+x-okfw-id: "01a1f475-0b43-784c-bd6f-77d518600e6c"
 title: "ISSUE-007: C++ comments"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "closed"
   - "phase-7"
   - "parser"
-created: "2026-11-19T09:37:53-06:00"
-timestamp: "2026-11-19T09:37:53-06:00"
+x-okfw-created: "2026-11-19T09:37:53-06:00"
+x-okfw-timestamp: "2026-11-19T09:37:53-06:00"
 description: "lexis does not read the comments of C++ files, although ztree has a C++ grammar."
 ---
 

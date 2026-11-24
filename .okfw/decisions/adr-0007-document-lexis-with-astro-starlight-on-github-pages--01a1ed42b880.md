@@ -1,12 +1,12 @@
 ---
-id: "01a1ed42-b880-7af0-b709-7c3f22eb52d5"
+x-okfw-id: "01a1ed42-b880-7af0-b709-7c3f22eb52d5"
 title: "ADR-0007: Document lexis with Astro Starlight on GitHub Pages"
 type: "ADR"
 tags:
   - "adr"
   - "docs"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:05:35-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:05:35-06:00"
 description: "An Astro Starlight site in docs/, built with bun and deployed to GitHub Pages by GitHub Actions; the docs toolchain stays outside the Go gates."
 ---
 

@@ -1,12 +1,12 @@
 ---
-id: "01a1ee14-90ca-7915-81c8-97ec7e7ccc53"
+x-okfw-id: "01a1ee14-90ca-7915-81c8-97ec7e7ccc53"
 title: "ADR-0008: CLI exit statuses, output errors and commands of later phases"
 type: "ADR"
 tags:
   - "adr"
   - "cli"
-created: "2026-11-18T03:54:47-06:00"
-timestamp: "2026-11-18T03:54:47-06:00"
+x-okfw-created: "2026-11-18T03:54:47-06:00"
+x-okfw-timestamp: "2026-11-18T03:54:47-06:00"
 description: "lexis exits with 0, 1 or 2, keeps the first output error in one writer, and its scan and rules commands check flags before their engines exist."
 ---
 

@@ -1,13 +1,13 @@
 ---
-id: "01a1fec6-a230-7e93-a9b7-f7c158ab0663"
+x-okfw-id: "01a1fec6-a230-7e93-a9b7-f7c158ab0663"
 title: "ADR-0013: lexiscope checks the text in the XML doc tags of C#"
 type: "ADR"
 tags:
   - "adr"
   - "parser"
   - "csharp"
-created: "2026-11-21T09:43:12-06:00"
-timestamp: "2026-11-21T09:43:38-06:00"
+x-okfw-created: "2026-11-21T09:43:12-06:00"
+x-okfw-timestamp: "2026-11-21T09:43:38-06:00"
 description: "In a C# doc comment, lexiscope removes the known XML doc tags at the start of a /// line and checks the text after them, and it skips the lines of a <code> block."
 ---
 

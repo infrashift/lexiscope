@@ -1,15 +1,15 @@
 ---
-id: "01a1ed42-b886-7297-9310-4d9b13524d64"
+x-okfw-id: "01a1ed42-b886-7297-9310-4d9b13524d64"
 title: "ISSUE-001: Bootstrap the repository, the gates, the wiki and the docs site"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "phase-1"
   - "bootstrap"
   - "closed"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T00:06:50-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T00:06:50-06:00"
 description: "Create the Go module, the package layout, the build files, the OKF wiki, the docs site and the Pages workflow."
 ---
 

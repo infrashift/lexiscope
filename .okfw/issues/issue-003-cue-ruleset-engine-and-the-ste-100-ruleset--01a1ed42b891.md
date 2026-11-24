@@ -1,15 +1,15 @@
 ---
-id: "01a1ed42-b891-79de-a788-6bdbe48a56cb"
+x-okfw-id: "01a1ed42-b891-79de-a788-6bdbe48a56cb"
 title: "ISSUE-003: CUE ruleset engine and the ste-100 ruleset"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "phase-3"
   - "ruleset"
   - "closed"
-created: "2026-11-18T00:05:35-06:00"
-timestamp: "2026-11-18T04:10:02-06:00"
+x-okfw-created: "2026-11-18T00:05:35-06:00"
+x-okfw-timestamp: "2026-11-18T04:10:02-06:00"
 description: "Add the CUE schema, the loader, the lexicon projection, the overrides and the ste-100 ruleset."
 ---
 

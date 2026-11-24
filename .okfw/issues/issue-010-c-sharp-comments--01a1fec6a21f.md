@@ -1,15 +1,15 @@
 ---
-id: "01a1fec6-a21f-7039-b18b-e62e7dc9181d"
+x-okfw-id: "01a1fec6-a21f-7039-b18b-e62e7dc9181d"
 title: "ISSUE-010: C# comments"
 type: "Issue"
-kind: "issue"
+x-okfw-kind: "issue"
 tags:
   - "issue"
   - "phase-10"
   - "parser"
   - "closed"
-created: "2026-11-21T09:43:12-06:00"
-timestamp: "2026-11-21T09:43:38-06:00"
+x-okfw-created: "2026-11-21T09:43:12-06:00"
+x-okfw-timestamp: "2026-11-21T09:43:38-06:00"
 description: "lexiscope does not read the comments of C# files, and it skips the prose in the XML doc tags of a C# doc comment."
 ---
 
